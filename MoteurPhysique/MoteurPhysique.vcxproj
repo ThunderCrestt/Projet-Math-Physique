@@ -153,9 +153,11 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Particule.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Particule.h" />
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

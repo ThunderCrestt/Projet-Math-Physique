@@ -7,7 +7,7 @@ private :
 	float _y;
 	float _z;
 public :
-	Vector3D(float x, float y, float z) :_x(x), _y(y), _z(z) {
+	Vector3D(float x=0., float y=0., float z=0.) :_x(x), _y(y), _z(z) {
 	};
 	float getX(void);
 	float getY(void);
@@ -28,6 +28,7 @@ public :
 	void multiply_Y_ByScalar(float scalar);
 	void multiply_Z_ByScalar(float scalar);
 
+	Vector3D composantProduct(Vector3D vector);
 	float scalarProduct(Vector3D vector);
 	Vector3D vectorProduct(Vector3D vector);
 

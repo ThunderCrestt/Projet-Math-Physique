@@ -89,6 +89,11 @@ void Vector3D::multiply_Z_ByScalar(float scalar)
 	setZ(getZ() * scalar);
 }
 
+Vector3D Vector3D::composantProduct(Vector3D vector)
+{
+	return Vector3D(getX() * vector.getX(), getY() * vector.getY(), getZ() * vector.getZ());
+}
+
 float Vector3D::scalarProduct(Vector3D vector)
 {
 	return getX() * vector.getX() + getY() * vector.getY() + getZ() * vector.getZ();
