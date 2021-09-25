@@ -82,8 +82,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\Libraries\include;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
