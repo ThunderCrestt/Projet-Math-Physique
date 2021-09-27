@@ -1,12 +1,18 @@
 #include "Particule.h"
+#include "ParticuleSystem.h"
 
-Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D initialAcceleration) :_mass(mass),_damping(damping){
+Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration, ParticuleSystem& particuleSystem) :_mass(mass),_damping(damping){
 	this->_position = Vector3D(initialPosition.getX(), initialPosition.getY(), initialPosition.getZ());
 	this->_speed = Vector3D(initialSpeed.getX(), initialSpeed.getY(), initialSpeed.getZ());
-	this->_acceleration = Vector3D(initialAcceleration.getX(), initialAcceleration.getY(), initialAcceleration.getZ());
-
+	this->_acceleration = Vector3D(acceleration.getX(), acceleration.getY(), acceleration.getZ());
+	this->_system = &particuleSystem;
+	particuleSystem.addParticule(*this);
 }
 
+Particule::~Particule()
+{
+	this->_system->removeParticule(*this);
+}
 
 float Particule::getInversMass() 
 {
@@ -41,7 +47,10 @@ Vector3D Particule::getAcceleration()
 
 void Particule::setMass(float mass) 
 {
-	this->_mass = mass;
+	if (mass != 0)
+	{
+		this->_mass = mass;
+	}
 }
 void Particule::setDamping(float damping)
 {
@@ -62,5 +71,14 @@ void Particule::setAcceleration(Vector3D const& vector)
 
 void Particule::integrer(float time)
 {
+	//update de la position
+	this->setPosition(getPosition() + getSpeed() * time + getAcceleration() * (pow(time, 2) / 2)); //a verif
+	
+	//update de la vélocité
+	this->setSpeed(getSpeed()*getDamping() + getAcceleration() * time);
+	
+	//update de l'accélération
+	//pour l'instant accélération constante
 
+	//appel de l'update graphique après l'appel de cette fonction
 }

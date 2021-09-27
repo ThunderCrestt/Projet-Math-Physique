@@ -1,6 +1,10 @@
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include "Vector3D.h"
+#include "Particule.h"
+#include "ParticuleSystem.h"
+
 #include<vector>
 
 const char* vertexShaderSource = "#version 330 core\n"
@@ -28,7 +32,7 @@ const float circleCenterY = 0.5f;
 unsigned int myVBO[NumObjects];  
 unsigned int myVAO[NumObjects];
 
-// réajuste viewport
+// rï¿½ajuste viewport
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -46,9 +50,9 @@ void setupGeometries() {
 	glGenVertexArrays(NumObjects, &myVAO[0]);
 	glGenBuffers(NumObjects, &myVBO[0]);
 
-	//Première figure : triangles
+	//Premiï¿½re figure : triangles
 	float trianglesVerts[] = {		//color
-		-0.8f, -0.2f, 0.0f,		1.0f, 0.8f, 0.8f,		//premier triangle (forme la moitié du canon)
+		-0.8f, -0.2f, 0.0f,		1.0f, 0.8f, 0.8f,		//premier triangle (forme la moitiï¿½ du canon)
 		-0.4f, -0.2f, 0.0f,		1.0f, 0.8f, 0.8f,
 		-0.4f,  0.0f, 0.0f,		1.0f, 0.8f, 0.8f,
 
@@ -96,7 +100,7 @@ void setupGeometries() {
 }
 
 
-// dessine les formes en fonction des vertices passés dans myVAO
+// dessine les formes en fonction des vertices passï¿½s dans myVAO
 void rendScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shaderProgram);
@@ -118,8 +122,16 @@ void rendScene() {
 
 int main()
 {
-	// initialisation de la fenêtre d'openGL
-	glfwInit();
+	// initialisation de la fenï¿½tre d'openGL
+	/*
+	ParticuleSystem system = ParticuleSystem();
+	Vector3D pos = Vector3D(1, 0, 0);
+	Vector3D c = Vector3D(0, 1, 0);
+	Vector3D acc = pos + c; //acc must be different for each object
+	Particule bouboule = Particule(10, 1, pos, c, acc,system);
+	bouboule.integrer(1);
+	*/
+		glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -141,7 +153,7 @@ int main()
 		return -1;
 	}
 
-	//parametrages des shaders (à mettre dans une fonction plus tard)
+	//parametrages des shaders (ï¿½ mettre dans une fonction plus tard)
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -163,7 +175,7 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//affichage de la fenêtre
+	//affichage de la fenï¿½tre
 
 	glViewport(0, 0, 800, 800);
 	void framebuffer_size_callback(GLFWwindow * window, int width, int height);
@@ -185,5 +197,10 @@ int main()
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
+	
+
+
+
+
 	return 0;
 }
