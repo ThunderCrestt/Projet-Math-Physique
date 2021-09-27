@@ -3,15 +3,17 @@
 #include<GLFW/glfw3.h>
 #include "Vector3D.h"
 #include "Particule.h"
+#include "ParticuleSystem.h"
 
 
 int main()
 {
 	/*
-	Vector3D x = Vector3D(1, 0, 0);
-	Vector3D y = Vector3D(0, 1, 0);
-	Vector3D truc = x + y;
-	Particule bouboule = Particule(10, 1, x, y, truc);
+	ParticuleSystem system = ParticuleSystem();
+	Vector3D pos = Vector3D(1, 0, 0);
+	Vector3D c = Vector3D(0, 1, 0);
+	Vector3D acc = pos + c; //acc must be different for each object
+	Particule bouboule = Particule(10, 1, pos, c, acc,system);
 	bouboule.integrer(1);
 	*/
 	

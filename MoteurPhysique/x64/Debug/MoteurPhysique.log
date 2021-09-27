@@ -1,5 +1,2 @@
-﻿  Particule.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Particule.cpp(67,90): warning C4244: 'argument' : conversion de 'double' en 'const float', perte possible de données
-  ParticuleSystem.cpp
-  Génération de code en cours...
+﻿  Main.cpp
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
