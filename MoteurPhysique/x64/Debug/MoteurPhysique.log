@@ -1,2 +1,8 @@
 ﻿  Main.cpp
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(82,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(83,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(126,48): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(131,38): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(164,48): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(165,43): warning C4305: 'argument' : troncation de 'double' à 'float'
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe

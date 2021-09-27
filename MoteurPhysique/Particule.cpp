@@ -69,6 +69,14 @@ void Particule::setAcceleration(Vector3D const& vector)
 	this->_acceleration = vector;
 }
 
+void Particule::setupVectors(Vector3D position, Vector3D speed, Vector3D acceleration)
+{
+	this->setPosition(position);
+	this->setSpeed(speed);
+	this->setAcceleration(acceleration);
+}
+
+
 void Particule::integrer(float time)
 {
 	//update de la position

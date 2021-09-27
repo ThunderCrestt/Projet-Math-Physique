@@ -37,7 +37,8 @@ public:
 	void setSpeed(Vector3D const& vector);
 	//set the acceleration vector(vector) of this particule
 	void setAcceleration(Vector3D const& vector);
-
+	//set the position,speed and acceleration of the particule, usefull when changing projectile
+	void setupVectors(Vector3D position, Vector3D speed, Vector3D acceleration);
 
 
 	//compute at each frame what is the next position/velocity of this particule.

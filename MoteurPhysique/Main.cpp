@@ -4,8 +4,8 @@
 #include "Vector3D.h"
 #include "Particule.h"
 #include "ParticuleSystem.h"
-
 #include<vector>
+
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -28,7 +28,8 @@ const int iTriangles = 1;
 const int num_segments = 100;
 const float circleCenterX = 0.5f;
 const float circleCenterY = 0.5f;
-
+//ParticuleSystem
+//Particule
 unsigned int myVBO[NumObjects];  
 unsigned int myVAO[NumObjects];
 
@@ -118,20 +119,52 @@ void rendScene() {
 
 }
 
-
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	Particule *particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
+	Vector3D basePosition = Vector3D(0, 0, 0);
+	Vector3D initialSpeed = Vector3D(0.07, 0.07, 0);
+	Vector3D acceleration;
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+	{
+		//update la particule
+		acceleration = Vector3D(0, -9.81, 0);
+		particule->setupVectors(basePosition, initialSpeed, acceleration);
+		particule->setMass(25);
+		//update la couleur
+		//update le rayon
+		//setupGeometric
+	}
+	else if(key == GLFW_KEY_2 && action == GLFW_PRESS) {
+		//update la particule
+		acceleration = Vector3D(0, -12, 0);
+		particule->setupVectors(basePosition, initialSpeed, acceleration);
+		particule->setMass(75);
+		//update la couleur
+		//update le rayon
+		//setupGeometric
+	}
+	else if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+		//update la particule
+		acceleration = Vector3D(0, -15, 0);
+		particule->setupVectors(basePosition, initialSpeed, acceleration);
+		particule->setMass(130);
+		//update la couleur
+		//update le rayon
+		//setupGeometric
+	}
+}
 
 int main()
 {
 	// initialisation de la fen�tre d'openGL
-	/*
+	//initialisation d'une particule qui sera modifié pour chaque type de projectile
 	ParticuleSystem system = ParticuleSystem();
-	Vector3D pos = Vector3D(1, 0, 0);
-	Vector3D c = Vector3D(0, 1, 0);
-	Vector3D acc = pos + c; //acc must be different for each object
-	Particule bouboule = Particule(10, 1, pos, c, acc,system);
-	bouboule.integrer(1);
-	*/
-		glfwInit();
+	Vector3D position = Vector3D(1, 0, 0);
+	Vector3D initialSpeed = Vector3D(0.07, 0.07, 0);
+	Vector3D acceleration =Vector3D(0,-9.81,0); //acc must be different for each object
+	Particule bouboule = Particule(10, 1, position, initialSpeed, acceleration,system);
+	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -146,7 +179,8 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-
+	glfwSetWindowUserPointer(window, &bouboule);
+	glfwSetKeyCallback(window, key_callback);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
