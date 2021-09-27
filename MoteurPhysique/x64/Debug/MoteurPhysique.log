@@ -1,9 +1,10 @@
 ﻿  Main.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(82,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(83,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(122,48): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(127,38): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(160,48): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(161,43): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(227,30): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(84,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(124,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(129,39): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(138,37): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(162,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(163,44): warning C4305: 'argument' : troncation de 'double' à 'float'
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(229,30): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
