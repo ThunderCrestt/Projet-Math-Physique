@@ -14,7 +14,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);"
+"   FragColor = vec4(1.0f, 0.2f, 0.2f, 1.0f);"
 "}\0";
 
 unsigned int shaderProgram;
@@ -22,17 +22,12 @@ const int NumObjects = 2;
 const int iLines = 0;
 const int iTriangles = 1;
 const int num_segments = 100;
-const float circleCenterX = 0.5f;
-const float circleCenterY = 0.5f;
+const float circleCenterX = -0.7f;
+const float circleCenterY = 0.0f;
+float colorCircle[] = { 1, 1.0f, 1.0f, 1.0f };
 
 unsigned int myVBO[NumObjects];  
 unsigned int myVAO[NumObjects];
-
-// réajuste viewport
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
 
 
 void processInput(GLFWwindow* window)
@@ -42,7 +37,7 @@ void processInput(GLFWwindow* window)
 }
 
 // recuperation des vertices pour dessiner plus tard 
-void setupGeometries() {
+void setupGeometries(float r) {
 	glGenVertexArrays(NumObjects, &myVAO[0]);
 	glGenBuffers(NumObjects, &myVBO[0]);
 
@@ -66,7 +61,6 @@ void setupGeometries() {
 	glEnableVertexAttribArray(1);
 
 	//deuxieme figure : ligne
-	//std::vector<float> sixVertsForLines = std::vector<float> ();
 	float sixVertsForLines[2 * num_segments];
 	int posX = 0;
 	int posY = 1;
@@ -74,8 +68,8 @@ void setupGeometries() {
 	for (int ii = 0; ii < num_segments; ii++)
 	{
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
-		float x = 0.5 * cosf(theta);
-		float y = 0.5 * sinf(theta);
+		float x = r * cosf(theta);
+		float y = r * sinf(theta);
 		sixVertsForLines[posX] = x + circleCenterX;
 		sixVertsForLines[posY] = y + circleCenterY;
 		posX += 2;
@@ -106,7 +100,7 @@ void rendScene() {
 
 	//dessin du crecle
 	glBindVertexArray(myVAO[iLines]);
-	glVertexAttrib3f(1, 1.0f, 1.0f, 0.2f);		// A yellow-ish color (R, G, B values).
+	glVertexAttrib3f(1, 0.0f, 0.0f, 0.0f);		// A yellow-ish color (R, G, B values).
 	glDrawArrays(GL_LINE_LOOP, 0, num_segments);
 
 
@@ -125,7 +119,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "test", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1200, 800, "test", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create a GLFW window" << std::endl;
@@ -166,10 +160,11 @@ int main()
 	//affichage de la fenêtre
 
 	glViewport(0, 0, 800, 800);
-	void framebuffer_size_callback(GLFWwindow * window, int width, int height);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	setupGeometries();
+	setupGeometries(0.2);
+
+	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT);
 
 	//boucle de jeu
 	while (!glfwWindowShouldClose(window))

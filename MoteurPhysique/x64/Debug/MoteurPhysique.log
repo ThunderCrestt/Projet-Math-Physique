@@ -1,5 +1,3 @@
-﻿  glad.c
-  Main.cpp
-  Particule.cpp
-  Génération de code en cours...
-  MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
+﻿  Main.cpp
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(164,21): warning C4305: 'argument' : troncation de 'double' à 'float'
+  MoteurPhysique.vcxproj -> D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\MoteurPhysique.exe
