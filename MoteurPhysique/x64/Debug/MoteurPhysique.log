@@ -1,5 +1,8 @@
 ﻿  Main.cpp
   Particule.cpp
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Particule.cpp(66,90): warning C4244: 'argument' : conversion de 'double' en 'const float', perte possible de données
+  Vector3D.cpp
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Vector3D.cpp(35,13): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Vector3D.cpp(40,41): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
   Génération de code en cours...
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
