@@ -62,5 +62,14 @@ void Particule::setAcceleration(Vector3D const& vector)
 
 void Particule::integrer(float time)
 {
+	//update de la position
+	this->setPosition(getPosition() + getSpeed() * time + getAcceleration() * (pow(time, 2) / 2)); //a verif
+	
+	//update de la vélocité
+	this->setSpeed(getSpeed()*getDamping() + getAcceleration() * time);
+	
+	//update de l'accélération
+	//pour l'instant accélération constante
 
+	//appel de l'update graphique après l'appel de cette fonction
 }
