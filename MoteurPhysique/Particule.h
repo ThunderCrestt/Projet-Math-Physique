@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3D.h"
+class ParticuleSystem;
 class Particule
 {
 private :
@@ -9,7 +10,7 @@ private :
 	Vector3D _speed;
 	Vector3D _acceleration; //is a constant
 public:
-	Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration);
+	Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration,ParticuleSystem &particuleSystem);
 	//get the inverse mass of this particule
 	float getInversMass();
 	//get the mass of this particule
