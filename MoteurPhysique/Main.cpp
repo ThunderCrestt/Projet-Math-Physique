@@ -26,8 +26,8 @@ const int NumObjects = 2;
 const int iLines = 0;
 const int iTriangles = 1;
 const int num_segments = 100;
-const float circleCenterX = 0.5f;
-const float circleCenterY = 0.5f;
+float circleCenterX = 0.5f;
+float circleCenterY = 0.5f;
 //ParticuleSystem
 //Particule
 unsigned int myVBO[NumObjects];  
@@ -113,10 +113,6 @@ void rendScene() {
 	glBindVertexArray(myVAO[iLines]);
 	glVertexAttrib3f(1, 1.0f, 1.0f, 0.2f);		// A yellow-ish color (R, G, B values).
 	glDrawArrays(GL_LINE_LOOP, 0, num_segments);
-
-
-
-
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -218,10 +214,20 @@ int main()
 	setupGeometries();
 
 	//boucle de jeu
+	double currentFrame = glfwGetTime();
+	double lastFrame = currentFrame;
+	double deltaTime;
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
+		system.integerAllParticule(deltaTime);
+		//for now
+		circleCenterX = bouboule.getPosition().getX();
+		circleCenterY = bouboule.getPosition().getY();
 		rendScene();
 
 
