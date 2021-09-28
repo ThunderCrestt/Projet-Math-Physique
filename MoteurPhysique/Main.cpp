@@ -5,8 +5,6 @@
 #include "Particule.h"
 #include "ParticuleSystem.h"
 #include<vector>
-#include"Libraries/include/ft2build.h"
-#include FT_FREETYPE_H  
 #include <stdlib.h>
 
 
@@ -35,7 +33,6 @@ float rCircle = 0.1;
 //Particule
 unsigned int myVBO;  
 unsigned int myVAO;
-FT_Face face;
 
 
 void processInput(GLFWwindow* window)
