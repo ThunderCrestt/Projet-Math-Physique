@@ -9,8 +9,10 @@ private :
 	Vector3D _position;
 	Vector3D _speed;
 	Vector3D _acceleration; //is a constant
+	ParticuleSystem *_system;
 public:
 	Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration,ParticuleSystem &particuleSystem);
+	~Particule();
 	//get the inverse mass of this particule
 	float getInversMass();
 	//get the mass of this particule
@@ -35,7 +37,8 @@ public:
 	void setSpeed(Vector3D const& vector);
 	//set the acceleration vector(vector) of this particule
 	void setAcceleration(Vector3D const& vector);
-
+	//set the position,speed and acceleration of the particule, usefull when changing projectile
+	void setupVectors(Vector3D position, Vector3D speed, Vector3D acceleration);
 
 
 	//compute at each frame what is the next position/velocity of this particule.

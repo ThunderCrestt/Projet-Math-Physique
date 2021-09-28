@@ -10,6 +10,12 @@ void ParticuleSystem::addParticule(Particule& particule)
 	_allParticules.push_back(&particule);
 }
 
+void ParticuleSystem::removeParticule(Particule& particule)
+{
+	_allParticules.erase(std::remove(_allParticules.begin(), _allParticules.end(),&particule), _allParticules.end());
+}
+
+
 void ParticuleSystem::integerAllParticule(float time)
 {
 	//maybe compute the time pass between each frame here or before the call of this function.
