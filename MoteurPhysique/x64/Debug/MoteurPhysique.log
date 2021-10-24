@@ -1,10 +1,27 @@
 ﻿  Main.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(83,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(84,11): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(124,46): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(129,39): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(138,37): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(162,46): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(163,44): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(229,30): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
-  MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(53,21): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(174,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(179,39): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(184,16): warning C4305: '=' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(191,37): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(196,18): warning C4305: '=' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(208,17): warning C4305: '=' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(221,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(222,44): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(308,9): warning C4101: 'deltaTime' : variable locale non référencée
+glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(context.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(init.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(init.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(input.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(monitor.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(monitor.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(vulkan.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(window.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(window.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(win32_init.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(win32_joystick.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(win32_monitor.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_time.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(win32_time.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(win32_thread.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(win32_window.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(win32_window.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(wgl_context.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' n'a pu être trouvé avec 'glfw3.lib(egl_context.obj)' ou sur 'D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\glfw3.pdb' ; l'objet sera lié sans informations de débogage
+glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'glfw3.lib(osmesa_context.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+  MoteurPhysique.vcxproj -> D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\MoteurPhysique.exe

@@ -17,22 +17,44 @@ const char* vertexShaderSource = "#version 330 core\n"
 "}\0";
 
 // fragment shader simple avec couleur gris clair
-const char* fragmentShaderSource = "#version 330 core\n"
+const char* fragmentShaderSourceGrey = "#version 330 core\n"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(0.9f, 0.9f, 0.9f, 1.0f);"
+"   FragColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);"
 "}\0";
 
-unsigned int shaderProgram;
+// fragment shader simple avec couleur bleue
+const char* fragmentShaderSourceBlue = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(0.3f, 0.4f, 0.9f, 1.0f);"
+"}\0";
+
+// fragment shader simple avec couleur verte
+const char* fragmentShaderSourceGreen = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(0.1f, 0.5f, 0.1f, 1.0f);"
+"}\0";
+
+unsigned int shaderProgramGrey;
+unsigned int shaderProgramBlue;
+unsigned int shaderProgramGreen;
 const int num_segments = 100;
+const int iCircle = 0;
+const int iFirstSquare = 1;
+const int iSecondSquare = 2;
+const int iWater = 3;
 float circleCenterX = -0.5;
-float circleCenterY = -0.5;
-float rCircle = 0.1;
+float circleCenterY = 0.5;
+float rCircle = 0.03;
 //ParticuleSystem
 //Particule
-unsigned int myVBO;  
-unsigned int myVAO;
+unsigned int myVBO[4];  
+unsigned int myVAO[4];
 
 
 void processInput(GLFWwindow* window)
@@ -43,8 +65,8 @@ void processInput(GLFWwindow* window)
 
 // recuperation des vertices pour dessiner plus tard 
 void setupGeometries() {
-	glGenVertexArrays(1, &myVAO);
-	glGenBuffers(1, &myVBO);
+	glGenVertexArrays(4, &myVAO[0]);
+	glGenBuffers(4, &myVBO[0]);
 
 	//figure cercle : utilisation de LINE_LOOP
 	float sixVertsForLines[2 * num_segments];
@@ -63,9 +85,53 @@ void setupGeometries() {
 	}
 
 	//Conserve les vertices des segments du cercle pour les dessiner plus tard 
-	glBindVertexArray(myVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, myVBO);
+	glBindVertexArray(myVAO[iCircle]);
+	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iCircle]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(sixVertsForLines), &sixVertsForLines, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+
+
+	// figure : premiere plateforme
+	float firstSquare[] = {
+		-1.0f, -0.2f,
+		-0.3f, -0.2f,
+		-0.3f, -1.0f,
+		-1.0f, -0.2f,
+		-1.0f, -1.0f,	
+		-0.3f, -1.0f,
+	};
+	glBindVertexArray(myVAO[iFirstSquare]);
+	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iFirstSquare]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(firstSquare), firstSquare, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+
+	float secondSquare[] = {
+		-0.3f, -1.0f,
+		0.3f, -1.0f,
+		0.3f, -0.5f,
+		-0.3f, -1.0f,
+		-0.3f, -0.5f,
+		0.3f, -0.5f,
+	};
+	glBindVertexArray(myVAO[iSecondSquare]);
+	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iSecondSquare]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(secondSquare), secondSquare, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glEnableVertexAttribArray(0);
+
+	float water[] = {
+		0.3f, -0.7f,
+		1.0f, -0.7f,
+		1.0f, -1.0f,
+		0.3f, -0.7f,
+		0.3f, -1.0f,
+		1.0f, -1.0f,
+	};
+	glBindVertexArray(myVAO[iWater]);
+	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iWater]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(water), water, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -77,14 +143,27 @@ void setupGeometries() {
 // dessine les formes en fonction des vertices passés dans myVAO
 void rendScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shaderProgram);
+	glUseProgram(shaderProgramGreen);
 
 	//dessin du crecle
-	glBindVertexArray(myVAO);
-	glVertexAttrib3f(1, 1.0f, 1.0f, 0.2f);		// A yellow-ish color (R, G, B values).
+	glBindVertexArray(myVAO[iCircle]);
 	glDrawArrays(GL_LINE_LOOP, 0, num_segments);
 
-	
+	glUseProgram(shaderProgramGrey);
+
+	// Draw des carrés:
+	glBindVertexArray(myVAO[iFirstSquare]);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(myVAO[iSecondSquare]);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+	glUseProgram(shaderProgramBlue);
+
+	//Dessin de l'eau
+	glBindVertexArray(myVAO[iWater]);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	
 }
 
@@ -171,19 +250,42 @@ int main()
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
+	unsigned int fragmentShaderGrey;
+	fragmentShaderGrey = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShaderGrey, 1, &fragmentShaderSourceGrey, NULL);
+	glCompileShader(fragmentShaderGrey);
 
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	unsigned int fragmentShaderBlue;
+	fragmentShaderBlue = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShaderBlue, 1, &fragmentShaderSourceBlue, NULL);
+	glCompileShader(fragmentShaderBlue);
 
-	glUseProgram(shaderProgram);
+	unsigned int fragmentShaderGreen;
+	fragmentShaderGreen = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShaderGreen, 1, &fragmentShaderSourceGreen, NULL);
+	glCompileShader(fragmentShaderGreen);
+
+	shaderProgramGrey = glCreateProgram();
+	glAttachShader(shaderProgramGrey, vertexShader);
+	glAttachShader(shaderProgramGrey, fragmentShaderGrey);
+	glLinkProgram(shaderProgramGrey);
+
+	shaderProgramBlue = glCreateProgram();
+	glAttachShader(shaderProgramBlue, vertexShader);
+	glAttachShader(shaderProgramBlue, fragmentShaderBlue);
+	glLinkProgram(shaderProgramBlue);
+
+	shaderProgramGreen = glCreateProgram();
+	glAttachShader(shaderProgramGreen, vertexShader);
+	glAttachShader(shaderProgramGreen, fragmentShaderGreen);
+	glLinkProgram(shaderProgramGreen);
+
+	glUseProgram(shaderProgramGreen);
 	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDeleteShader(fragmentShaderGrey);
+	glDeleteShader(fragmentShaderGreen);
+	glDeleteShader(fragmentShaderBlue);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -193,7 +295,7 @@ int main()
 
 	setupGeometries();
 
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.7f, 0.7f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	std::system("cls");
@@ -207,14 +309,14 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
-		currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		//currentFrame = glfwGetTime();
+		//deltaTime = currentFrame - lastFrame;
+		//lastFrame = currentFrame;
 
-		system.integerAllParticule(deltaTime);
-		//for now
-		circleCenterX = bouboule.getPosition().getX();
-		circleCenterY = bouboule.getPosition().getY();
+		//system.integerAllParticule(deltaTime);
+		////for now
+		//circleCenterX = bouboule.getPosition().getX();
+		//circleCenterY = bouboule.getPosition().getY();
 		setupGeometries();
 		rendScene();
 
