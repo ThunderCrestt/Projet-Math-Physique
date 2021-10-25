@@ -69,7 +69,7 @@ void setupGeometries() {
 	glGenBuffers(4, &myVBO[0]);
 
 	//figure cercle : utilisation de LINE_LOOP
-	float sixVertsForLines[2 * num_segments];
+	float sixVertsForLines[10 * num_segments];
 	int posX = 0;
 	int posY = 1;
 
@@ -80,6 +80,47 @@ void setupGeometries() {
 		float y = rCircle * sinf(theta);
 		sixVertsForLines[posX] = x + circleCenterX;
 		sixVertsForLines[posY] = y + circleCenterY;
+		posX += 2;
+		posY += 2;
+	}
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+		float x = rCircle * cosf(theta);
+		float y = rCircle * sinf(theta);
+		sixVertsForLines[posX] = x + circleCenterX + 0.06;
+		sixVertsForLines[posY] = y + circleCenterY;
+		posX += 2;
+		posY += 2;
+	}
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+		float x = rCircle * cosf(theta);
+		float y = rCircle * sinf(theta);
+		sixVertsForLines[posX] = x + circleCenterX - 0.06;
+		sixVertsForLines[posY] = y + circleCenterY;
+		posX += 2;
+		posY += 2;
+	}
+
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+		float x = rCircle * cosf(theta);
+		float y = rCircle * sinf(theta);
+		sixVertsForLines[posX] = x + circleCenterX;
+		sixVertsForLines[posY] = y + circleCenterY + 0.06;
+		posX += 2;
+		posY += 2;
+	}
+	for (int ii = 0; ii < num_segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
+		float x = rCircle * cosf(theta);
+		float y = rCircle * sinf(theta);
+		sixVertsForLines[posX] = x + circleCenterX;
+		sixVertsForLines[posY] = y + circleCenterY - 0.06;
 		posX += 2;
 		posY += 2;
 	}
@@ -148,6 +189,10 @@ void rendScene() {
 	//dessin du crecle
 	glBindVertexArray(myVAO[iCircle]);
 	glDrawArrays(GL_LINE_LOOP, 0, num_segments);
+	glDrawArrays(GL_LINE_LOOP, num_segments, num_segments);
+	glDrawArrays(GL_LINE_LOOP, 2*num_segments, num_segments);
+	glDrawArrays(GL_LINE_LOOP, 3 * num_segments, num_segments);
+	glDrawArrays(GL_LINE_LOOP, 4 * num_segments, num_segments);
 
 	glUseProgram(shaderProgramGrey);
 
@@ -167,48 +212,24 @@ void rendScene() {
 	
 }
 
+
+
+
+
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Particule *particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
 	Vector3D basePosition = Vector3D(-0.5, 0, 0);
 	Vector3D initialSpeed = Vector3D(0.9, 0.9, 0);
 	Vector3D acceleration;
-	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+	if (key == GLFW_KEY_RIGHT && action == GLFW_REPEAT)
 	{
-		//update la particule
-		acceleration = Vector3D(0, -0.981, 0);
-		particule->setupVectors(basePosition, initialSpeed, acceleration);
-		particule->setMass(25);
-		//update la couleur
-		//update le rayon
-		rCircle = 0.1;
-		//setupGeometric
-		system("cls");
-		std::wcout << "Projectile : boule de feu";
+		circleCenterX += 0.01;
 	}
-	else if(key == GLFW_KEY_2 && action == GLFW_PRESS) {
-		//update la particule
-		acceleration = Vector3D(0, -1.2, 0);
-		particule->setupVectors(basePosition, initialSpeed, acceleration);
-		particule->setMass(75);
-		//update la couleur
-		//update le rayon
-		 rCircle = 0.15;
-		//setupGeometric
-		 system("cls");
-		 std::wcout << "Projectile : ballon";
-	}
-	else if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
-		//update la particule
-		acceleration = Vector3D(0, -1.5, 0);
-		particule->setupVectors(basePosition, initialSpeed, acceleration);
-		particule->setMass(130);
-		//update la couleur
-		//update le rayon
-		 rCircle = 0.2;
-		//setupGeometric
-		 std::system("cls");
-		 std::wcout << "Projectile : boulet de canon";
+	else if (key == GLFW_KEY_LEFT && action == GLFW_REPEAT)
+	{
+		circleCenterX -= 0.01;
 	}
 }
 
