@@ -317,6 +317,12 @@ int main()
 		////for now
 		//circleCenterX = bouboule.getPosition().getX();
 		//circleCenterY = bouboule.getPosition().getY();
+
+		//on accède au registre force et on vient updateForce sur chaque générateur de force.
+
+		//accumForce = somme de toutes les forces appliqués à l'objet
+
+		//clear accumForce
 		setupGeometries();
 		rendScene();
 

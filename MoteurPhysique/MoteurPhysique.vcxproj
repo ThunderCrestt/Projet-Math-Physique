@@ -151,15 +151,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DragForceGenerator.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="GravityForceGenerator.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Particule.cpp" />
+    <ClCompile Include="ParticuleAnchoredSpring.cpp" />
+    <ClCompile Include="ParticuleElastique.cpp" />
+    <ClCompile Include="ParticuleFlottaison.cpp" />
+    <ClCompile Include="ParticuleForceGenerator.cpp" />
+    <ClCompile Include="ParticuleSpring.cpp" />
     <ClCompile Include="ParticuleSystem.cpp" />
+    <ClCompile Include="RegistreForces.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DragForceGenerator.h" />
+    <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="Particule.h" />
+    <ClInclude Include="ParticuleAnchoredSpring.h" />
+    <ClInclude Include="ParticuleElastique.h" />
+    <ClInclude Include="ParticuleFlottaison.h" />
+    <ClInclude Include="ParticuleForceGenerator.h" />
+    <ClInclude Include="ParticuleSpring.h" />
     <ClInclude Include="ParticuleSystem.h" />
+    <ClInclude Include="RegistreForces.h" />
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
