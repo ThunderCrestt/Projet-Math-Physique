@@ -8,9 +8,13 @@ ParticuleSpring::ParticuleSpring(Particule* autreParticule, float constanteResso
 void ParticuleSpring::updateForce(Particule* particule, float duration)
 {
 	Vector3D position = particule->getPosition();
+	//on calcule la différence entre les deux positions des particules
 	position = position - this->_autreParticule->getPosition();
-	float coeff= abs(position.getNorm() - this->_l0) * this->_constanteRessort;
+	//on calcule la norme de la force 
+	float magnitude= abs(position.getNorm() - this->_l0) * this->_constanteRessort;
 	position.normalize();
-	Vector3D force = position * -coeff;
+	//on applique la direction à la magnitude calculé
+	Vector3D force = position * -magnitude;
+	//on ajoute la force à la somme totale des forces de la particule
 	particule->addForce(force);
 }
