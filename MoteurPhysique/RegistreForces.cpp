@@ -10,6 +10,17 @@ void RegistreForces::removeFromRegistre(Particule& particule, ParticuleForceGene
 	this->_registre.erase(std::remove(this->_registre.begin(), this->_registre.end(), ef), this->_registre.end());
 }
 
+EnregistrementForce RegistreForces::getEnregistrementAtPos(int pos)
+{
+	return this->_registre[pos];
+}
+
+Registre* RegistreForces::getRegistre()
+{
+	return &this->_registre;
+}
+
+
 void RegistreForces::clear()
 {
 

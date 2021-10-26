@@ -220,7 +220,7 @@ int main()
 	Vector3D position = Vector3D(-0.5, 0.0, 0);
 	Vector3D initialSpeed = Vector3D(0.7, 0.7, 0);
 	Vector3D acceleration =Vector3D(0,-0.981,0); //acc must be different for each object
-	Particule bouboule = Particule(10, 1, position, initialSpeed, acceleration,system);
+	Particule bouboule = Particule(10, 1, position, initialSpeed, acceleration);
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

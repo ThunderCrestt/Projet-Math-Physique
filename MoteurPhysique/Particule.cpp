@@ -1,17 +1,17 @@
 #include "Particule.h"
 #include "ParticuleSystem.h"
 
-Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration, ParticuleSystem& particuleSystem) :_mass(mass),_damping(damping){
+Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration) :_mass(mass),_damping(damping){
 	this->_position = Vector3D(initialPosition.getX(), initialPosition.getY(), initialPosition.getZ());
 	this->_speed = Vector3D(initialSpeed.getX(), initialSpeed.getY(), initialSpeed.getZ());
 	this->_acceleration = Vector3D(acceleration.getX(), acceleration.getY(), acceleration.getZ());
-	this->_system = &particuleSystem;
-	particuleSystem.addParticule(*this);
+	//this->_system = &particuleSystem;
+	//particuleSystem.addParticule(*this);
 }
 
 Particule::~Particule()
 {
-	this->_system->removeParticule(*this);
+	//this->_system->removeParticule(*this);
 }
 
 float Particule::getInversMass() 

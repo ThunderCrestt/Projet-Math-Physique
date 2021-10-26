@@ -1,5 +1,4 @@
-﻿  ParticuleAnchoredSpring.cpp
-  ParticuleElastique.cpp
-  ParticuleSpring.cpp
+﻿  ParticuleSystem.cpp
+  RegistreForces.cpp
   Génération de code en cours...
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe

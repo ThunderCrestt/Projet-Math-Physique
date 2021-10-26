@@ -2,6 +2,9 @@
 #include "Particule.h"
 #include "ParticuleForceGenerator.h"
 #include <vector>
+
+
+
 struct EnregistrementForce {
 	Particule* particule;
 	ParticuleForceGenerator* fg;
@@ -19,16 +22,19 @@ struct EnregistrementForce {
 		else { return false; }
 	}
 };
+
+typedef std::vector<EnregistrementForce> Registre;
 class RegistreForces
 {
 
-	typedef std::vector<EnregistrementForce> Registre;
 private :
 	Registre _registre;
 public:
 	RegistreForces(){}
 	void addToRegistre(Particule &particule, ParticuleForceGenerator &fg);
 	void removeFromRegistre(Particule& particule, ParticuleForceGenerator& fg);
+	EnregistrementForce getEnregistrementAtPos(int pos);
+	Registre* getRegistre();
 	void clear();
 	void updateForces(float duration);
 };
