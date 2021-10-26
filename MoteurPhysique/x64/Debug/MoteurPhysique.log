@@ -1,13 +1,13 @@
 ﻿  Main.cpp
 D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(53,21): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(91,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(101,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(113,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(123,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(224,46): warning C4305: 'argument' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(228,24): warning C4305: '+=' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(232,24): warning C4305: '-=' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(242,46): warning C4305: 'argument' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(243,44): warning C4305: 'argument' : troncation de 'double' à 'float'
-D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(329,9): warning C4101: 'deltaTime' : variable locale non référencée
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(92,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(104,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(117,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(129,46): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(228,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(233,24): warning C4305: '+=' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(238,24): warning C4305: '-=' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(248,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(249,44): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(335,9): warning C4101: 'deltaTime' : variable locale non référencée
   MoteurPhysique.vcxproj -> D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\MoteurPhysique.exe
