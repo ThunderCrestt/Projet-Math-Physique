@@ -34,7 +34,7 @@ public:
 	void addToRegistre(Particule &particule, ParticuleForceGenerator &fg);
 	void removeFromRegistre(Particule& particule, ParticuleForceGenerator& fg);
 	EnregistrementForce getEnregistrementAtPos(int pos);
-	Registre* getRegistre();
+	Registre getRegistre();
 	void clear();
 	void updateForces(float duration);
 };

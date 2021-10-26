@@ -15,9 +15,9 @@ EnregistrementForce RegistreForces::getEnregistrementAtPos(int pos)
 	return this->_registre[pos];
 }
 
-Registre* RegistreForces::getRegistre()
+Registre RegistreForces::getRegistre()
 {
-	return &this->_registre;
+	return this->_registre;
 }
 
 

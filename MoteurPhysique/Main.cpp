@@ -236,6 +236,7 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
+	//remplacer bouboule par particule system
 	glfwSetWindowUserPointer(window, &bouboule);
 	glfwSetKeyCallback(window, key_callback);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -320,9 +321,7 @@ int main()
 
 		//on accède au registre force et on vient updateForce sur chaque générateur de force.
 
-		//accumForce = somme de toutes les forces appliqués à l'objet
 
-		//clear accumForce
 		setupGeometries();
 		rendScene();
 

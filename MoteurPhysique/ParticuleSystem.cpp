@@ -19,7 +19,7 @@ void ParticuleSystem::removeParticule(Particule& particule, ParticuleForceGenera
 void ParticuleSystem::integerAllParticule(float time)
 {
 	//maybe compute the time pass between each frame here or before the call of this function.
-	for (auto& elem : *this->getRegistry().getRegistre())
+	for (auto& elem : this->getRegistry().getRegistre())
 	{
 		elem.particule->integrer(time);
 	}
