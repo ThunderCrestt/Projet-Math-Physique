@@ -22,6 +22,14 @@ public :
 	//set the Z coordinate of the vector
 	void setZ(float z);
 
+	//set the vector to 0,0,0
+	void clear()
+	{
+		setX(0);
+		setY(0);
+		setZ(0);
+	}
+
 	//get the norm of the vector
 	float getNorm(void);
 	//get the square norm of the vector
@@ -63,10 +71,22 @@ public :
 		return this->addToVector(toAdd);
 	}
 
+	Vector3D operator-(const Vector3D& tosubstract)
+	{
+		return this->substractToVector(tosubstract);
+	}
+
 	//multiply this vector with a float
 	Vector3D operator*(const float scalar)
 	{
 		return this->multiplyByScalar(scalar);
 	}
+
+	/*
+	Vector3D operator+=(const Vector3D toAdd)
+	{
+		return this->addToVector(toAdd);
+	}
+	*/
 };
 

@@ -6,7 +6,8 @@
 #include "ParticuleSystem.h"
 #include<vector>
 #include <stdlib.h>
-
+#include "gravityForceGenerator.h"
+#include "ParticuleSpring.h"
 
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
@@ -55,6 +56,7 @@ unsigned int myVBO[4];
 unsigned int myVAO[4];
 
 
+
 void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -62,7 +64,7 @@ void processInput(GLFWwindow* window)
 }
 
 // recuperation des vertices pour dessiner plus tard 
-void setupGeometries() {
+void setupGeometries(ParticuleSystem system) {
 	glGenVertexArrays(4, &myVAO[0]);
 	glGenBuffers(4, &myVBO[0]);
 
@@ -70,6 +72,7 @@ void setupGeometries() {
 	float sixVertsForLines[10 * num_segments];
 	int posX = 0;
 	int posY = 1;
+	Registre registre = system.getRegistry().getRegistre();
 
 	//Injection des points du premier blob (blob central)
 	for (int ii = 0; ii < num_segments; ii++)
@@ -77,8 +80,8 @@ void setupGeometries() {
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
 		float x = rCircle * cosf(theta);
 		float y = rCircle * sinf(theta);
-		sixVertsForLines[posX] = x + circleCenterX;
-		sixVertsForLines[posY] = y + circleCenterY;
+		sixVertsForLines[posX] = x + system.getRegistry().getEnregistrementAtPos(0).particule->getPosition().getX();
+		sixVertsForLines[posY] = y + system.getRegistry().getEnregistrementAtPos(0).particule->getPosition().getY();
 		posX += 2;
 		posY += 2;
 	}
@@ -89,8 +92,8 @@ void setupGeometries() {
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
 		float x = rCircle * cosf(theta);
 		float y = rCircle * sinf(theta);
-		sixVertsForLines[posX] = x + circleCenterX + 0.06;
-		sixVertsForLines[posY] = y + circleCenterY;
+		sixVertsForLines[posX] = x + system.getRegistry().getEnregistrementAtPos(1).particule->getPosition().getX();
+		sixVertsForLines[posY] = y + system.getRegistry().getEnregistrementAtPos(1).particule->getPosition().getY();
 		posX += 2;
 		posY += 2;
 	}
@@ -101,8 +104,8 @@ void setupGeometries() {
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
 		float x = rCircle * cosf(theta);
 		float y = rCircle * sinf(theta);
-		sixVertsForLines[posX] = x + circleCenterX - 0.06;
-		sixVertsForLines[posY] = y + circleCenterY;
+		sixVertsForLines[posX] = x + system.getRegistry().getEnregistrementAtPos(2).particule->getPosition().getX();
+		sixVertsForLines[posY] = y + system.getRegistry().getEnregistrementAtPos(2).particule->getPosition().getY();
 		posX += 2;
 		posY += 2;
 	}
@@ -113,8 +116,8 @@ void setupGeometries() {
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
 		float x = rCircle * cosf(theta);
 		float y = rCircle * sinf(theta);
-		sixVertsForLines[posX] = x + circleCenterX;
-		sixVertsForLines[posY] = y + circleCenterY + 0.06;
+		sixVertsForLines[posX] = x + system.getRegistry().getEnregistrementAtPos(3).particule->getPosition().getX();
+		sixVertsForLines[posY] = y + system.getRegistry().getEnregistrementAtPos(3).particule->getPosition().getY();
 		posX += 2;
 		posY += 2;
 	}
@@ -125,8 +128,8 @@ void setupGeometries() {
 		float theta = 2.0f * 3.1415926f * float(ii) / float(num_segments);//get the current angle
 		float x = rCircle * cosf(theta);
 		float y = rCircle * sinf(theta);
-		sixVertsForLines[posX] = x + circleCenterX;
-		sixVertsForLines[posY] = y + circleCenterY - 0.06;
+		sixVertsForLines[posX] = x + system.getRegistry().getEnregistrementAtPos(4).particule->getPosition().getX();
+		sixVertsForLines[posY] = y + system.getRegistry().getEnregistrementAtPos(4).particule->getPosition().getY();
 		posX += 2;
 		posY += 2;
 	}
@@ -241,15 +244,50 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main()
 {
-	// initialisation de la fen�tre d'openGL
 	//initialisation d'une particule qui sera modifié pour chaque type de projectile
 	ParticuleSystem system = ParticuleSystem();
-	Vector3D position = Vector3D(-0.5, 0.0, 0);
-	Vector3D initialSpeed = Vector3D(0.7, 0.7, 0);
-	Vector3D acceleration =Vector3D(0,-0.981,0); 
-	Particule bouboule = Particule(10, 1, position, initialSpeed, acceleration,system);
-	glfwInit();
+	Vector3D positionB1 = Vector3D(-0.5, 0.5, 0);
+	Vector3D positionB2 = Vector3D(-0.43, 0.5, 0);
+	Vector3D positionB3 = Vector3D(-0.57, 0.5, 0);
+	Vector3D positionB4 = Vector3D(-0.5, 0.57, 0);
+	Vector3D positionB5 = Vector3D(-0.5, 0.43, 0);
+	//Vector3D initialSpeed = Vector3D(0.7, 0.7, 0);
+	//Vector3D acceleration =Vector3D(0,-0.981,0); //acc must be different for each object
+	Particule blob1 = Particule(1, 1, positionB1, 0, 0);
+	Particule blob2 = Particule(1, 1, positionB2, 0, 0);
+	Particule blob3 = Particule(1, 1, positionB3, 0, 0);
+	Particule blob4 = Particule(1, 1, positionB4, 0, 0);
+	Particule blob5 = Particule(1, 1, positionB5, 0, 0);
 
+	//Ajout de la premiere particule avec un generateur de force gravité
+	Vector3D gravity = Vector3D(0, -1, 0);
+	GravityForceGenerator gravityGenerator = GravityForceGenerator(gravity);
+	system.addParticule(blob1, gravityGenerator);
+	system.addParticule(blob2, gravityGenerator);
+	system.addParticule(blob3, gravityGenerator);
+	system.addParticule(blob4, gravityGenerator);
+	system.addParticule(blob5, gravityGenerator);
+
+	//Ajout des ressort entre le blob 1 et les autres
+	ParticuleSpring ressortGeneratorb1b2 = ParticuleSpring(&blob2, 4.5, 0.07);
+	system.addParticule(blob1, ressortGeneratorb1b2);
+	ParticuleSpring ressortGeneratorb1b3 = ParticuleSpring(&blob3, 4.5, 0.07);
+	system.addParticule(blob1, ressortGeneratorb1b3);
+	ParticuleSpring ressortGeneratorb1b4 = ParticuleSpring(&blob4, 4.5, 0.07);
+	system.addParticule(blob1, ressortGeneratorb1b4);
+	ParticuleSpring ressortGeneratorb1b5 = ParticuleSpring(&blob5, 4.5, 0.07);
+	system.addParticule(blob1, ressortGeneratorb1b5);
+	ParticuleSpring ressortGeneratorb2b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	system.addParticule(blob2, ressortGeneratorb2b1);
+	ParticuleSpring ressortGeneratorb3b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	system.addParticule(blob3, ressortGeneratorb3b1);
+	ParticuleSpring ressortGeneratorb4b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	system.addParticule(blob4, ressortGeneratorb4b1);
+	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	system.addParticule(blob5, ressortGeneratorb5b1);
+
+	// initialisation de la fen�tre d'openGL
+	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -263,7 +301,7 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-	glfwSetWindowUserPointer(window, &bouboule);
+	glfwSetWindowUserPointer(window, &blob1);
 	glfwSetKeyCallback(window, key_callback);
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -320,13 +358,10 @@ int main()
 
 	glViewport(0, 0, 1000, 1000);
 
-	setupGeometries();
+	setupGeometries(system);
 
 	glClearColor(0.7f, 0.7f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	std::system("cls");
-	std::wcout << "Projectile : boule de feu";
 
 
 	//boucle de jeu
@@ -335,10 +370,13 @@ int main()
 	double deltaTime;
 	while (!glfwWindowShouldClose(window))
 	{
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		system.runPhysic(deltaTime);
 		processInput(window);
-		setupGeometries();
+		setupGeometries(system);
 		rendScene();
-
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
