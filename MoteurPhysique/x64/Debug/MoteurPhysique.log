@@ -1,1 +1,6 @@
-﻿  MoteurPhysique.vcxproj -> D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\MoteurPhysique.exe
+﻿  ParticuleContactResolver.cpp
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleContactResolver.h(1,10): warning C4067: jetons inattendus après la directive du préprocesseur - saut de ligne attendu
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleContactResolver.cpp(22,15): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleContactResolver.cpp(25,11): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleContactResolver.cpp(30,34): warning C4244: 'argument' : conversion de 'int' en 'float', perte possible de données
+  MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
