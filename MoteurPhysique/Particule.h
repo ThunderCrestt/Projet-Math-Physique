@@ -10,9 +10,10 @@ private :
 	Vector3D _speed;
 	Vector3D _acceleration; //is a constant
 	Vector3D _accumForce;
+	float _rayon;
 	//ParticuleSystem *_system;
 public:
-	Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration);
+	Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration,float rayon);
 	~Particule();
 	//get the inverse mass of this particule
 	float getInversMass();
@@ -20,7 +21,7 @@ public:
 	float getMass();
 	//get the damping of this particule
 	float getDamping();
-
+	float getRayon();
 	//get the position vector of this particule
 	Vector3D getPosition();
 	//get the velocity vector of this particule

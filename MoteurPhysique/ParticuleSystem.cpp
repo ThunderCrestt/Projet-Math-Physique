@@ -31,11 +31,11 @@ void ParticuleSystem::startFrame()
 unsigned ParticuleSystem::generateContacts()
 {
 	unsigned limit = maxContacts;
-	unsigned used = simpleContactGenerator.addContact(contacts, limit);
+	unsigned used = simpleContactGenerator.addContact(&contacts, limit);
 	//a voir si la boucle for auto fonctionne
 	for (int i = 0; i < registreContactGenerator.size(); i++)
 	{
-		unsigned used = registreContactGenerator[i]->addContact(contacts, limit);
+		 used += registreContactGenerator[i]->addContact(&contacts, limit);
 		limit -= used;
 		if (limit <= 0) return maxContacts - limit;
 	}
@@ -81,7 +81,12 @@ RegistreForces ParticuleSystem::getRegistry()
 
 void ParticuleSystem::runPhysic(float duration)
 {
-
+	/*
+for (int i = 0; i < contacts.size(); i++)
+{
+	delete contacts[i];
+}
+*/
 	//on update les forces
 	this->getRegistry().updateForces(duration);
 
@@ -94,4 +99,6 @@ void ParticuleSystem::runPhysic(float duration)
 	//on les résout
 	resolver.setIterations(usedContacts * 2);
 	resolver.resolveContacts(contacts, usedContacts, duration);
+	contacts.clear();
+
 }

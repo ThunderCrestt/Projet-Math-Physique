@@ -13,7 +13,7 @@ public:
 	* been written.
 	*/
 	//on rempli le contact qu'on passe, ici un tableau.
-	virtual unsigned addContact(std::vector<ParticuleContact*> contacts,
+	virtual unsigned addContact(std::vector<ParticuleContact*>* contacts,
 		unsigned limit) const = 0;
 };
 

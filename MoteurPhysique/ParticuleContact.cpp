@@ -22,49 +22,22 @@ float ParticuleContact::calculerVs() const
 }
 void ParticuleContact::resolveVelocity(float duration)
 {
-	//on calculVs
+	
 	float vs = calculerVs();
-	//On regarde si ça vaut le coup de résoudre
-	if (vs > 0)
-	{
-		//pas d'impulsions requises
-		return;
+	float newVs = vs * (restitution);
+
+	float g;
+	if (particules[1] != nullptr) {    //Si on a définit une seconde particule, on l'utilise pour calculer k et on change sa velocité
+
+		g= newVs / (particules[0]->getInversMass() + particules[1]->getInversMass());
+		particules[1]->setVelocity(particules[1]->getVelocity() +  contactNormal*g * particules[1]->getInversMass());
 	}
-	// On calcule le nouveau Vs
-	float newVs = -vs * restitution;
-	//pour contact au repos
-	Vector3D accCausedVelocity = particules[0]->getAcceleration();
-	if (particules[1]) accCausedVelocity = accCausedVelocity- particules[1]->getAcceleration();
-
-	float accCausedSepVelocity = accCausedVelocity.scalarProduct(contactNormal * duration);
-	// If we’ve got a closing velocity due to acceleration build-up,
-	// remove it from the new separating velocity.
-	if (accCausedSepVelocity < 0)
-	{
-		newVs += restitution * accCausedSepVelocity;
-		// Make sure we haven’t removed more than was
-		// there to remove.
-		if (newVs < 0) newVs = 0;
+	else {      //Sinon on calcule k en considérant l'objet de contact comme ayant une vitesse nulle et une masse inversée nulle (=masse infinie)
+		g = newVs / (particules[0]->getInversMass());
 	}
-
-	float deltaSpeed = newVs - vs;
-	// on applique la vitesse en fonction de la masse de la particule
-	float totalInverseMass = particules[0]->getInversMass();
-	if (particules[1]) totalInverseMass += particules[1]->getInversMass();
-	// si toute les masses on une masses à 0, pas d'impulsion
-	if (totalInverseMass <= 0) return;
-	//On calcule l'impulsion
-	float impulse = deltaSpeed / totalInverseMass;
-	Vector3D impulsionParMass = contactNormal * impulse;
-	//on applique les  impulsions 
-	particules[0]->setVelocity(particules[0]->getVelocity() +impulsionParMass * particules[0]->getInversMass());
-	if (particules[1])
-	{
-		// Particle 1 goes in the opposite direction.
-		particules[1]->setVelocity(particules[1]->getVelocity() +impulsionParMass * -particules[1]->getInversMass());
-	}
-
-
+	//Et dans tout les cas on change la vélocité de la première particule
+	particules[0]->setVelocity(particules[0]->getVelocity() - contactNormal*g * particules[0]->getInversMass());
+	
 }
 
 void ParticuleContact::resolveInterpenetration(float duration)
@@ -76,7 +49,7 @@ void ParticuleContact::resolveInterpenetration(float duration)
 	if (particules[1]) totalInverseMass += particules[1]->getInversMass();
 	// si pas de masse on return
 	if (totalInverseMass <= 0) return;
-	Vector3D movePerIMass = contactNormal *(-penetration / totalInverseMass);
+	Vector3D movePerIMass = contactNormal *(-penetration / totalInverseMass) * 0.01;
 	//On résout l'interpenetration
 	particules[0]->setPosition(particules[0]->getPosition() +
 		movePerIMass * particules[0]->getInversMass());

@@ -8,7 +8,7 @@ private :
 	
 
 public :
-	virtual unsigned addContact(std::vector<ParticuleContact*> contact, unsigned limit) const = 0;
+	virtual unsigned addContact(std::vector<ParticuleContact*>* contacts, unsigned limit) const = 0;
 
 	float currentLength() const;
 

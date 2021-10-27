@@ -13,21 +13,30 @@ void ParticuleContactResolver::setIterations(unsigned iterations)
 void ParticuleContactResolver::resolveContacts(std::vector<ParticuleContact*> contactArray, unsigned numContacts, int duration)
 {
 	iterationsUsed = 0;
-	while (iterationsUsed < iterations)
+	if (contactArray.size() != 0)
 	{
-		float max = 0;
-		unsigned maxIndex = numContacts;
-		for (unsigned i = 0; i < numContacts; i++)
+		/*
+		while (iterationsUsed < iterations)
 		{
-			int sepVel = contactArray[i]->calculerVs();
-			if (sepVel < max)
+			float max = 0;
+			unsigned maxIndex = numContacts;
+			for (unsigned i = 0; i < numContacts; i++)
 			{
-				max = sepVel;
-				maxIndex = i;
+				int sepVel = contactArray[i]->calculerVs();
+				if (sepVel < max)
+				{
+					max = sepVel;
+					maxIndex = i;
+				}
 			}
-		}
 
-		contactArray[maxIndex]->resolve(duration);
-		iterationsUsed++;
+			contactArray[maxIndex]->resolve(duration);
+			iterationsUsed++;
+		}
+		*/
+		for (auto& elem : contactArray)
+		{
+			elem->resolve(duration);
+		}
 	}
 }

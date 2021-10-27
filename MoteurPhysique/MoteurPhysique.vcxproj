@@ -172,6 +172,7 @@
     <ClCompile Include="ParticuleSystem.cpp" />
     <ClCompile Include="RegistreForces.cpp" />
     <ClCompile Include="SimpleParticuleContactGenerator.cpp" />
+    <ClCompile Include="PlaneSurface2DContactGenerator.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="ParticuleSystem.h" />
     <ClInclude Include="RegistreForces.h" />
     <ClInclude Include="SimpleParticuleContactGenerator.h" />
+    <ClInclude Include="PlaneSurface2DContactGenerator.h" />
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

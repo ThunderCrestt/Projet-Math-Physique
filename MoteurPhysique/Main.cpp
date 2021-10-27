@@ -9,6 +9,9 @@
 #include "gravityForceGenerator.h"
 #include "ParticuleSpring.h"
 #include "ParticuleContactResolver.h"
+#include "PlaneSurface2DContactGenerator.h"
+#include "ParticuleCable.h"
+#include "ParticuleElastique.h"
 
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
@@ -26,14 +29,6 @@ const char* fragmentShaderSourceGrey = "#version 330 core\n"
 "   FragColor = vec4(0.6f, 0.6f, 0.6f, 1.0f);"
 "}\0";
 
-// fragment shader simple avec couleur bleue
-const char* fragmentShaderSourceBlue = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(0.3f, 0.4f, 0.9f, 1.0f);"
-"}\0";
-
 // fragment shader simple avec couleur verte
 const char* fragmentShaderSourceGreen = "#version 330 core\n"
 "out vec4 FragColor;\n"
@@ -43,17 +38,16 @@ const char* fragmentShaderSourceGreen = "#version 330 core\n"
 "}\0";
 
 unsigned int shaderProgramGrey;
-unsigned int shaderProgramBlue;
 unsigned int shaderProgramGreen;
 const int num_segments = 100;
 const int iCircle = 0;
 const int iFirstSquare = 1;
 const int iSecondSquare = 2;
-const int iWater = 3;
+const int iThirdSquare = 3;
 float circleCenterX = -0.5;
 float circleCenterY = 0.5;
 float rCircle = 0.03;
-unsigned int myVBO[4];  
+unsigned int myVBO[4];
 unsigned int myVAO[4];
 
 
@@ -149,7 +143,7 @@ void setupGeometries(ParticuleSystem system) {
 		-0.3f, -0.2f,
 		-0.3f, -1.0f,
 		-1.0f, -0.2f,
-		-1.0f, -1.0f,	
+		-1.0f, -1.0f,
 		-0.3f, -1.0f,
 	};
 	glBindVertexArray(myVAO[iFirstSquare]);
@@ -173,8 +167,8 @@ void setupGeometries(ParticuleSystem system) {
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//Figure troisième plateforme = eau
-	float water[] = {
+	//Figure troisième plateforme
+	float thirdSquare[] = {
 		0.3f, -0.7f,
 		1.0f, -0.7f,
 		1.0f, -1.0f,
@@ -182,9 +176,9 @@ void setupGeometries(ParticuleSystem system) {
 		0.3f, -1.0f,
 		1.0f, -1.0f,
 	};
-	glBindVertexArray(myVAO[iWater]);
-	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iWater]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(water), water, GL_STATIC_DRAW);
+	glBindVertexArray(myVAO[iThirdSquare]);
+	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iThirdSquare]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(thirdSquare), thirdSquare, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -202,7 +196,7 @@ void rendScene() {
 	glBindVertexArray(myVAO[iCircle]);
 	glDrawArrays(GL_LINE_LOOP, 0, num_segments);
 	glDrawArrays(GL_LINE_LOOP, num_segments, num_segments);
-	glDrawArrays(GL_LINE_LOOP, 2*num_segments, num_segments);
+	glDrawArrays(GL_LINE_LOOP, 2 * num_segments, num_segments);
 	glDrawArrays(GL_LINE_LOOP, 3 * num_segments, num_segments);
 	glDrawArrays(GL_LINE_LOOP, 4 * num_segments, num_segments);
 
@@ -215,19 +209,15 @@ void rendScene() {
 	glBindVertexArray(myVAO[iSecondSquare]);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-
-	glUseProgram(shaderProgramBlue);
-
-	//Dessin de l'eau:
-	glBindVertexArray(myVAO[iWater]);
+	glBindVertexArray(myVAO[iThirdSquare]);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-	
+
 }
 
 //Récuperation des évenements clavier
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	Particule *particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
+	Particule* particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
 	Vector3D basePosition = Vector3D(-0.5, 0, 0);
 	Vector3D initialSpeed = Vector3D(0.9, 0.9, 0);
 	Vector3D acceleration;
@@ -257,13 +247,18 @@ int main()
 	Vector3D positionB5 = Vector3D(-0.5, 0.43, 0);
 	//Vector3D initialSpeed = Vector3D(0.7, 0.7, 0);
 	//Vector3D acceleration =Vector3D(0,-0.981,0); //acc must be different for each object
-	Particule blob1 = Particule(1, 1, positionB1, 0, 0);
-	Particule blob2 = Particule(1, 1, positionB2, 0, 0);
-	Particule blob3 = Particule(1, 1, positionB3, 0, 0);
-	Particule blob4 = Particule(1, 1, positionB4, 0, 0);
-	Particule blob5 = Particule(1, 1, positionB5, 0, 0);
-
+	Particule blob1 = Particule(1, 1, positionB1, 0, 0,rCircle);
+	Particule blob2 = Particule(1, 1, positionB2, 0, 0, rCircle);
+	Particule blob3 = Particule(1, 1, positionB3, 0, 0, rCircle);
+	Particule blob4 = Particule(1, 1, positionB4, 0, 0, rCircle);
+	Particule blob5 = Particule(1, 1, positionB5, 0, 0, rCircle);
 	//les particules doivent être ajouter au système aussi
+	system.addParticule(blob1);
+	system.addParticule(blob2);
+	system.addParticule(blob3);
+	system.addParticule(blob4);
+	system.addParticule(blob5);
+
 
 	//Ajout de la premiere particule avec un generateur de force gravité
 	Vector3D gravity = Vector3D(0, -1, 0);
@@ -275,6 +270,7 @@ int main()
 	system.addToRegistreForce(blob5, gravityGenerator);
 
 	//Ajout des ressort entre le blob 1 et les autres
+	
 	ParticuleSpring ressortGeneratorb1b2 = ParticuleSpring(&blob2, 4.5, 0.07);
 	system.addToRegistreForce(blob1, ressortGeneratorb1b2);
 	ParticuleSpring ressortGeneratorb1b3 = ParticuleSpring(&blob3, 4.5, 0.07);
@@ -291,7 +287,20 @@ int main()
 	system.addToRegistreForce(blob4, ressortGeneratorb4b1);
 	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 4.5, 0.07);
 	system.addToRegistreForce(blob5, ressortGeneratorb5b1);
+	
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.9 - 0.9, 0), Vector3D(-0.9, 0.9, 0), system.getAllParticules(), 0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.9, -0.9, 0), Vector3D(0.9, 0.9, 0), system.getAllParticules(), 0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-1,-0.2,0),Vector3D(-0.3,-0.2,0),system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3,-0.2,0),Vector3D(-0.3,-0.5,0),system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3, -0.5, 0), Vector3D(0.3, -0.5, 0), system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.3, -0.5, 0), Vector3D(0.3, -0.7, 0), system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.3, -0.7, 0), Vector3D(1, -0.7, 0), system.getAllParticules(),0.2));
 
+	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob2, 0.09, 0.1));
+	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob3, 0.09, 0.1));
+	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob4, 0.09, 0.1));
+	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob5, 0.09, 0.1));
+	
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -326,11 +335,6 @@ int main()
 	glShaderSource(fragmentShaderGrey, 1, &fragmentShaderSourceGrey, NULL);
 	glCompileShader(fragmentShaderGrey);
 
-	unsigned int fragmentShaderBlue;
-	fragmentShaderBlue = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderBlue, 1, &fragmentShaderSourceBlue, NULL);
-	glCompileShader(fragmentShaderBlue);
-
 	unsigned int fragmentShaderGreen;
 	fragmentShaderGreen = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShaderGreen, 1, &fragmentShaderSourceGreen, NULL);
@@ -341,11 +345,6 @@ int main()
 	glAttachShader(shaderProgramGrey, fragmentShaderGrey);
 	glLinkProgram(shaderProgramGrey);
 
-	shaderProgramBlue = glCreateProgram();
-	glAttachShader(shaderProgramBlue, vertexShader);
-	glAttachShader(shaderProgramBlue, fragmentShaderBlue);
-	glLinkProgram(shaderProgramBlue);
-
 	shaderProgramGreen = glCreateProgram();
 	glAttachShader(shaderProgramGreen, vertexShader);
 	glAttachShader(shaderProgramGreen, fragmentShaderGreen);
@@ -355,7 +354,6 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShaderGrey);
 	glDeleteShader(fragmentShaderGreen);
-	glDeleteShader(fragmentShaderBlue);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -390,7 +388,7 @@ int main()
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
-	
+
 
 
 

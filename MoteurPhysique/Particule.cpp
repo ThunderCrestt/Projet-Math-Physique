@@ -1,10 +1,11 @@
 #include "Particule.h"
 #include "ParticuleSystem.h"
 
-Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration) :_mass(mass),_damping(damping){
+Particule::Particule(float mass, float damping, Vector3D initialPosition, Vector3D initialSpeed, Vector3D acceleration,float rayon) :_mass(mass),_damping(damping){
 	this->_position = Vector3D(initialPosition.getX(), initialPosition.getY(), initialPosition.getZ());
 	this->_speed = Vector3D(initialSpeed.getX(), initialSpeed.getY(), initialSpeed.getZ());
 	this->_acceleration = Vector3D(acceleration.getX(), acceleration.getY(), acceleration.getZ());
+	this->_rayon = rayon;
 	//this->_system = &particuleSystem;
 	//particuleSystem.addParticule(*this);
 }
@@ -26,6 +27,11 @@ float Particule::getInversMass()
 float Particule::getMass()
 {
 	return _mass;
+}
+
+float Particule::getRayon()
+{
+	return _rayon;
 }
 
 float Particule::getDamping()

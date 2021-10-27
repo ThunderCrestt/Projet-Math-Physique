@@ -5,7 +5,7 @@ class ParticuleCable: public ParticuleLink
 public:
 	float maxLength;
 	float restitution;
-
-	virtual unsigned addContact(std::vector<ParticuleContact*>, unsigned limit) const;
+	ParticuleCable(Particule* p1, Particule* p2,float maxLength, float restitution);
+	virtual unsigned addContact(std::vector<ParticuleContact*>*contacts, unsigned limit) const;
 };
 

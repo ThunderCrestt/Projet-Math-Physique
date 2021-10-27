@@ -4,8 +4,8 @@ class ParticuleRod : public ParticuleLink
 {
 public :
 	float length;
-
-	unsigned addContact(std::vector<ParticuleContact*> contact, unsigned limit) const;
+	ParticuleRod(Particule* p1, Particule* p2, float length);
+	unsigned addContact(std::vector<ParticuleContact*> *contact, unsigned limit) const;
 
 };
 

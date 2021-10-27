@@ -11,7 +11,7 @@ void SimpleParticuleContactGenerator::setParticules(std::vector<Particule*> part
 	particules = particules;
 }
 
-unsigned SimpleParticuleContactGenerator::addContact(std::vector<ParticuleContact*> contacts,unsigned limit) const{
+unsigned SimpleParticuleContactGenerator::addContact(std::vector<ParticuleContact*>* contacts,unsigned limit) const{
 	int iteration = 0;
 	for (int i = 0; i < particules.size(); i++) {
 		for (int j = 0; j < particules.size(); j++) {
@@ -24,14 +24,14 @@ unsigned SimpleParticuleContactGenerator::addContact(std::vector<ParticuleContac
 
 				//On vérifie si le contact n'existe pas déjà
 				bool contactAlreadyExist = false;
-				for (int i = 0; i < contacts.size(); i++) {
-					if (*contacts.at(i) == *c) {
+				for (int i = 0; i < contacts->size(); i++) {
+					if (contacts->at(i) == c) {
 						contactAlreadyExist = true; break;
 					}
 				}
 
 				if (!contactAlreadyExist) {
-					contacts.push_back(c);
+					contacts->push_back(c);
 					iteration++;
 				}
 			}

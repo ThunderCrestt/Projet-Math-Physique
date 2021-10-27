@@ -1,2 +1,3 @@
-﻿  ParticuleRod.cpp
+﻿  ParticuleContact.cpp
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleContact.cpp(52,81): warning C4305: 'argument' : troncation de 'double' à 'const float'
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
