@@ -4,6 +4,21 @@ ParticuleSystem::ParticuleSystem() : resolver(resolver)
 {
 	this->_registre =RegistreForces();
 	this->resolver = ParticuleContactResolver(0);
+	this->contacts =  std::vector<ParticuleContact*>();
+	this->registreContactGenerator = std::vector<ParticuleContactGenerator*>();
+	//un simple générateur de contact entre les particules en plus des cables
+	this->simpleContactGenerator = SimpleParticuleContactGenerator(maxContacts, getAllParticules());
+}
+std::vector<Particule*> ParticuleSystem::getAllParticules()
+{
+	/*
+	std::vector<Particule*> particules = std::vector<Particule*>();
+	for (auto& elem : this->getRegistry().getRegistre())
+	{
+		particules.push_back(elem.particule);
+	}
+	*/
+	return _allParticules;
 }
 
 void ParticuleSystem::startFrame()
@@ -16,19 +31,15 @@ void ParticuleSystem::startFrame()
 unsigned ParticuleSystem::generateContacts()
 {
 	unsigned limit = maxContacts;
-	ParticuleContact* nextContact = contacts;
-	RegistreDeContacts* reg = firstContactGen;
-	while (reg)
+	unsigned used = simpleContactGenerator.addContact(contacts, limit);
+	//a voir si la boucle for auto fonctionne
+	for (int i = 0; i < registreContactGenerator.size(); i++)
 	{
-		unsigned used = reg->generateur->addContact(nextContact, limit);
+		unsigned used = registreContactGenerator[i]->addContact(contacts, limit);
 		limit -= used;
-		nextContact += used;
-		// We’ve run out of contacts to fill. This means we’re missing
-		// contacts.
-		if (limit <= 0) break;
-		reg = reg->next;
+		if (limit <= 0) return maxContacts - limit;
 	}
-	// Return the number of contacts used.
+
 	return maxContacts - limit;
 }
 
@@ -42,6 +53,15 @@ void ParticuleSystem::removeFromRegistreForce(Particule& particule, ParticuleFor
 	_registre.removeFromRegistre(particule, forceGenerator);
 }
 
+void ParticuleSystem::addParticule(Particule& particule)
+{
+	_allParticules.push_back(&particule);
+}
+
+void ParticuleSystem::removeParticule(Particule& particule)
+{
+	_allParticules.erase(std::remove(_allParticules.begin(), _allParticules.end(), &particule), _allParticules.end());
+}
 
 void ParticuleSystem::integerAllParticule(float time)
 {

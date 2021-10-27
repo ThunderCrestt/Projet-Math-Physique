@@ -263,6 +263,8 @@ int main()
 	Particule blob4 = Particule(1, 1, positionB4, 0, 0);
 	Particule blob5 = Particule(1, 1, positionB5, 0, 0);
 
+	//les particules doivent être ajouter au système aussi
+
 	//Ajout de la premiere particule avec un generateur de force gravité
 	Vector3D gravity = Vector3D(0, -1, 0);
 	GravityForceGenerator gravityGenerator = GravityForceGenerator(gravity);

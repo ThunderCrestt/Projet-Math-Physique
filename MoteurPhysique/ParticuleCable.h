@@ -6,6 +6,6 @@ public:
 	float maxLength;
 	float restitution;
 
-	virtual unsigned fillContact(ParticuleContact* contact, unsigned limit) const;
+	virtual unsigned addContact(std::vector<ParticuleContact*>, unsigned limit) const;
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "ParticuleContact.h"
+#include <vector>
 class ParticuleContactGenerator
 {
 public:
@@ -11,7 +12,8 @@ public:
 	* to. The method returns the number of contacts that have
 	* been written.
 	*/
-	virtual unsigned addContact(ParticuleContact* contact,
+	//on rempli le contact qu'on passe, ici un tableau.
+	virtual unsigned addContact(std::vector<ParticuleContact*> contacts,
 		unsigned limit) const = 0;
 };
 

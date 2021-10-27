@@ -5,7 +5,7 @@ class ParticuleRod : public ParticuleLink
 public :
 	float length;
 
-	virtual unsigned fillContact(ParticuleContact* contact, unsigned limit) const;
+	unsigned addContact(std::vector<ParticuleContact*> contact, unsigned limit) const;
 
 };
 

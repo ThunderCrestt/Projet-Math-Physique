@@ -1,4 +1,13 @@
 #include "ParticuleContact.h"
+
+ParticuleContact::ParticuleContact(Particule* p1, Particule* p2, float restitution, Vector3D contactNormal, float penetration)
+{
+	this->particules[0] = p1;
+	this->particules[1] = p2;
+	this->restitution = restitution;
+	this->contactNormal = contactNormal;
+	this->penetration = penetration;
+}
 void ParticuleContact::resolve(float duration)
 {
 resolveVelocity(duration);
@@ -76,4 +85,12 @@ void ParticuleContact::resolveInterpenetration(float duration)
 		particules[1]->setPosition(particules[1]->getPosition() +
 			movePerIMass * particules[1]->getInversMass());
 	}
+}
+
+bool ParticuleContact::operator==(const ParticuleContact c)
+{
+	if ((c.particules[0] == particules[0] && c.particules[1] == particules[1]) ||       //Si le contact pointe vers deux particules identiques
+		(c.particules[0] == particules[1] && c.particules[1] == particules[0]))         //dans n'importe quel ordre, alors il est identique
+		return true;
+	else return false;
 }

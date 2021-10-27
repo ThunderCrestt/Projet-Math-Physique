@@ -3,7 +3,7 @@
 
 #include "Particule.h"
 #include "ParticuleContact.h"
-
+#include <vector>
 
 
 
@@ -17,7 +17,7 @@ private:
 public:
 	ParticuleContactResolver(unsigned iterations);
 	void setIterations(unsigned iterations);
-	void resolveContacts(ParticuleContact* contactArray, unsigned numContacts, int duration);
+	void resolveContacts(std::vector<ParticuleContact*> contactArray, unsigned numContacts, int duration);
 
 
 };

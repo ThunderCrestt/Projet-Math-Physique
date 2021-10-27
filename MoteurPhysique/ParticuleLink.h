@@ -1,13 +1,14 @@
 #pragma once
 #include "Particule.h"
 #include "ParticuleContact.h"
-class ParticuleLink
+#include "ParticuleContactGenerator.h"
+class ParticuleLink : public ParticuleContactGenerator
 {
 private :
 	
 
 public :
-	virtual unsigned fillContact(ParticuleContact* contact, unsigned limit) const = 0;
+	virtual unsigned addContact(std::vector<ParticuleContact*> contact, unsigned limit) const = 0;
 
 	float currentLength() const;
 

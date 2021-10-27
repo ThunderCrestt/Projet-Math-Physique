@@ -1,28 +1,32 @@
 #include "ParticuleRod.h"
 
-unsigned ParticuleRod::fillContact(ParticuleContact* contact, unsigned limit) const
+unsigned ParticuleRod::addContact(std::vector<ParticuleContact*> contact, unsigned limit) const
 {
+	// Find the length of the rod.
+	float penetration;
 	float currentLen = currentLength();
-	if (currentLen == length)
-	{
-		return 0;
-	}
-	contact->particules[0] = particule[0];
-	contact->particules[1] = particule[1];
-
-	Vector3D normal = particule[1]->getPosition() - particule[0]->getPosition();
+		// Check whether we’re overextended.
+		if (currentLen == length)
+		{
+			return 0;
+		}
+	// Otherwise return the contact.
+	// Calculate the normal.
+	Vector3D normal = particule[1]->getPosition() - particule[0]
+		->getPosition();
 	normal.normalize();
-
+	// The contact normal depends on whether we’re extending
+	// or compressing.
 	if (currentLen > length) {
-		contact->contactNormal = normal;
-		contact->penetration = currentLen - length;
+		
+		penetration = currentLen - length;
 	}
 	else {
-		contact->contactNormal = normal;
-		contact->penetration = length - currentLen;
+		normal = normal * -1;
+		penetration = length - currentLen;
 	}
-
-	contact->restitution = 0;
-
+	// Always use zero restitution (no bounciness).
+	float restitution = 0;
+	contact.push_back(new ParticuleContact(particule[0], particule[1], restitution, normal, penetration));
 	return 1;
 }
