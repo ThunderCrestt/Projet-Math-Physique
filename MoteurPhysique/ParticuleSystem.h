@@ -6,7 +6,7 @@
 #include "ParticuleForceGenerator.h"
 #include "ParticuleContactGenerator.h"
 #include "SimpleParticuleContactGenerator.h"
-class ParticuleSystem
+class ParticuleWorld
 {
 	//ajouter les collisions ici 
 
@@ -14,7 +14,7 @@ class ParticuleSystem
 		std::vector<Particule*> _allParticules;
 		RegistreForces _registre;
 	public :
-		ParticuleSystem();
+		ParticuleWorld();
 		void addParticule(Particule& particule);
 		void removeParticule(Particule& particule);
 		void addToRegistreForce( Particule &particule, ParticuleForceGenerator &forceGenerator);

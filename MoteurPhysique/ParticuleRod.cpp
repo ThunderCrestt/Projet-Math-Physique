@@ -8,21 +8,18 @@ ParticuleRod::ParticuleRod(Particule* p1, Particule* p2, float length)
 
 unsigned ParticuleRod::addContact(std::vector<ParticuleContact*>* contact) const
 {
-	// Find the length of the rod.
 	float penetration;
 	float currentLen = currentLength();
-		// Check whether we’re overextended.
+		// on regarde si on est pas surétendu
 		if (currentLen == length)
 		{
 			return 0;
 		}
-	// Otherwise return the contact.
-	// Calculate the normal.
+	// calcul de la normale
 	Vector3D normal = particule[1]->getPosition() - particule[0]
 		->getPosition();
 	normal.normalize();
-	// The contact normal depends on whether we’re extending
-	// or compressing.
+	// la normale dépends de si la tige est compréssé ou étendu
 	if (currentLen > length) {
 		
 		penetration = currentLen - length;
@@ -31,7 +28,7 @@ unsigned ParticuleRod::addContact(std::vector<ParticuleContact*>* contact) const
 		normal = normal * -1;
 		penetration = length - currentLen;
 	}
-	// Always use zero restitution (no bounciness).
+	// pas d'élasticité
 	float restitution = 0;
 	contact->push_back(new ParticuleContact(particule[0], particule[1], restitution, normal, penetration));
 	return 1;

@@ -19,8 +19,6 @@ unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact
 		//si les composantes Y sont égales :
 		if (leftVector.getY()==rightVector.getY())
 		{
-			float distance1 = elem->getPosition().getX() - elem->getRayon() - leftVector.getX();
-			float distance2 = elem->getPosition().getX() + elem->getRayon() - leftVector.getX();
 			//si la particule est entre les deux composantes x des vecteurs
 
 			if (elem->getPosition().getX() - elem->getRayon()  >= leftVector.getX() && elem->getPosition().getX() + elem->getRayon() <= rightVector.getX())
@@ -34,6 +32,7 @@ unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact
 			}
 		}	
 		//si les composantes X sont égales
+
 		else if (leftVector.getX() == rightVector.getX())
 		{
 			//si la particule est entre les deux composantes y des vecteurs
@@ -42,10 +41,12 @@ unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact
 				//si la particule est en collisions ou non avec la surface
 				if (float penetration = elem->getPosition().getX() - elem->getRayon() <= leftVector.getX())
 				{
-					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, penetration));
+					Vector3D normalInverse = normal;
+					normalInverse = normalInverse * -1.0;
+					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normalInverse, 0.01));
 				} else 	if (float penetration = elem->getPosition().getX() + elem->getRayon()  >= leftVector.getX())
 				{
-					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, penetration));
+					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, 0.01));
 				}
 			}
 		}

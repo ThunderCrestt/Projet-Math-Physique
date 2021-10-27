@@ -59,7 +59,7 @@ void processInput(GLFWwindow* window)
 }
 
 // recuperation des vertices pour dessiner plus tard 
-void setupGeometries(ParticuleSystem system) {
+void setupGeometries(ParticuleWorld system) {
 	glGenVertexArrays(4, &myVAO[0]);
 	glGenBuffers(4, &myVBO[0]);
 
@@ -218,26 +218,27 @@ void rendScene() {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Particule* particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
+	float addVelocity = 0.4;
 	Vector3D basePosition = Vector3D(-0.5, 0, 0);
 	Vector3D initialSpeed = Vector3D(0.9, 0.9, 0);
 	Vector3D acceleration;
 	//Tant que la flèche de droite est pressée
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
-		particule->setVelocity(particule->getVelocity() + Vector3D(0.3, 0, 0));
+		particule->setVelocity(particule->getVelocity() + Vector3D(addVelocity, 0, 0));
 	}
 	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 	{
-		particule->setVelocity(particule->getVelocity() - Vector3D(0.3, 0, 0));
+		particule->setVelocity(particule->getVelocity() - Vector3D(addVelocity, 0, 0));
 	}
 	//Tant que la flèche de droite est pressée
 	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
 	{
-		particule->setVelocity(particule->getVelocity() + Vector3D(-0.3, 0, 0));
+		particule->setVelocity(particule->getVelocity() + Vector3D(-addVelocity, 0, 0));
 	}
 	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
 	{
-		particule->setVelocity(particule->getVelocity() - Vector3D(-0.3, 0, 0));
+		particule->setVelocity(particule->getVelocity() - Vector3D(-addVelocity, 0, 0));
 	}
 }
 
@@ -246,7 +247,7 @@ int main()
 	//initialisation d'une particule qui sera modifié pour chaque type de projectile
 	unsigned iterationsContactResolver = 15;
 	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
-	ParticuleSystem system = ParticuleSystem();
+	ParticuleWorld system = ParticuleWorld();
 	system.resolver.setIterations(15);
 	Vector3D positionB1 = Vector3D(-0.5, 0.5, 0);
 	Vector3D positionB2 = Vector3D(-0.43, 0.5, 0);
@@ -269,7 +270,7 @@ int main()
 
 
 	//Ajout de la premiere particule avec un generateur de force gravité
-	Vector3D gravity = Vector3D(0, -1, 0);
+	Vector3D gravity = Vector3D(0, -0.9, 0);
 	GravityForceGenerator gravityGenerator = GravityForceGenerator(gravity);
 	system.addToRegistreForce(blob1, gravityGenerator);
 	system.addToRegistreForce(blob2, gravityGenerator);
@@ -278,32 +279,39 @@ int main()
 	system.addToRegistreForce(blob5, gravityGenerator);
 
 	//Ajout des ressort entre le blob 1 et les autres
-	
-	ParticuleSpring ressortGeneratorb1b2 = ParticuleSpring(&blob2, 4.5, 0.07);
+
+	ParticuleSpring ressortGeneratorb1b2 = ParticuleSpring(&blob2, 3, 0.07);
 	system.addToRegistreForce(blob1, ressortGeneratorb1b2);
-	ParticuleSpring ressortGeneratorb1b3 = ParticuleSpring(&blob3, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb1b3 = ParticuleSpring(&blob3, 3, 0.07);
 	system.addToRegistreForce(blob1, ressortGeneratorb1b3);
-	ParticuleSpring ressortGeneratorb1b4 = ParticuleSpring(&blob4, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb1b4 = ParticuleSpring(&blob4, 3, 0.07);
 	system.addToRegistreForce(blob1, ressortGeneratorb1b4);
-	ParticuleSpring ressortGeneratorb1b5 = ParticuleSpring(&blob5, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb1b5 = ParticuleSpring(&blob5, 3, 0.07);
 	system.addToRegistreForce(blob1, ressortGeneratorb1b5);
-	ParticuleSpring ressortGeneratorb2b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb2b1 = ParticuleSpring(&blob1, 3, 0.07);
 	system.addToRegistreForce(blob2, ressortGeneratorb2b1);
-	ParticuleSpring ressortGeneratorb3b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb3b1 = ParticuleSpring(&blob1, 3, 0.07);
 	system.addToRegistreForce(blob3, ressortGeneratorb3b1);
-	ParticuleSpring ressortGeneratorb4b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb4b1 = ParticuleSpring(&blob1, 3, 0.07);
 	system.addToRegistreForce(blob4, ressortGeneratorb4b1);
-	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 4.5, 0.07);
+	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 3, 0.07);
 	system.addToRegistreForce(blob5, ressortGeneratorb5b1);
 	
-	//system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.9 - 0.9, 0), Vector3D(-0.9, 0.9, 0), system.getAllParticules(), 0.2));
-	//system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.9, -0.9, 0), Vector3D(0.9, 0.9, 0), system.getAllParticules(), 0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-1,-0.2,0),Vector3D(-0.3,-0.2,0),system.getAllParticules(),0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3,-0.2,0),Vector3D(-0.3,-0.5,0),system.getAllParticules(),0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3, -0.5, 0), Vector3D(0.3, -0.5, 0), system.getAllParticules(),0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.3, -0.5, 0), Vector3D(0.3, -0.7, 0), system.getAllParticules(),0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.3, -0.7, 0), Vector3D(1, -0.7, 0), system.getAllParticules(),0.2));
+	//ajout des divers surfaces
 
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.8, 0.9, 0), Vector3D(-0.8, -0.9, 0), system.getAllParticules(), 0));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.8, -0.9, 0), Vector3D(0.8, 0.9, 0), system.getAllParticules(), 0));
+
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-1.3,-0.2,0),Vector3D(-0.3,-0.2,0),system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3,-0.2,0),Vector3D(-0.3,-0.6,0),system.getAllParticules(),0.2));
+
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.4, -0.5, 0), Vector3D(0.3, -0.5, 0), system.getAllParticules(),0.2));
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.3, -0.5, 0), Vector3D(0.3, -0.8, 0), system.getAllParticules(),0.2));
+
+	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.2, -0.7, 0), Vector3D(1.2, -0.7, 0), system.getAllParticules(),0.2));
+
+	
+	//ajout des cables entres les particules
 	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob2, 0.09, 0.1));
 	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob3, 0.09, 0.1));
 	system.registreContactGenerator.push_back(new ParticuleCable(&blob1, &blob4, 0.09, 0.1));
@@ -389,7 +397,7 @@ int main()
 		processInput(window);
 		setupGeometries(system);
 		rendScene();
-		std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
+		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

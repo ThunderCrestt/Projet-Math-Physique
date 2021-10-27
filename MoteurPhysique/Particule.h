@@ -1,6 +1,6 @@
 #pragma once
 #include "Vector3D.h"
-class ParticuleSystem;
+class ParticuleWorld;
 class Particule
 {
 private :
