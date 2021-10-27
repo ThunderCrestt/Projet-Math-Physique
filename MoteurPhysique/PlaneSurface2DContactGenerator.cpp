@@ -1,5 +1,5 @@
 #include "PlaneSurface2DContactGenerator.h"
-
+#include <iostream>
 PlaneSurface2DContactGenerator::PlaneSurface2DContactGenerator(Vector3D leftVector, Vector3D rightVector, std::vector<Particule*>particules, float restitution)
 {
 	this->leftVector = leftVector;
@@ -11,7 +11,7 @@ PlaneSurface2DContactGenerator::PlaneSurface2DContactGenerator(Vector3D leftVect
 	this->normal = liaison.vectorProduct(Vector3D(0, 0, -0.1));
 	this->normal.normalize();
 }
-unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact*>* contacts,unsigned limit) const
+unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact*>* contacts) const
 {
 	unsigned iteration = 0;
 	for (auto& elem : particules)
@@ -22,10 +22,11 @@ unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact
 			float distance1 = elem->getPosition().getX() - elem->getRayon() - leftVector.getX();
 			float distance2 = elem->getPosition().getX() + elem->getRayon() - leftVector.getX();
 			//si la particule est entre les deux composantes x des vecteurs
-			if (elem->getPosition().getX() - elem->getRayon() - leftVector.getX() >= 0 && elem->getPosition().getX() + elem->getRayon() - leftVector.getX() >= 0)
+
+			if (elem->getPosition().getX() - elem->getRayon()  >= leftVector.getX() && elem->getPosition().getX() + elem->getRayon() <= rightVector.getX())
 			{
 				//si la particule est en collisions ou non avec la surface
-				if (float penetration = elem->getPosition().getY() - elem->getRayon() - leftVector.getY() <= 0)
+				if (float penetration = elem->getPosition().getY() - elem->getRayon()  <= leftVector.getY())
 				{
 					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, penetration));
 					iteration++;
@@ -36,13 +37,13 @@ unsigned PlaneSurface2DContactGenerator::addContact(std::vector<ParticuleContact
 		else if (leftVector.getX() == rightVector.getX())
 		{
 			//si la particule est entre les deux composantes y des vecteurs
-			if (elem->getPosition().getY() + elem->getRayon() - leftVector.getY() <= 0 && elem->getPosition().getY() - elem->getRayon() - leftVector.getY() >= 0)
+			if (elem->getPosition().getY() + elem->getRayon()  <= leftVector.getY() && elem->getPosition().getY() - elem->getRayon() >= rightVector.getY())
 			{
 				//si la particule est en collisions ou non avec la surface
-				if (float penetration = elem->getPosition().getX() - elem->getRayon() - leftVector.getX() <= 0)
+				if (float penetration = elem->getPosition().getX() - elem->getRayon() <= leftVector.getX())
 				{
 					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, penetration));
-				} else 	if (float penetration = elem->getPosition().getX() + elem->getRayon() - leftVector.getX() >= 0)
+				} else 	if (float penetration = elem->getPosition().getX() + elem->getRayon()  >= leftVector.getX())
 				{
 					contacts->push_back(new ParticuleContact(elem, NULL, restitution, normal, penetration));
 				}

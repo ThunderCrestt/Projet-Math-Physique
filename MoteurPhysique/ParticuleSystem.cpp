@@ -30,17 +30,14 @@ void ParticuleSystem::startFrame()
 }
 unsigned ParticuleSystem::generateContacts()
 {
-	unsigned limit = maxContacts;
-	unsigned used = simpleContactGenerator.addContact(&contacts, limit);
+	unsigned used = simpleContactGenerator.addContact(&contacts);
 	//a voir si la boucle for auto fonctionne
 	for (int i = 0; i < registreContactGenerator.size(); i++)
 	{
-		 used += registreContactGenerator[i]->addContact(&contacts, limit);
-		limit -= used;
-		if (limit <= 0) return maxContacts - limit;
+		 used += registreContactGenerator[i]->addContact(&contacts);
 	}
 
-	return maxContacts - limit;
+	return used;
 }
 
 void ParticuleSystem::addToRegistreForce(Particule& particule, ParticuleForceGenerator &forceGenerator)

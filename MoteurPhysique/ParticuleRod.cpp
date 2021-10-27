@@ -6,7 +6,7 @@ ParticuleRod::ParticuleRod(Particule* p1, Particule* p2, float length)
 	this->length = length;
 }
 
-unsigned ParticuleRod::addContact(std::vector<ParticuleContact*>* contact, unsigned limit) const
+unsigned ParticuleRod::addContact(std::vector<ParticuleContact*>* contact) const
 {
 	// Find the length of the rod.
 	float penetration;

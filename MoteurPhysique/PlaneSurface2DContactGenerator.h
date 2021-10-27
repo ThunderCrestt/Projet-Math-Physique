@@ -16,7 +16,7 @@ public:
 	float restitution;
 	std::vector<Particule*> particules;
 	PlaneSurface2DContactGenerator(Vector3D leftVector,Vector3D rightVector, std::vector<Particule*>particules,float restitution);
-	unsigned addContact(std::vector<ParticuleContact*>* contacts,unsigned limit) const;
+	unsigned addContact(std::vector<ParticuleContact*>* contacts) const;
 
 };
 

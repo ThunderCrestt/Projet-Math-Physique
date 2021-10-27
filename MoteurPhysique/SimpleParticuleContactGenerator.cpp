@@ -11,7 +11,7 @@ void SimpleParticuleContactGenerator::setParticules(std::vector<Particule*> part
 	particules = particules;
 }
 
-unsigned SimpleParticuleContactGenerator::addContact(std::vector<ParticuleContact*>* contacts,unsigned limit) const{
+unsigned SimpleParticuleContactGenerator::addContact(std::vector<ParticuleContact*>* contacts) const{
 	int iteration = 0;
 	for (int i = 0; i < particules.size(); i++) {
 		for (int j = 0; j < particules.size(); j++) {

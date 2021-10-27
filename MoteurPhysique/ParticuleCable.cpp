@@ -8,7 +8,7 @@ ParticuleCable::ParticuleCable(Particule* p1, Particule* p2, float maxLength, fl
 	this->restitution = restitution;
 }
 
-unsigned ParticuleCable::addContact(std::vector<ParticuleContact*>* contact, unsigned limit) const
+unsigned ParticuleCable::addContact(std::vector<ParticuleContact*>* contact) const
 {
 	float length = currentLength();
 	if (length < maxLength)

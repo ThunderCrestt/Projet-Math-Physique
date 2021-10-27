@@ -14,6 +14,6 @@ public:
 
 	std::vector<Particule*> particules;
 
-	unsigned addContact(std::vector<ParticuleContact*>* contacts,unsigned limit) const;
+	unsigned addContact(std::vector<ParticuleContact*>* contacts) const;
 
 };

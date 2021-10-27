@@ -222,14 +222,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	Vector3D initialSpeed = Vector3D(0.9, 0.9, 0);
 	Vector3D acceleration;
 	//Tant que la flèche de droite est pressée
-	if (key == GLFW_KEY_RIGHT && action == GLFW_REPEAT)
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
 	{
-		circleCenterX += 0.01;
+		particule->setVelocity(particule->getVelocity() + Vector3D(0.3, 0, 0));
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
+	{
+		particule->setVelocity(particule->getVelocity() - Vector3D(0.3, 0, 0));
 	}
 	//Tant que la flèche de droite est pressée
-	else if (key == GLFW_KEY_LEFT && action == GLFW_REPEAT)
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
 	{
-		circleCenterX -= 0.01;
+		particule->setVelocity(particule->getVelocity() + Vector3D(-0.3, 0, 0));
+	}
+	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
+	{
+		particule->setVelocity(particule->getVelocity() - Vector3D(-0.3, 0, 0));
 	}
 }
 
@@ -288,8 +296,8 @@ int main()
 	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 4.5, 0.07);
 	system.addToRegistreForce(blob5, ressortGeneratorb5b1);
 	
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.9 - 0.9, 0), Vector3D(-0.9, 0.9, 0), system.getAllParticules(), 0.2));
-	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.9, -0.9, 0), Vector3D(0.9, 0.9, 0), system.getAllParticules(), 0.2));
+	//system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.9 - 0.9, 0), Vector3D(-0.9, 0.9, 0), system.getAllParticules(), 0.2));
+	//system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(0.9, -0.9, 0), Vector3D(0.9, 0.9, 0), system.getAllParticules(), 0.2));
 	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-1,-0.2,0),Vector3D(-0.3,-0.2,0),system.getAllParticules(),0.2));
 	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3,-0.2,0),Vector3D(-0.3,-0.5,0),system.getAllParticules(),0.2));
 	system.registreContactGenerator.push_back(new PlaneSurface2DContactGenerator(Vector3D(-0.3, -0.5, 0), Vector3D(0.3, -0.5, 0), system.getAllParticules(),0.2));
@@ -381,7 +389,7 @@ int main()
 		processInput(window);
 		setupGeometries(system);
 		rendScene();
-
+		std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
