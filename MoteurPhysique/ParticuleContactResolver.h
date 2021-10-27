@@ -1,7 +1,15 @@
-#include "Particule.h""
+#ifndef ParticuleContactResolver_h
+#define ParticuleContactResolver_h
+
+#include "Particule.h"
 #include "ParticuleContact.h"
+
+
+
+
 class ParticuleContactResolver
 {
+
 private:
 	unsigned iterations;
 	unsigned iterationsUsed;
@@ -13,3 +21,5 @@ public:
 
 
 };
+
+#endif // !ParticuleContactResolver.h

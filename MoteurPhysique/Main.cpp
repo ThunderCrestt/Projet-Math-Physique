@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "gravityForceGenerator.h"
 #include "ParticuleSpring.h"
+#include "ParticuleContactResolver.h"
 
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
@@ -245,7 +246,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 int main()
 {
 	//initialisation d'une particule qui sera modifié pour chaque type de projectile
+	unsigned iterationsContactResolver = 15;
+	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
 	ParticuleSystem system = ParticuleSystem();
+	system.resolver.setIterations(15);
 	Vector3D positionB1 = Vector3D(-0.5, 0.5, 0);
 	Vector3D positionB2 = Vector3D(-0.43, 0.5, 0);
 	Vector3D positionB3 = Vector3D(-0.57, 0.5, 0);
@@ -262,29 +266,29 @@ int main()
 	//Ajout de la premiere particule avec un generateur de force gravité
 	Vector3D gravity = Vector3D(0, -1, 0);
 	GravityForceGenerator gravityGenerator = GravityForceGenerator(gravity);
-	system.addParticule(blob1, gravityGenerator);
-	system.addParticule(blob2, gravityGenerator);
-	system.addParticule(blob3, gravityGenerator);
-	system.addParticule(blob4, gravityGenerator);
-	system.addParticule(blob5, gravityGenerator);
+	system.addToRegistreForce(blob1, gravityGenerator);
+	system.addToRegistreForce(blob2, gravityGenerator);
+	system.addToRegistreForce(blob3, gravityGenerator);
+	system.addToRegistreForce(blob4, gravityGenerator);
+	system.addToRegistreForce(blob5, gravityGenerator);
 
 	//Ajout des ressort entre le blob 1 et les autres
 	ParticuleSpring ressortGeneratorb1b2 = ParticuleSpring(&blob2, 4.5, 0.07);
-	system.addParticule(blob1, ressortGeneratorb1b2);
+	system.addToRegistreForce(blob1, ressortGeneratorb1b2);
 	ParticuleSpring ressortGeneratorb1b3 = ParticuleSpring(&blob3, 4.5, 0.07);
-	system.addParticule(blob1, ressortGeneratorb1b3);
+	system.addToRegistreForce(blob1, ressortGeneratorb1b3);
 	ParticuleSpring ressortGeneratorb1b4 = ParticuleSpring(&blob4, 4.5, 0.07);
-	system.addParticule(blob1, ressortGeneratorb1b4);
+	system.addToRegistreForce(blob1, ressortGeneratorb1b4);
 	ParticuleSpring ressortGeneratorb1b5 = ParticuleSpring(&blob5, 4.5, 0.07);
-	system.addParticule(blob1, ressortGeneratorb1b5);
+	system.addToRegistreForce(blob1, ressortGeneratorb1b5);
 	ParticuleSpring ressortGeneratorb2b1 = ParticuleSpring(&blob1, 4.5, 0.07);
-	system.addParticule(blob2, ressortGeneratorb2b1);
+	system.addToRegistreForce(blob2, ressortGeneratorb2b1);
 	ParticuleSpring ressortGeneratorb3b1 = ParticuleSpring(&blob1, 4.5, 0.07);
-	system.addParticule(blob3, ressortGeneratorb3b1);
+	system.addToRegistreForce(blob3, ressortGeneratorb3b1);
 	ParticuleSpring ressortGeneratorb4b1 = ParticuleSpring(&blob1, 4.5, 0.07);
-	system.addParticule(blob4, ressortGeneratorb4b1);
+	system.addToRegistreForce(blob4, ressortGeneratorb4b1);
 	ParticuleSpring ressortGeneratorb5b1 = ParticuleSpring(&blob1, 4.5, 0.07);
-	system.addParticule(blob5, ressortGeneratorb5b1);
+	system.addToRegistreForce(blob5, ressortGeneratorb5b1);
 
 	// initialisation de la fen�tre d'openGL
 	glfwInit();

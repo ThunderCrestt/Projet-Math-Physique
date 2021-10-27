@@ -1,16 +1,43 @@
 #include "ParticuleSystem.h"
 
-ParticuleSystem::ParticuleSystem()
+ParticuleSystem::ParticuleSystem() : resolver(resolver)
 {
 	this->_registre =RegistreForces();
+	this->resolver = ParticuleContactResolver(0);
 }
 
-void ParticuleSystem::addParticule(Particule& particule, ParticuleForceGenerator &forceGenerator)
+void ParticuleSystem::startFrame()
+{
+	for (auto& elem : this->getRegistry().getRegistre())
+	{
+		elem.particule->clearAccumulator();
+	}
+}
+unsigned ParticuleSystem::generateContacts()
+{
+	unsigned limit = maxContacts;
+	ParticuleContact* nextContact = contacts;
+	RegistreDeContacts* reg = firstContactGen;
+	while (reg)
+	{
+		unsigned used = reg->generateur->addContact(nextContact, limit);
+		limit -= used;
+		nextContact += used;
+		// We’ve run out of contacts to fill. This means we’re missing
+		// contacts.
+		if (limit <= 0) break;
+		reg = reg->next;
+	}
+	// Return the number of contacts used.
+	return maxContacts - limit;
+}
+
+void ParticuleSystem::addToRegistreForce(Particule& particule, ParticuleForceGenerator &forceGenerator)
 {
 	_registre.addToRegistre(particule, forceGenerator);
 }
 
-void ParticuleSystem::removeParticule(Particule& particule, ParticuleForceGenerator &forceGenerator)
+void ParticuleSystem::removeFromRegistreForce(Particule& particule, ParticuleForceGenerator &forceGenerator)
 {
 	_registre.removeFromRegistre(particule, forceGenerator);
 }
@@ -42,6 +69,9 @@ void ParticuleSystem::runPhysic(float duration)
 	this->integerAllParticule(duration);
 
 	//on génère les contacts
+	unsigned usedContacts = generateContacts();
 
 	//on les résout
+	resolver.setIterations(usedContacts * 2);
+	resolver.resolveContacts(contacts, usedContacts, duration);
 }

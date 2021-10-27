@@ -1,5 +1,5 @@
 #include "ParticuleContactResolver.h"
-
+#include "ParticuleContact.h"
 
 ParticuleContactResolver::ParticuleContactResolver(unsigned iterations)
 {
