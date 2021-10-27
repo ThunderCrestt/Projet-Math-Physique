@@ -39,6 +39,4 @@ C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(316,89): warn
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(317,89): warning C4305: 'argument' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(318,89): warning C4305: 'argument' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(396,20): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
-Vector3D.obj : warning LNK4099: PDB 'vc142.pdb' n'a pu être trouvé avec 'Vector3D.obj' ou sur 'C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\vc142.pdb' ; l'objet sera lié sans informations de débogage
-glad.obj : warning LNK4099: PDB 'vc142.pdb' n'a pu être trouvé avec 'glad.obj' ou sur 'C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\vc142.pdb' ; l'objet sera lié sans informations de débogage
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
