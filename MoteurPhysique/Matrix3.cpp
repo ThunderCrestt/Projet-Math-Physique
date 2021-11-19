@@ -1,19 +1,19 @@
 #include "Matrix3.h"
-Matrix3 Matrix3::operator-(const Matrix3& toAdd)
+Matrix3 Matrix3::operator-(const Matrix3& toSubstract)
 {
 	return Matrix3(
 		{ {
-			{data[0][0] - toAdd.data[0][0],
-			data[0][1] - toAdd.data[0][1],
-			data[0][2] - toAdd.data[0][2]},
+			{data[0][0] - toSubstract.data[0][0],
+			data[0][1] - toSubstract.data[0][1],
+			data[0][2] - toSubstract.data[0][2]},
 
-			{data[1][0] - toAdd.data[1][0],
-			data[1][1] - toAdd.data[1][1],
-			data[1][2] - toAdd.data[1][2]},
+			{data[1][0] - toSubstract.data[1][0],
+			data[1][1] - toSubstract.data[1][1],
+			data[1][2] - toSubstract.data[1][2]},
 
-			{data[2][0] - toAdd.data[2][0],
-			data[2][1] - toAdd.data[2][1],
-			data[2][2] - toAdd.data[2][2]}
+			{data[2][0] - toSubstract.data[2][0],
+			data[2][1] - toSubstract.data[2][1],
+			data[2][2] - toSubstract.data[2][2]}
 
 			} }
 	);
@@ -105,9 +105,8 @@ Matrix3 Matrix3::inverse() const
 	result.setInverse(*this);
 	return result;
 }
-/**
-* Inverts the matrix.
-*/
+
+//inverse la matrice
 void Matrix3::invert()
 {
 	setInverse(*this);
@@ -125,7 +124,7 @@ void Matrix3::setTranspose(const Matrix3& m)
 	data[2][1] = m.data[1][2]; 
 	data[2][2] = m.data[2][2]; 
 }
-/** Returns a new matrix containing the transpose of this matrix. */
+
 Matrix3 Matrix3::transpose() const
 {
 	Matrix3 result;

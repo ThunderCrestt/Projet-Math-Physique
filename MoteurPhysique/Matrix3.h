@@ -21,15 +21,9 @@ public:
 
 		//calcul l'inverse de la matrice m et l'applique sur la matrice actuel.
 		void setInverse(const Matrix3& m);
-
-		/** Returns a new matrix containing the inverse of this matrix. */
 		Matrix3 inverse() const;
-		/**
-		* Inverts the matrix.
-		*/
 		void invert();
 		void setTranspose(const Matrix3& m);
-		/** Returns a new matrix containing the transpose of this matrix. */
 		Matrix3 transpose() const;
 };
 
