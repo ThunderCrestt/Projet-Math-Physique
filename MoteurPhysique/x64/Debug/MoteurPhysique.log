@@ -1,2 +1,5 @@
-﻿  Matrix4.cpp
-  MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
+﻿  Main.cpp
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(158,25): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(160,46): warning C4305: 'argument' : troncation de 'double' à 'float'
+D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\MoteurPhysique\Main.cpp(260,9): warning C4101: 'deltaTime' : variable locale non référencée
+  MoteurPhysique.vcxproj -> D:\Documents\cours\UQAC\Semestre-automne\maths_physiqueJV\Projet-Math-Physique\x64\Debug\MoteurPhysique.exe
