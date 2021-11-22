@@ -87,40 +87,90 @@ Matrix4 Matrix4::operator*(const Matrix4& toMultiply)
 
 Vector3D Matrix4::operator*(const Vector3D& vector)
 {
-	return Vector3D(vector.getX() * data[0][0] + vector.getY() * data[0][1] + vector.getZ() * data[0][2],
-		vector.getX() * data[1][0] + vector.getY() * data[1][1] + vector.getZ() * data[1][2],
-		vector.getX() * data[2][0] + vector.getY() * data[2][1] + vector.getZ() * data[2][2]);
+	return Vector3D(vector.getX() * data[0][0] + vector.getY() * data[0][1] + vector.getZ() * data[0][2]+data[0][3],
+		vector.getX() * data[1][0] + vector.getY() * data[1][1] + vector.getZ() * data[1][2] + data[1][3],
+		vector.getX() * data[2][0] + vector.getY() * data[2][1] + vector.getZ() * data[2][2] + data[2][3]);
 }
 
 //calcul l'inverse de la matrice m et l'applique sur la matrice actuel.
 void Matrix4::setInverse(const Matrix4& m)
 {
 	//on calcule d'abord le déterminant
-	float det = (m.data[0][0] * m.data[1][1] * m.data[2][2]) +
-		(m.data[1][0] * m.data[2][1] * m.data[0][2]) +
-		(m.data[2][0] * m.data[0][1] * m.data[1][2]) -
-		(m.data[0][0] * m.data[2][1] * m.data[1][2]) -
-		(m.data[2][0] * m.data[1][1] * m.data[0][2]) -
-		(m.data[1][0] * m.data[0][1] * m.data[2][2]);
+	float det = 
+		m.data[0][0]*( (m.data[1][1]*m.data[2][2]*m.data[3][3]) + (m.data[1][2]* m.data[2][3]* m.data[3][1]) + (m.data[1][3]* m.data[2][1]* m.data[3][2])
+		-(m.data[1][3]* m.data[2][2]* m.data[3][1]) - (m.data[1][2]* m.data[2][1]* m.data[3][3]) - (m.data[1][1]* m.data[2][3]* m.data[3][2]) 
+		)
+		
+		- m.data[1][0]*( (m.data[0][1]* m.data[2][2]* m.data[3][3]) + (m.data[0][2]* m.data[2][3]* m.data[3][1]) + (m.data[0][3]* m.data[2][1]* m.data[3][2])
+		-(m.data[0][3]* m.data[2][2]* m.data[3][1]) - (m.data[0][2]* m.data[2][1]* m.data[3][3]) - (m.data[0][1]* m.data[2][3]* m.data[3][2]) 
+		) 
+		
+		+ m.data[2][0]*( (m.data[0][1]* m.data[1][2]* m.data[3][3]) + (m.data[0][2]* m.data[1][3]* m.data[3][1]) + (m.data[0][3]* m.data[1][1]* m.data[3][2])
+			-(m.data[0][3]* m.data[1][2]* m.data[3][1]) - (m.data[0][2]* m.data[1][1]* m.data[3][3]) - (m.data[0][1]* m.data[1][3]* m.data[3][2]) 
+		)
+		
+		-m.data[3][0]*( (m.data[0][1]* m.data[1][2]* m.data[2][3]) + (m.data[0][2]* m.data[1][3]* m.data[2][1]) + (m.data[0][3]* m.data[1][1]* m.data[2][2])
+			-(m.data[0][3]* m.data[1][2]* m.data[2][1]) - (m.data[0][2]* m.data[1][1]* m.data[2][3]) - (m.data[0][1]* m.data[1][3]* m.data[2][2]) 
+		);
 	if (det == (float)0)
 	{
 		return; // le déterminent est égale à 0, on ne peut pas calculer l'inverse
 	}
-	// la matrice est de la forme:
-	// a b c
-	// d e f
-	// g h i
-	this->data[0][0] = (m.data[1][1] * m.data[2][2]) - (m.data[1][2] * m.data[2][1]); //ei -fh
-	this->data[0][1] = (m.data[0][2] * m.data[2][1]) - (m.data[0][1] * m.data[2][2]); //ch - bi
-	this->data[0][2] = (m.data[0][1] * m.data[1][2]) - (m.data[0][2] * m.data[1][1]); //bf-ce
+	//le calcul de la matrice est fait selon le calcul du déterminant et de la matrice adjointe
+	this->data[0][0] = 1/det*( (m.data[1][1]* m.data[2][2]* m.data[3][3]) + (m.data[1][2]* m.data[2][3]* m.data[3][1]) + (m.data[1][3]* m.data[2][1]* m.data[3][2]) 
+		- (m.data[1][3]* m.data[2][2]* m.data[3][1]) - (m.data[1][2]* m.data[2][1]* m.data[3][3]) - (m.data[1][1]* m.data[2][3]* m.data[3][2]) );
 
-	this->data[1][0] = (m.data[1][2] * m.data[2][0]) - (m.data[1][0] * m.data[2][2]); //fg-di
-	this->data[1][1] = (m.data[0][0] * m.data[2][2]) - (m.data[0][2] * m.data[2][0]); //ai-cg
-	this->data[1][2] = (m.data[0][2] * m.data[0][1]) - (m.data[0][0] * m.data[1][2]); //cd-af
+	this->data[0][1] = 1 / det * ( -(m.data[0][1]* m.data[2][2]* m.data[3][3]) - (m.data[0][2]* m.data[2][3]* m.data[3][1]) - (m.data[0][3]* m.data[2][1]* m.data[3][2])
+		+(m.data[0][3]* m.data[2][2]* m.data[3][1]) + (m.data[0][2]* m.data[2][1]* m.data[3][3]) + (m.data[0][1]* m.data[2][3]* m.data[3][2]) );
+	
+	this->data[0][2] = 1 / det * ( (m.data[0][1] * m.data[1][2] * m.data[3][3]) + (m.data[0][2] * m.data[1][3] * m.data[3][1]) + (m.data[0][3] * m.data[1][1] * m.data[3][2])
+		- (m.data[0][3] * m.data[1][2] * m.data[3][1]) - (m.data[0][2] * m.data[1][1] * m.data[3][3]) - (m.data[0][1] * m.data[1][3] * m.data[3][2]) );
+	
+	this->data[0][3] = 1 / det * (-(m.data[0][1] * m.data[1][2] * m.data[2][3]) - (m.data[0][2] * m.data[1][3] * m.data[2][1]) - (m.data[0][3] * m.data[1][1] * m.data[2][2])
+		+ (m.data[0][3] * m.data[1][2] * m.data[2][1]) + (m.data[0][2] * m.data[1][1] * m.data[2][3]) + (m.data[0][1] * m.data[1][3] * m.data[2][2]));
 
-	this->data[2][0] = (m.data[1][0] * m.data[2][1]) - (m.data[1][1] * m.data[2][0]); //dh-eg
-	this->data[2][1] = (m.data[0][1] * m.data[2][0]) - (m.data[0][0] * m.data[2][1]); //bg-ah
-	this->data[2][2] = (m.data[0][0] * m.data[1][1]) - (m.data[0][1] * m.data[1][0]); //ae-bd
+	//
+
+	this->data[1][0] = 1 / det * (-(m.data[1][0] * m.data[2][2] * m.data[3][3]) - (m.data[1][2] * m.data[2][3] * m.data[3][0]) - (m.data[1][3] * m.data[2][0] * m.data[3][2])
+		+ (m.data[1][3] * m.data[2][2] * m.data[3][0]) + (m.data[1][2] * m.data[2][0] * m.data[3][3]) + (m.data[1][0] * m.data[2][3] * m.data[3][2]));
+
+	this->data[1][1] = 1 / det * ((m.data[0][0] * m.data[2][2] * m.data[3][3]) + (m.data[0][2] * m.data[2][3] * m.data[3][0]) + (m.data[0][3] * m.data[2][0] * m.data[3][2])
+		- (m.data[0][3] * m.data[2][2] * m.data[3][0]) - (m.data[0][2] * m.data[2][0] * m.data[3][3]) - (m.data[0][0] * m.data[2][3] * m.data[3][2]));
+	
+	this->data[1][2] = 1 / det * (-(m.data[0][0] * m.data[1][2] * m.data[3][3]) - (m.data[0][2] * m.data[1][3] * m.data[3][0]) - (m.data[0][3] * m.data[1][0] * m.data[3][2])
+		+ (m.data[0][3] * m.data[2][2] * m.data[3][0]) + (m.data[0][2] * m.data[2][0] * m.data[3][3]) + (m.data[0][0] * m.data[1][3] * m.data[3][2]));
+
+	this->data[1][3] = 1 / det * ((m.data[0][0] * m.data[1][2] * m.data[2][3]) + (m.data[0][2] * m.data[1][3] * m.data[2][0]) + (m.data[0][3] * m.data[1][0] * m.data[2][2])
+		- (m.data[0][3] * m.data[1][2] * m.data[2][0]) - (m.data[0][2] * m.data[1][0] * m.data[2][3]) - (m.data[0][0] * m.data[1][3] * m.data[2][2]));
+
+	//
+
+	this->data[2][0] = 1 / det * ((m.data[1][0] * m.data[2][1] * m.data[3][3]) + (m.data[1][1] * m.data[2][3] * m.data[3][0]) + (m.data[1][3] * m.data[2][0] * m.data[3][1])
+		- (m.data[1][3] * m.data[2][1] * m.data[3][0]) - (m.data[1][1] * m.data[2][0] * m.data[3][3]) - (m.data[1][0] * m.data[2][3] * m.data[3][1]));
+
+	this->data[2][1] = 1 / det * (-(m.data[0][0] * m.data[2][1] * m.data[3][3]) - (m.data[0][1] * m.data[2][3] * m.data[3][0]) - (m.data[0][3] * m.data[2][0] * m.data[3][1])
+		+ (m.data[0][3] * m.data[2][1] * m.data[3][0]) + (m.data[0][1] * m.data[2][0] * m.data[3][3]) + (m.data[0][0] * m.data[2][3] * m.data[3][1]));
+
+	this->data[2][2] = 1 / det * ((m.data[0][0] * m.data[1][1] * m.data[3][3]) + (m.data[0][1] * m.data[1][3] * m.data[3][0]) + (m.data[0][3] * m.data[1][0] * m.data[3][1])
+		- (m.data[0][3] * m.data[1][1] * m.data[3][0]) - (m.data[0][1] * m.data[1][0] * m.data[3][3]) - (m.data[0][0] * m.data[1][3] * m.data[3][1]));
+
+	this->data[2][3] = 1 / det * (-(m.data[0][0] * m.data[1][1] * m.data[2][3]) - (m.data[0][1] * m.data[1][3] * m.data[2][0]) - (m.data[0][3] * m.data[1][0] * m.data[2][1])
+		+ (m.data[0][3] * m.data[1][1] * m.data[2][0]) + (m.data[0][1] * m.data[1][0] * m.data[2][3]) + (m.data[0][0] * m.data[1][3] * m.data[2][1]));
+
+	//
+
+	this->data[3][0] = 1 / det * (-(m.data[1][0] * m.data[2][1] * m.data[3][2]) - (m.data[1][1] * m.data[2][2] * m.data[3][0]) - (m.data[1][2] * m.data[2][0] * m.data[3][1])
+		+ (m.data[1][2] * m.data[2][1] * m.data[3][0]) + (m.data[1][1] * m.data[2][0] * m.data[3][2]) + (m.data[1][0] * m.data[2][2] * m.data[3][1]));
+
+	this->data[3][1] = 1 / det * ((m.data[0][0] * m.data[2][1] * m.data[3][2]) + (m.data[0][1] * m.data[2][2] * m.data[3][0]) + (m.data[1][2] * m.data[2][0] * m.data[3][1])
+		- (m.data[1][2] * m.data[2][1] * m.data[3][0]) - (m.data[0][1] * m.data[2][0] * m.data[3][2]) - (m.data[0][0] * m.data[2][2] * m.data[3][0]));
+
+	this->data[3][2] = 1 / det * (-(m.data[0][0] * m.data[1][1] * m.data[3][2]) - (m.data[0][1] * m.data[1][2] * m.data[3][0]) - (m.data[0][2] * m.data[1][0] * m.data[3][1])
+		+ (m.data[0][2] * m.data[1][1] * m.data[3][0]) + (m.data[0][1] * m.data[1][0] * m.data[3][2]) + (m.data[0][0] * m.data[1][2] * m.data[3][1]));
+	
+	this->data[3][3] = 1 / det * ((m.data[0][0] * m.data[1][1] * m.data[2][2]) + (m.data[0][1] * m.data[1][2] * m.data[2][0]) + (m.data[0][2] * m.data[1][0] * m.data[2][1])
+		- (m.data[0][2] * m.data[1][1] * m.data[2][0]) - (m.data[0][1] * m.data[1][0] * m.data[2][2]) - (m.data[0][0] * m.data[1][2] * m.data[2][1]));
+
 }
 
 //retourne une matrice comprennant l'inverse de la matrice actuel.
@@ -142,12 +192,19 @@ void Matrix4::setTranspose(const Matrix4& m)
 	data[0][0] = m.data[0][0];
 	data[0][1] = m.data[1][0];
 	data[0][2] = m.data[2][0];
+	data[0][3] = m.data[3][0];
 	data[1][0] = m.data[0][1];
 	data[1][1] = m.data[1][1];
 	data[1][2] = m.data[2][1];
+	data[1][3] = m.data[3][1];
 	data[2][0] = m.data[0][2];
 	data[2][1] = m.data[1][2];
 	data[2][2] = m.data[2][2];
+	data[2][3] = m.data[3][2];
+	data[3][0] = m.data[0][3];
+	data[3][1] = m.data[1][3];
+	data[3][2] = m.data[2][3];
+	data[3][3] = m.data[3][3];
 }
 
 Matrix4 Matrix4::transpose() const

@@ -85,17 +85,17 @@ void Matrix3::setInverse(const Matrix3& m)
 	// a b c
 	// d e f
 	// g h i
-	this->data[0][0] = (m.data[1][1]*m.data[2][2])-(m.data[1][2] * m.data[2][1]); //ei -fh
-	this->data[0][1] = (m.data[0][2] * m.data[2][1]) - (m.data[0][1] * m.data[2][2]); //ch - bi
-	this->data[0][2] = (m.data[0][1] * m.data[1][2]) - (m.data[0][2] * m.data[1][1]); //bf-ce
+	this->data[0][0] = 1/det*(m.data[1][1]*m.data[2][2])-(m.data[1][2] * m.data[2][1]); //ei -fh
+	this->data[0][1] = 1 / det * (m.data[0][2] * m.data[2][1]) - (m.data[0][1] * m.data[2][2]); //ch - bi
+	this->data[0][2] = 1 / det * (m.data[0][1] * m.data[1][2]) - (m.data[0][2] * m.data[1][1]); //bf-ce
 
-	this->data[1][0] = (m.data[1][2] * m.data[2][0]) - (m.data[1][0] * m.data[2][2]); //fg-di
-	this->data[1][1] = (m.data[0][0] * m.data[2][2]) - (m.data[0][2] * m.data[2][0]); //ai-cg
-	this->data[1][2] = (m.data[0][2] * m.data[0][1]) - (m.data[0][0] * m.data[1][2]); //cd-af
+	this->data[1][0] = 1 / det * (m.data[1][2] * m.data[2][0]) - (m.data[1][0] * m.data[2][2]); //fg-di
+	this->data[1][1] = 1 / det * (m.data[0][0] * m.data[2][2]) - (m.data[0][2] * m.data[2][0]); //ai-cg
+	this->data[1][2] = 1 / det * (m.data[0][2] * m.data[0][1]) - (m.data[0][0] * m.data[1][2]); //cd-af
 
-	this->data[2][0] = (m.data[1][0] * m.data[2][1]) - (m.data[1][1] * m.data[2][0]); //dh-eg
-	this->data[2][1] = (m.data[0][1] * m.data[2][0]) - (m.data[0][0] * m.data[2][1]); //bg-ah
-	this->data[2][2] = (m.data[0][0] * m.data[1][1]) - (m.data[0][1] * m.data[1][0]); //ae-bd
+	this->data[2][0] = 1 / det * (m.data[1][0] * m.data[2][1]) - (m.data[1][1] * m.data[2][0]); //dh-eg
+	this->data[2][1] = 1 / det * (m.data[0][1] * m.data[2][0]) - (m.data[0][0] * m.data[2][1]); //bg-ah
+	this->data[2][2] = 1 / det * (m.data[0][0] * m.data[1][1]) - (m.data[0][1] * m.data[1][0]); //ae-bd
 }
 
 //retourne une matrice comprennant l'inverse de la matrice actuel.
