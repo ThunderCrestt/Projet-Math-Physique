@@ -1,4 +1,7 @@
 #pragma once
+#ifndef MATRIX3
+#define MATRIX3
+
 #include <array>
 #include "Vector3D.h"
 #include "Quaternion.h"
@@ -29,3 +32,4 @@ public:
 		void setOrientation(const Quaternion& q);
 };
 
+#endif

@@ -1,12 +1,14 @@
 #pragma once
+#ifndef MATRIX4
+#define MATRIX4
+
 #include <array>
 #include "Vector3D.h"
 #include "Quaternion.h"
 class Matrix4
 {
-private:
-	std::array<std::array<float, 4>, 4> data;
 public:
+	std::array<std::array<float, 4>, 4> data;
 
 	Matrix4(std::array<std::array<float, 4>, 4> data = { {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1} }
 })
@@ -38,3 +40,4 @@ public:
 
 };
 
+#endif

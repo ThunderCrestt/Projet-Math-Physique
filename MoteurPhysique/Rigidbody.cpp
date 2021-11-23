@@ -1,8 +1,8 @@
 #include "RigidBody.h"
 
-/*RigidBody::RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3x3 tenseurInertie)
-: _position(position), _orientation(orientation), _invMass(1/mass), _damping(damping), _angularDamping(angularDamping),
-_forceAccum(Vector3D(0,0,0)), _torqueAccum(Vector3D(0,0,0))*/
+RigidBody::RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie) : _position(position), _orientation(orientation), _inverseMass(1 / mass), _damping(damping), _angularDamping(angularDamping),
+_accumForce(Vector3D(0, 0, 0)), _accumTorque(Vector3D(0, 0, 0)){}
+
 
 float RigidBody::getInverseMass()
 {
@@ -63,10 +63,10 @@ void RigidBody::integrer(float time)
 {
 
     Vector3D _linearAccel =_accumForce  * _inverseMass ;
-    //Vector3D _angularAccel = _inverseInertiaTensorWold * _accumTorque;
+    Vector3D _angularAccel = inverseInertiaTensor * _accumTorque;
     
     _speed = _speed +_linearAccel * time;
-    //_rotation = _rotation +_angularAccel * time;
+    _rotation = _rotation +_angularAccel * time;
 
     //Impose Drag 
     _speed = _speed* pow(_damping, time);
@@ -90,7 +90,7 @@ void RigidBody::clearAccumulator()
 {
 	 _accumForce = Vector3D(0,0,0);
     _accumTorque = Vector3D(0,0,0);
-    //_orrientation.Normalize();
+    _orientation.normalize();
 }
 void RigidBody::addForce(Vector3D& force)
 {
@@ -98,8 +98,8 @@ void RigidBody::addForce(Vector3D& force)
 }
 void RigidBody::addForceAtBodyPoint(Vector3D& force, Vector3D& point)
 {
-	// Vector3D pointMonde = _transformMatrix*point;
-    //addForceAtPoint(force, point);
+	Vector3D pointMonde = _transformMatrix*point;
+    addForceAtPoint(force, point);
 }
 void RigidBody::addForceAtPoint(Vector3D& force, Vector3D& point)
 {
@@ -110,46 +110,59 @@ void RigidBody::addForceAtPoint(Vector3D& force, Vector3D& point)
 //Code à décommenter lors de l'implémentation des matrices,quaternion
 
 
-/*Matrix4 RigidBody::getTransformMatrix()
+Matrix4 RigidBody::getTransformMatrix()
 {
-	return _transformMatrix
-}*/
+	return _transformMatrix;
+}
 
-/*void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
+void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
 {
 inverseInertiaTensor.setInverse(inertiaTensor);
-}*/
+}
 
-/*void RigidBody::setTransformMatrix(Matrix4 matrix)
+void RigidBody::setTransformMatrix(Matrix4 matrix)
 {
 	this->_transformMatrix = matrix;
-}*/
+}
 
-/*void RigidBody::calculateDerivedData()
+void RigidBody::calculateDerivedData()
 {
 // Calculate the transform matrix for the body.
 calculateTransformMatrix(_transformMatrix, _position, _orientation);
-}*/
+}
 
-/*void calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3 &position,const Quaternion &orientation)
+void RigidBody::calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3D &position,const Quaternion &orientation)
 {
-transformMatrix.data[0] = 1-2*orientation.j*orientation.j2*orientation.k*orientation.k;
+	transformMatrix.data[0][0] = 1 - 2 * orientation.j * orientation.j -
+		2 * orientation.k * orientation.k;
 
-transformMatrix.data[1] = 2*orientation.i*orientation.j -
-2*orientation.r*orientation.k;
-transformMatrix.data[2] = 2*orientation.i*orientation.k +
-2*orientation.r*orientation.j;
-transformMatrix.data[3] = position.getX;
-transformMatrix.data[4] = 2*orientation.i*orientation.j +
-2*orientation.r*orientation.k;
-transformMatrix.data[5] = 1-2*orientation.i*orientation.i2*orientation.k*orientation.k;
-transformMatrix.data[6] = 2*orientation.j*orientation.k -
-2*orientation.r*orientation.i;
-transformMatrix.data[7] = position.getY;
-transformMatrix.data[8] = 2*orientation.i*orientation.k -
-2*orientation.r*orientation.j;
-transformMatrix.data[9] = 2*orientation.j*orientation.k +
-2*orientation.r*orientation.i;
-transformMatrix.data[10] = 1-2*orientation.i*orientation.i2*orientation.j*orientation.j;
-transformMatrix.data[11] = position.getZ;
-}*/
+	transformMatrix.data[0][1] = 2 * orientation.i * orientation.j -
+		2 * orientation.r * orientation.k;
+
+	transformMatrix.data[0][2] = 2 * orientation.i * orientation.k +
+		2 * orientation.r * orientation.j;
+
+	transformMatrix.data[0][3] = position.getX();
+
+	transformMatrix.data[1][0] = 2 * orientation.i * orientation.j +
+		2 * orientation.r * orientation.k;
+
+	transformMatrix.data[1][1] = 1 - 2 * orientation.i * orientation.i -
+		2 * orientation.k * orientation.k;
+
+	transformMatrix.data[1][2] = 2 * orientation.j * orientation.k -
+		2 * orientation.r * orientation.i;
+
+	transformMatrix.data[1][3] = position.getY();
+
+	transformMatrix.data[2][0] = 2 * orientation.i * orientation.k -
+		2 * orientation.r * orientation.j;
+
+	transformMatrix.data[2][1] = 2 * orientation.j * orientation.k +
+		2 * orientation.r * orientation.i;
+
+	transformMatrix.data[2][2] = 1 - 2 * orientation.i * orientation.i -
+		2 * orientation.j * orientation.j;
+
+	transformMatrix.data[2][3] = position.getZ();
+}

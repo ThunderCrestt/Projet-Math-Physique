@@ -1,5 +1,7 @@
 #include "Vector3D.h"
-
+#include "Matrix3.h"
+#include "Matrix4.h"
+#include "Quaternion.h"
 class RigidBody
 {
 
@@ -20,9 +22,9 @@ private:
 
 //Code à décommenter lors de l'implémentation des matrices,quaternion
 
-    //Matrix3 inverseInertiaTensor;
-   //Matrix4 _transformMatrix;
-   //Quaternion _orientation;
+   Matrix3 inverseInertiaTensor;
+   Matrix4 _transformMatrix;
+   Quaternion _orientation;
 
 public:
 
@@ -63,12 +65,12 @@ public:
 
 //Code à décommenter lors de l'implémentation des matrices,quaternion
 
-    // Rigidbody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3x3 tenseurInertie);
-    //Matrix4 getTransformMatrix();
-    //Quaternion getOrientation();
-    //void setInverseInertiaTensor(const Matrix3 &inertiaTensor);
-    //void setTransformMatrix();
-    //void setOrientation();
-    //void calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3 &position,const Quaternion &orientation)
+    RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie);
+    Matrix4 getTransformMatrix();
+    Quaternion getOrientation();
+    void setInverseInertiaTensor(const Matrix3 &inertiaTensor);
+    void setTransformMatrix(Matrix4 matrix);
+    void setOrientation();
+    void calculateTransformMatrix(Matrix4& transformMatrix, const Vector3D& position, const Quaternion& orientation);
 
 };

@@ -1,5 +1,10 @@
 #pragma once
 #include <array>
+#ifndef QUATERNION
+#define QUATERNION
+
+ // !
+
 #include "Vector3D.h"
 class Quaternion
 {
@@ -71,3 +76,4 @@ public:
 };
 
 
+#endif
