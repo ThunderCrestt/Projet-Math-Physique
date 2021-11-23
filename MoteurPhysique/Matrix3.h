@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include "Vector3D.h"
+#include "Quaternion.h"
 class Matrix3
 {
 private:
@@ -25,5 +26,6 @@ public:
 		void invert();
 		void setTranspose(const Matrix3& m);
 		Matrix3 transpose() const;
+		void setOrientation(const Quaternion& q);
 };
 

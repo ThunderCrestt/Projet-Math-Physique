@@ -131,3 +131,15 @@ Matrix3 Matrix3::transpose() const
 	result.setTranspose(*this);
 	return result;
 }
+
+void Matrix3::setOrientation(const Quaternion &q) {
+	data[0][0] = 1 - (2 * q.j * q.j + 2 * q.k * q.k);
+	data[0][1] = 2 * q.i * q.j + 2 * q.k * q.r;
+	data[0][2] = 2 * q.i * q.k - 2 * q.j * q.r;
+	data[1][0] = 2 * q.i * q.j - 2 * q.k * q.r;
+	data[1][1] = 1 - (2 * q.i * q.i + 2 * q.k * q.k);
+	data[1][2] = 2 * q.j * q.k + 2 * q.i * q.r;
+	data[2][0] = 2 * q.i * q.k + 2 * q.j * q.r;
+	data[2][1] = 2 * q.j * q.k - 2 * q.i * q.r;
+	data[2][2] = 1 - (2 * q.i * q.i + 2 * q.j * q.j);
+}
