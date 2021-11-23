@@ -96,7 +96,7 @@ Vector3D Matrix4::operator*(const Vector3D& vector)
 void Matrix4::setInverse(const Matrix4& m)
 {
 	//on calcule d'abord le déterminant
-	float det = 
+	float det = (
 		m.data[0][0]*( (m.data[1][1]*m.data[2][2]*m.data[3][3]) + (m.data[1][2]* m.data[2][3]* m.data[3][1]) + (m.data[1][3]* m.data[2][1]* m.data[3][2])
 		-(m.data[1][3]* m.data[2][2]* m.data[3][1]) - (m.data[1][2]* m.data[2][1]* m.data[3][3]) - (m.data[1][1]* m.data[2][3]* m.data[3][2]) 
 		)
@@ -111,7 +111,10 @@ void Matrix4::setInverse(const Matrix4& m)
 		
 		-m.data[3][0]*( (m.data[0][1]* m.data[1][2]* m.data[2][3]) + (m.data[0][2]* m.data[1][3]* m.data[2][1]) + (m.data[0][3]* m.data[1][1]* m.data[2][2])
 			-(m.data[0][3]* m.data[1][2]* m.data[2][1]) - (m.data[0][2]* m.data[1][1]* m.data[2][3]) - (m.data[0][1]* m.data[1][3]* m.data[2][2]) 
-		);
+		));
+
+
+
 	if (det == (float)0)
 	{
 		return; // le déterminent est égale à 0, on ne peut pas calculer l'inverse
@@ -138,7 +141,7 @@ void Matrix4::setInverse(const Matrix4& m)
 		- (m.data[0][3] * m.data[2][2] * m.data[3][0]) - (m.data[0][2] * m.data[2][0] * m.data[3][3]) - (m.data[0][0] * m.data[2][3] * m.data[3][2]));
 	
 	this->data[1][2] = 1 / det * (-(m.data[0][0] * m.data[1][2] * m.data[3][3]) - (m.data[0][2] * m.data[1][3] * m.data[3][0]) - (m.data[0][3] * m.data[1][0] * m.data[3][2])
-		+ (m.data[0][3] * m.data[2][2] * m.data[3][0]) + (m.data[0][2] * m.data[2][0] * m.data[3][3]) + (m.data[0][0] * m.data[1][3] * m.data[3][2]));
+		+ (m.data[0][3] * m.data[1][2] * m.data[3][0]) + (m.data[0][2] * m.data[1][0] * m.data[3][3]) + (m.data[0][0] * m.data[1][3] * m.data[3][2]));
 
 	this->data[1][3] = 1 / det * ((m.data[0][0] * m.data[1][2] * m.data[2][3]) + (m.data[0][2] * m.data[1][3] * m.data[2][0]) + (m.data[0][3] * m.data[1][0] * m.data[2][2])
 		- (m.data[0][3] * m.data[1][2] * m.data[2][0]) - (m.data[0][2] * m.data[1][0] * m.data[2][3]) - (m.data[0][0] * m.data[1][3] * m.data[2][2]));
@@ -159,11 +162,11 @@ void Matrix4::setInverse(const Matrix4& m)
 
 	//
 
-	this->data[3][0] = 1 / det * (-(m.data[1][0] * m.data[2][1] * m.data[3][2]) - (m.data[1][1] * m.data[2][2] * m.data[3][0]) - (m.data[1][2] * m.data[2][0] * m.data[3][1])
+	this->data[3][0] = 1 / det * (-(m.data[1][0] * m.data[2][1] * m.data[3][2]) - (m.data[0][1] * m.data[2][2] * m.data[3][0]) - (m.data[1][2] * m.data[2][0] * m.data[3][1])
 		+ (m.data[1][2] * m.data[2][1] * m.data[3][0]) + (m.data[1][1] * m.data[2][0] * m.data[3][2]) + (m.data[1][0] * m.data[2][2] * m.data[3][1]));
 
-	this->data[3][1] = 1 / det * ((m.data[0][0] * m.data[2][1] * m.data[3][2]) + (m.data[0][1] * m.data[2][2] * m.data[3][0]) + (m.data[1][2] * m.data[2][0] * m.data[3][1])
-		- (m.data[1][2] * m.data[2][1] * m.data[3][0]) - (m.data[0][1] * m.data[2][0] * m.data[3][2]) - (m.data[0][0] * m.data[2][2] * m.data[3][0]));
+	this->data[3][1] = 1 / det * ((m.data[0][0] * m.data[2][1] * m.data[3][2]) + (m.data[0][1] * m.data[2][2] * m.data[3][0]) + (m.data[0][2] * m.data[2][0] * m.data[3][1])
+		- (m.data[0][2] * m.data[2][1] * m.data[3][0]) - (m.data[0][1] * m.data[2][0] * m.data[3][2]) - (m.data[0][0] * m.data[2][2] * m.data[3][1]));
 
 	this->data[3][2] = 1 / det * (-(m.data[0][0] * m.data[1][1] * m.data[3][2]) - (m.data[0][1] * m.data[1][2] * m.data[3][0]) - (m.data[0][2] * m.data[1][0] * m.data[3][1])
 		+ (m.data[0][2] * m.data[1][1] * m.data[3][0]) + (m.data[0][1] * m.data[1][0] * m.data[3][2]) + (m.data[0][0] * m.data[1][2] * m.data[3][1]));
@@ -176,12 +179,12 @@ void Matrix4::setInverse(const Matrix4& m)
 //retourne une matrice comprennant l'inverse de la matrice actuel.
 Matrix4 Matrix4::inverse() const
 {
-	Matrix4 result;
-	result.setInverse(*this);
-	return result;
+	Matrix4 resultMatrix;
+	resultMatrix.setInverse(*this);
+	return resultMatrix;
 }
 
-//inverse la matrice
+//inverse la matrice actuel
 void Matrix4::invert()
 {
 	setInverse(*this);

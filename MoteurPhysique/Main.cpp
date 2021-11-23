@@ -12,6 +12,8 @@
 #include "PlaneSurface2DContactGenerator.h"
 #include "ParticuleCable.h"
 #include "ParticuleElastique.h"
+#include "Matrix3.h"
+#include "Matrix4.h"
 
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
@@ -244,6 +246,24 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main()
 {
+
+	//test matrice
+	Matrix4 m4 = Matrix4({ {
+		{1,1,1,-1},
+		{1,1,-1,1},
+		{1,-1,1,1},
+		{-1,1,1,1}
+} });
+	Matrix4 inverseM4 = m4.inverse();
+
+	Matrix3 m3 = Matrix3({ {
+	{1,1,1},
+	{1,1,-1},
+	{1,-1,1},
+} });
+	Matrix3 inverseM3 = m3.inverse();
+
+
 	//initialisation d'une particule qui sera modifié pour chaque type de projectile
 	unsigned iterationsContactResolver = 15;
 	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);

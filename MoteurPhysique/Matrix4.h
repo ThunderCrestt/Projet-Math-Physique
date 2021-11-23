@@ -21,7 +21,9 @@ public:
 
 	//calcul l'inverse de la matrice m et l'applique sur la matrice actuel.
 	void setInverse(const Matrix4& m);
+	//retourne une matrice comprennant l'inverse de la matrice actuel.
 	Matrix4 inverse() const;
+	//inverse la matrice actuel
 	void invert();
 	void setTranspose(const Matrix4& m);
 	Matrix4 transpose() const;
