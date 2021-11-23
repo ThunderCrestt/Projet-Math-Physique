@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include "Vector3D.h"
+#include "Quaternion.h"
 class Matrix4
 {
 private:
@@ -27,5 +28,13 @@ public:
 	void invert();
 	void setTranspose(const Matrix4& m);
 	Matrix4 transpose() const;
+	void setOrientationAndPos(const Quaternion& q, const Vector3D& pos);
+	Vector3D transformInverse(const Vector3D& vector) const;
+	Vector3D transformDirection(const Vector3D& vector) const;
+	Vector3D transformInverseDirection(const Vector3D& vector) const;
+	Vector3D worldToLocal(const Vector3D& world, const Matrix4& transform);
+	Vector3D localToWorldDir(const Vector3D& local, const Matrix4& transform);
+	Vector3D worldToLocalDir(const Vector3D& world, const Matrix4& transform);
+
 };
 

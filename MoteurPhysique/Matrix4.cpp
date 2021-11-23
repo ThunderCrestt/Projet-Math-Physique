@@ -216,3 +216,90 @@ Matrix4 Matrix4::transpose() const
 	result.setTranspose(*this);
 	return result;
 }
+
+void Matrix4::setOrientationAndPos(const Quaternion& q, const Vector3D& pos)
+{
+	data[0][0] = 1 - (2 * q.j * q.j + 2 * q.k * q.k);
+	data[0][1] = 2 * q.i * q.j + 2 * q.k * q.r;
+	data[0][2] = 2 * q.i * q.k - 2 * q.j * q.r;
+	data[0][3] = pos.getX();
+	data[1][0] = 2 * q.i * q.j - 2 * q.k * q.r;
+	data[1][1] = 1 - (2 * q.i * q.i + 2 * q.k * q.k);
+	data[1][2] = 2 * q.j * q.k + 2 * q.i * q.r;
+	data[1][3] = pos.getY();
+	data[2][0] = 2 * q.i * q.k + 2 * q.j * q.r;
+	data[2][1] = 2 * q.j * q.k - 2 * q.i * q.r;
+	data[2][2] = 1 - (2 * q.i * q.i + 2 * q.j * q.j);
+	data[2][3] = pos.getZ();
+	data[3][0] = 0;
+	data[3][1] = 0;
+	data[3][2] = 0;
+	data[3][3] = 1;
+}
+
+Vector3D Matrix4::transformInverse(const Vector3D& vector) const {
+	Vector3D tmp = vector;
+	tmp.setX(tmp.getX() - data[0][3]);
+	tmp.setY(tmp.getY() - data[1][3]);
+	tmp.setZ(tmp.getZ() - data[2][3]);
+	return Vector3D(
+		tmp.getX() * data[0][0] +
+		tmp.getY() * data[1][0] +
+		tmp.getZ() * data[2][0],
+
+		tmp.getX() * data[0][1] +
+		tmp.getY() * data[1][1] +
+		tmp.getZ() * data[2][1],
+
+		tmp.getX() * data[0][2] +
+		tmp.getY() * data[1][2] +
+		tmp.getZ() * data[2][2]
+	);
+}
+
+Vector3D Matrix4::transformDirection(const Vector3D& vector) const {
+	return Vector3D(
+		vector.getX() * data[0][0] +
+		vector.getY() * data[0][1] +
+		vector.getZ() * data[0][2],
+
+		vector.getX() * data[1][0] +
+		vector.getY() * data[1][1] +
+		vector.getZ() * data[1][2],
+
+		vector.getX() * data[2][0] +
+		vector.getY() * data[2][1] +
+		vector.getZ() * data[2][2]
+	);
+}
+
+Vector3D Matrix4::transformInverseDirection(const Vector3D& vector) const {
+	return Vector3D(
+		vector.getX() * data[0][0] +
+		vector.getY() * data[1][0] +
+		vector.getZ() * data[2][0],
+
+		vector.getX() * data[0][1] +
+		vector.getY() * data[1][1] +
+		vector.getZ() * data[2][1],
+
+		vector.getX() * data[0][2] +
+		vector.getY() * data[1][2] +
+		vector.getZ() * data[2][2]
+		);
+}
+
+Vector3D Matrix4::worldToLocal(const Vector3D& world, const Matrix4& transform)
+{
+	return transform.transformInverse(world);
+}
+
+Vector3D Matrix4::localToWorldDir(const Vector3D& local, const Matrix4& transform)
+{
+	return transform.transformDirection(local);
+}
+
+Vector3D Matrix4::worldToLocalDir(const Vector3D& world, const Matrix4& transform)
+{
+	return transform.transformInverseDirection(world);
+}
