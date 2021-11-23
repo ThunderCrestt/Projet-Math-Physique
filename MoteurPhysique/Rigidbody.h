@@ -31,6 +31,7 @@ public:
     //getter si besoin
     float getInverseMass();
 	float getDamping();
+    float getLinearDamping();
 
     Vector3D getPosition();
 	Vector3D getVelocity();
@@ -41,6 +42,7 @@ public:
     //setter si besoin
     void setInverseMass(float inverseMass);
 	void setDamping(float damping);
+    void setLinearDamping(float lineardamping);
 	void setPosition(Vector3D const& vector);
 	void setVelocity(Vector3D const& vector);
 	void setAcceleration(Vector3D const& vector);

@@ -1,20 +1,21 @@
 #include "RigidBody.h"
 
 /*RigidBody::RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3x3 tenseurInertie)
-: m_position(position), m_orientation(orientation), m_invMass(1/mass), m_damping(damping), m_angularDamping(angularDamping),
-m_forceAccum(Vector3D(0,0,0)), m_torqueAccum(Vector3D(0,0,0))*/
+: _position(position), _orientation(orientation), _invMass(1/mass), _damping(damping), _angularDamping(angularDamping),
+_forceAccum(Vector3D(0,0,0)), _torqueAccum(Vector3D(0,0,0))*/
 
 float RigidBody::getInverseMass()
 {
 	return _inverseMass;
 }
-
 float RigidBody::getDamping()
+{
+	return _damping;
+}
+float RigidBody::getLinearDamping()
 {
 	return _linearDamping;
 }
-
-
 Vector3D RigidBody::getPosition()
 {
 	return _position;
@@ -38,7 +39,11 @@ void RigidBody::setInverseMass(float inverseMass)
 }
 void RigidBody::setDamping(float damping)
 {
-	this->_linearDamping = damping;
+	this->_damping = damping;
+}
+void RigidBody::setLinearDamping(float lineardamping)
+{
+	this->_linearDamping = lineardamping;
 }
 void RigidBody::setPosition(Vector3D const& vector)
 {
@@ -81,7 +86,6 @@ void RigidBody::integrer(float time)
     clearAccumulator();
 
 }
-
 void RigidBody::clearAccumulator()
 {
 	 _accumForce = Vector3D(0,0,0);
