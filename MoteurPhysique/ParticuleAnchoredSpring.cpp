@@ -1,5 +1,5 @@
 #include "ParticuleAnchoredSpring.h"
-ParticuleAnchoredSpring::ParticuleAnchoredSpring(Vector3D *pointAncrage, float k, float l0) : ParticuleForceGenerator()
+ParticuleAnchoredSpring::ParticuleAnchoredSpring(Vector3D *pointAncrage, float k, float l0) : ForceGenerator()
 {
 	this->_pointAncrage = pointAncrage;
 	this->_constanteRessort = k;

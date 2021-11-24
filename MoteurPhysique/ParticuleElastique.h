@@ -1,6 +1,6 @@
 #pragma once
-#include "ParticuleForceGenerator.h"
-class ParticuleElastique : public ParticuleForceGenerator
+#include "ForceGenerator.h"
+class ParticuleElastique : public ForceGenerator
 {
 private:
 	//si on veut lier deux particules par un ressort il faut deux générateurs

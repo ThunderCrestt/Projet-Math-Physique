@@ -7,6 +7,7 @@
 #include<vector>
 #include <stdlib.h>
 #include "gravityForceGenerator.h"
+#include "DragForceGenerator.h"
 #include "ParticuleSpring.h"
 #include "ParticuleContactResolver.h"
 #include "PlaneSurface2DContactGenerator.h"
@@ -15,6 +16,7 @@
 #include "Rigidbody.h"
 #include "Matrix3.h"
 #include "Matrix4.h"
+#include "RigidBodyManager.h"
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -76,13 +78,14 @@ void setupGeometries(RigidBody rb) {
 	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
 
 	// transformation de tous nos points
-	rb.getTransformMatrix()* vertex1;
-	rb.getTransformMatrix()* vertex2;
-	rb.getTransformMatrix()* vertex3;
-	rb.getTransformMatrix()* vertex4;
-	rb.getTransformMatrix()* vertex5;
-	rb.getTransformMatrix()* vertex6;	
-	rb.getTransformMatrix()* vertex7;
+	Matrix4 transformMatrix = rb.getTransformMatrix();
+	vertex1 = rb.getTransformMatrix()* vertex1;
+	vertex2 = rb.getTransformMatrix()* vertex2;
+	vertex3 = rb.getTransformMatrix()* vertex3;
+	vertex4 = rb.getTransformMatrix()* vertex4;
+	vertex5 = rb.getTransformMatrix()* vertex5;
+	vertex6 = rb.getTransformMatrix()* vertex6;
+	vertex7 = rb.getTransformMatrix()* vertex7;
 
 
 	//Carré 1
@@ -183,20 +186,26 @@ int main()
 	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
 	ParticuleWorld system = ParticuleWorld();
 	system.resolver.setIterations(15);
+	Vector3D gravity = Vector3D(0, -0.9, 0);
+	GravityForceGenerator gravityForce = GravityForceGenerator(gravity);
+	DragForceGenerator dragForce = DragForceGenerator(1, 1);
 	float mass = 1;
 	float lSquare = 1; //la longueur du carré
-	Quaternion orientation = Quaternion(0, 0, 0, 0);
+	Quaternion orientation = Quaternion(0, 1, 1, 1);
 	Matrix3 inertiaTensor = Matrix3({ {
 		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
 	} });
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
-	Vector3D gravity = Vector3D(0, -0.9, 0);
-	Vector3D forcePousse = Vector3D(0.5, 1, 0);
-	Vector3D truc = ((float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2), 0);
-	rb.addForce(gravity);
-	rb.addForce(forcePousse);
+	Vector3D forcePousse = Vector3D(1, 1, 0);
+	RigidBodyManager rbManager = RigidBodyManager();
+	rb.setVelocity(forcePousse);
+	rbManager.addToRigidBodies(rb);
+	rbManager.addToRegistre(rb, gravityForce);
+	//rbManager.addToRegistre(rb, dragForce);
+	//rb.addForce(gravity);
+	//rb.addForce(forcePousse);
 	//rb.addForceAtBodyPoint(forcePousse,truc );
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
@@ -274,13 +283,12 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		processInput(window);
-		rb.integrer(deltaTime);
+		rbManager.runPhysic(deltaTime);
 		setupGeometries(rb);
 		rendScene();
 		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		rb.addForce(gravity);
 
 	}
 

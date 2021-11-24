@@ -1,7 +1,7 @@
 #pragma once
-#include "ParticuleForceGenerator.h"
+#include "ForceGenerator.h"
 #include "Particule.h"
-class ParticuleSpring : public ParticuleForceGenerator
+class ParticuleSpring : public ForceGenerator
 {
 private:
 	//si on veut lier deux particules par un ressort il faut deux générateurs

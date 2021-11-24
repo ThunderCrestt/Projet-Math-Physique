@@ -1,14 +1,14 @@
 #pragma once
 #include "Particule.h"
-#include "ParticuleForceGenerator.h"
+#include "ForceGenerator.h"
 #include <vector>
 
 
 
 struct EnregistrementForce {
 	Particule* particule;
-	ParticuleForceGenerator* fg;
-	EnregistrementForce(Particule& _particule, ParticuleForceGenerator& _fg)
+	ForceGenerator* fg;
+	EnregistrementForce(Particule& _particule, ForceGenerator& _fg)
 	{
 		particule = &_particule;
 		fg = &_fg;
@@ -31,8 +31,8 @@ private :
 public:
 	Registre _registre;
 	RegistreForces(){}
-	void addToRegistre(Particule &particule, ParticuleForceGenerator &fg);
-	void removeFromRegistre(Particule& particule, ParticuleForceGenerator& fg);
+	void addToRegistre(Particule &particule, ForceGenerator &fg);
+	void removeFromRegistre(Particule& particule, ForceGenerator& fg);
 	EnregistrementForce getEnregistrementAtPos(int pos);
 	Registre getRegistre();
 	void clear();

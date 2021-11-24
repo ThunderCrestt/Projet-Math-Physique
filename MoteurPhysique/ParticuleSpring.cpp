@@ -1,5 +1,5 @@
 #include "ParticuleSpring.h"
-ParticuleSpring::ParticuleSpring(Particule* autreParticule, float constanteRessort, float l0): ParticuleForceGenerator()
+ParticuleSpring::ParticuleSpring(Particule* autreParticule, float constanteRessort, float l0): ForceGenerator()
 {
 	this->_autreParticule = autreParticule;
 	this->_constanteRessort = constanteRessort;

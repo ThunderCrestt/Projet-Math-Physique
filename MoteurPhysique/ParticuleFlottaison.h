@@ -1,7 +1,7 @@
 #pragma once
-#include "ParticuleForceGenerator.h"
+#include "ForceGenerator.h"
 #include "Vector3D.h"
-class ParticuleFlottaison : public ParticuleForceGenerator
+class ParticuleFlottaison : public ForceGenerator
 {
 private:
 	float _profondeurMax;

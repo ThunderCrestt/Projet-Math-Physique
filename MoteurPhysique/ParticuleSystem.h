@@ -3,7 +3,7 @@
 #include "ParticuleContactResolver.h"
 #include "Particule.h"
 #include "RegistreForces.h"
-#include "ParticuleForceGenerator.h"
+#include "ForceGenerator.h"
 #include "ParticuleContactGenerator.h"
 #include "SimpleParticuleContactGenerator.h"
 class ParticuleWorld
@@ -17,8 +17,8 @@ class ParticuleWorld
 		ParticuleWorld();
 		void addParticule(Particule& particule);
 		void removeParticule(Particule& particule);
-		void addToRegistreForce( Particule &particule, ParticuleForceGenerator &forceGenerator);
-		void removeFromRegistreForce(Particule &particule , ParticuleForceGenerator &forceGenerator);
+		void addToRegistreForce( Particule &particule, ForceGenerator &forceGenerator);
+		void removeFromRegistreForce(Particule &particule , ForceGenerator &forceGenerator);
 		//compute the next position and velocity of each particule
 		void integerAllParticule(float time);
 		//return the vector of particules

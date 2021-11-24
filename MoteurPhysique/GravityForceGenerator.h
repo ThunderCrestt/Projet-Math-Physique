@@ -1,13 +1,13 @@
 #pragma once
 #include "Vector3D.h"
-#include "ParticuleForceGenerator.h"
+#include "ForceGenerator.h"
 #include "Rigidbody.h"
-class GravityForceGenerator : public ParticuleForceGenerator
+class GravityForceGenerator : public ForceGenerator
 {
 private : 
 	Vector3D _gravity;
 public:
-	GravityForceGenerator(Vector3D gravity) : ParticuleForceGenerator()
+	GravityForceGenerator(Vector3D gravity) : ForceGenerator()
 	{
 		this->_gravity = gravity;
 	}

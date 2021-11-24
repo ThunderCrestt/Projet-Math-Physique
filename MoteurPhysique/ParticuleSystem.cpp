@@ -45,12 +45,12 @@ unsigned ParticuleWorld::generateContacts()
 }
 
 //fonctions d'ajout et de retrait dans les registre de force
-void ParticuleWorld::addToRegistreForce(Particule& particule, ParticuleForceGenerator &forceGenerator)
+void ParticuleWorld::addToRegistreForce(Particule& particule, ForceGenerator &forceGenerator)
 {
 	_registre.addToRegistre(particule, forceGenerator);
 }
 
-void ParticuleWorld::removeFromRegistreForce(Particule& particule, ParticuleForceGenerator &forceGenerator)
+void ParticuleWorld::removeFromRegistreForce(Particule& particule, ForceGenerator &forceGenerator)
 {
 	_registre.removeFromRegistre(particule, forceGenerator);
 }

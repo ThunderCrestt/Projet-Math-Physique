@@ -1,5 +1,5 @@
 #include "ParticuleElastique.h"
-ParticuleElastique::ParticuleElastique(Particule* autreParticule, float constanteRessort, float l0) : ParticuleForceGenerator()
+ParticuleElastique::ParticuleElastique(Particule* autreParticule, float constanteRessort, float l0) : ForceGenerator()
 {
 	this->_autreParticule = autreParticule;
 	this->_constanteRessort = constanteRessort;
