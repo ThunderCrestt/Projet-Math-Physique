@@ -45,10 +45,16 @@ public:
 		data[2] = j;
 		data[3] = k;
 
-	}
+	} 
+	/**
+	*Normalise le quaternion
+	*/
 	void normalize();
 	void operator *=(const Quaternion& multiplier);
 
+	/**
+	*tourne le quaternion par un vecteur.
+	*/
 	void rotateByVector(const Vector3D & vector,float scale)
 	{
 		Quaternion q(0, vector.getX() * scale, vector.getY() * scale,
@@ -57,7 +63,9 @@ public:
 		normalize();
 	}
 
-	//update 
+	/*
+	* ajoute au quaternion un vecteur par un scalaire
+	*/
 	void addScaledVector(const Vector3D& vector, float scale)
 	{
 		Quaternion q(0,

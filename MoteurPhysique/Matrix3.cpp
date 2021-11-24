@@ -98,7 +98,6 @@ void Matrix3::setInverse(const Matrix3& m)
 	this->data[2][2] = 1 / det *( (m.data[0][0] * m.data[1][1]) - (m.data[0][1] * m.data[1][0])); //ae-bd
 }
 
-//retourne une matrice comprennant l'inverse de la matrice actuel.
 Matrix3 Matrix3::inverse() const
 {
 	Matrix3 resultMatrix;
@@ -106,7 +105,6 @@ Matrix3 Matrix3::inverse() const
 	return resultMatrix;
 }
 
-//inverse la matrice
 void Matrix3::invert()
 {
 	setInverse(*this);
