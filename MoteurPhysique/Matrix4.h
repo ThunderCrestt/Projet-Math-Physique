@@ -34,7 +34,13 @@ public:
 	Vector3D transformInverse(const Vector3D& vector) const;
 	Vector3D transformDirection(const Vector3D& vector) const;
 	Vector3D transformInverseDirection(const Vector3D& vector) const;
+	/**
+	*Change la base du point world en local en fonction de la matrice de transformation
+	*/
 	Vector3D worldToLocal(const Vector3D& world, const Matrix4& transform);
+	/**
+	*Change la base du point local en world en fonction de la matrice de transformation
+	*/
 	Vector3D localToWorldDir(const Vector3D& local, const Matrix4& transform);
 	Vector3D worldToLocalDir(const Vector3D& world, const Matrix4& transform);
 
