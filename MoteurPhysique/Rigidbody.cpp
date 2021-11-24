@@ -69,7 +69,7 @@ void RigidBody::integrer(float time)
     _rotation = _rotation*pow(_angularDamping, time) ;
 
     
-    _position =_position+ _speed * time;
+    _position =_position+ _speed * (time);
     //_orientation = _orientation +_rotation * time;
 	_orientation.addScaledVector(_rotation, time);
     //Impose Drag 

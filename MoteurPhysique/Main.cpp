@@ -59,7 +59,7 @@ void processInput(GLFWwindow* window)
 }
 
 // recuperation des vertices pour dessiner plus tard 
-void setupGeometries(ParticuleWorld system) {
+void setupGeometries(RigidBody rb) {
 	glGenVertexArrays(3, &myVAO[0]);
 	glGenBuffers(3, &myVBO[0]);
 
@@ -67,13 +67,13 @@ void setupGeometries(ParticuleWorld system) {
 	//enregistrement des vertexes de la Figure
 
 	//Création des 6 points de notre figure
-	Vector3D vertex1 = { (float)(gravityCenter.getX() - 0.2), (float)(gravityCenter.getY() - 0.2) , 0 };
-	Vector3D vertex2 = { (float)(gravityCenter.getX() - 0.2), (float)(gravityCenter.getY() + 0.2) , 0 };
-	Vector3D vertex3 = { (float)(gravityCenter.getX() + 0.2), (float)(gravityCenter.getY() + 0.2) , 0 };
-	Vector3D vertex4 = { (float)(gravityCenter.getX() + 0.2), (float)(gravityCenter.getY() - 0.2) , 0 };
-	Vector3D vertex5 = { (float)(gravityCenter.getX() + 0.3), (float)(gravityCenter.getY() + 0.2) , 0 };
-	Vector3D vertex6 = { (float)(gravityCenter.getX() + 0.3), (float)(gravityCenter.getY() + 0.1) , 0 };
-	Vector3D vertex7 = { (float)(gravityCenter.getX() + 0.2), (float)(gravityCenter.getY() + 0.1) , 0 };
+	Vector3D vertex1 = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
+	Vector3D vertex2 = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
+	Vector3D vertex3 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
+	Vector3D vertex4 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
+	Vector3D vertex5 = { (float)(rb.getPosition().getX() + 0.3), (float)(rb.getPosition().getY() + 0.2) , 0 };
+	Vector3D vertex6 = { (float)(rb.getPosition().getX() + 0.3), (float)(rb.getPosition().getY() + 0.1) , 0 };
+	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
 
 	// transformation de tous nos points
 
@@ -246,7 +246,7 @@ int main()
 
 	glViewport(0, 0, 1000, 1000);
 
-	setupGeometries(system);
+	setupGeometries(rb);
 
 	glClearColor(0.7f, 0.7f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -263,7 +263,7 @@ int main()
 		lastFrame = currentFrame;
 		processInput(window);
 		rb.integrer(deltaTime);
-		setupGeometries(system);
+		setupGeometries(rb);
 		rendScene();
 		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
