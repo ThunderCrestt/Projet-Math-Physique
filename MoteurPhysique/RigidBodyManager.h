@@ -9,6 +9,14 @@ class RigidBodyManager
 {
 private :
 	std::vector<RigidBody*> rigidBodies;
+public :
+	RigidBodyManager();
+	std::vector<RigidBody*> getRigidBodies();
+	void addToRigidBodies(RigidBody& rb);
+	void removeFromRigidBodies(RigidBody& rb);
+	void integerAllRigidBodies(float duration);
+	void startFrame();
+	void runPhysic(float duration);
 
 };
 

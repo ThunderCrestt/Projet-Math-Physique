@@ -196,8 +196,8 @@ int main()
 	Vector3D forcePousse = Vector3D(0.5, 1, 0);
 	Vector3D truc = ((float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2), 0);
 	rb.addForce(gravity);
-	//rb.addForce(forcePousse);
-	rb.addForceAtBodyPoint(forcePousse,truc );
+	rb.addForce(forcePousse);
+	//rb.addForceAtBodyPoint(forcePousse,truc );
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -280,7 +280,7 @@ int main()
 		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		//rb.addForce(gravity);
+		rb.addForce(gravity);
 
 	}
 
