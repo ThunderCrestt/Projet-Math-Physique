@@ -9,7 +9,6 @@ private:
 
     float _inverseMass;
     float _damping;
-	float _linearDamping;
     float _angularDamping;
     
 
@@ -33,7 +32,6 @@ public:
     //getter si besoin
     float getInverseMass();
 	float getDamping();
-    float getLinearDamping();
 
     Vector3D getPosition();
 	Vector3D getVelocity();
@@ -44,7 +42,6 @@ public:
     //setter si besoin
     void setInverseMass(float inverseMass);
 	void setDamping(float damping);
-    void setLinearDamping(float lineardamping);
 	void setPosition(Vector3D const& vector);
 	void setVelocity(Vector3D const& vector);
 	void setAcceleration(Vector3D const& vector);
@@ -65,7 +62,7 @@ public:
 
 //Code à décommenter lors de l'implémentation des matrices,quaternion
 
-    RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie);
+    RigidBody(Vector3D *position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie);
     Matrix4 getTransformMatrix();
     Quaternion getOrientation();
     void setInverseInertiaTensor(const Matrix3 &inertiaTensor);

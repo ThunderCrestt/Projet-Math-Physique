@@ -12,7 +12,9 @@
 #include "PlaneSurface2DContactGenerator.h"
 #include "ParticuleCable.h"
 #include "ParticuleElastique.h"
-
+#include "Rigidbody.h"
+#include "Matrix3.h"
+#include "Matrix4.h"
 // vertex shader basique
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -173,8 +175,17 @@ int main()
 	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
 	ParticuleWorld system = ParticuleWorld();
 	system.resolver.setIterations(15);
-
-
+	float mass = 1;
+	float lSquare = 1; //la longueur du carré
+	Quaternion orientation = Quaternion(0, 0, 0, 0);
+	Matrix3 inertiaTensor = Matrix3({ {
+		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
+		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
+		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
+	} });
+	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
+	Vector3D gravity = Vector3D(0, -0.9, 0);
+	rb.addForce(gravity);
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -247,11 +258,11 @@ int main()
 	double deltaTime;
 	while (!glfwWindowShouldClose(window))
 	{
-		//currentFrame = glfwGetTime();
-		//deltaTime = currentFrame - lastFrame;
-		//lastFrame = currentFrame;
-		//system.runPhysic(deltaTime);
-		//processInput(window);
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		processInput(window);
+		rb.integrer(deltaTime);
 		setupGeometries(system);
 		rendScene();
 		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;

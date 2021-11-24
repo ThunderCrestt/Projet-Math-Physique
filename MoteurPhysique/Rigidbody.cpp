@@ -1,7 +1,9 @@
 #include "RigidBody.h"
 
-RigidBody::RigidBody(Vector3D position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie) : _position(position), _orientation(orientation), _inverseMass(1 / mass), _damping(damping), _angularDamping(angularDamping),
-_accumForce(Vector3D(0, 0, 0)), _accumTorque(Vector3D(0, 0, 0)){}
+RigidBody::RigidBody(Vector3D *position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie) : _position(*position), _orientation(orientation), _inverseMass(1 / mass), _damping(damping), _angularDamping(angularDamping),
+_accumForce(Vector3D(0, 0, 0)), _accumTorque(Vector3D(0, 0, 0)){
+	this->setInverseInertiaTensor(tenseurInertie);
+}
 
 
 float RigidBody::getInverseMass()
@@ -12,10 +14,7 @@ float RigidBody::getDamping()
 {
 	return _damping;
 }
-float RigidBody::getLinearDamping()
-{
-	return _linearDamping;
-}
+
 Vector3D RigidBody::getPosition()
 {
 	return _position;
@@ -41,10 +40,7 @@ void RigidBody::setDamping(float damping)
 {
 	this->_damping = damping;
 }
-void RigidBody::setLinearDamping(float lineardamping)
-{
-	this->_linearDamping = lineardamping;
-}
+
 void RigidBody::setPosition(Vector3D const& vector)
 {
 	this->_position = vector;
@@ -75,7 +71,7 @@ void RigidBody::integrer(float time)
     
     _position =_position+ _speed * time;
     //_orientation = _orientation +_rotation * time;
-
+	_orientation.addScaledVector(_rotation, time);
     //Impose Drag 
     _speed = _speed* pow(_damping, time);
     _rotation = _rotation*pow(_angularDamping, time) ;
@@ -117,7 +113,7 @@ Matrix4 RigidBody::getTransformMatrix()
 
 void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
 {
-inverseInertiaTensor.setInverse(inertiaTensor);
+	inverseInertiaTensor.setInverse(inertiaTensor);
 }
 
 void RigidBody::setTransformMatrix(Matrix4 matrix)
