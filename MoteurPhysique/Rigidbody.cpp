@@ -64,7 +64,7 @@ void RigidBody::integrer(float time)
 {
 
     Vector3D _linearAccel =_accumForce  * _inverseMass ;
-    Vector3D _angularAccel = inverseInertiaTensor * _accumTorque;
+    Vector3D _angularAccel = _inverseInertiaTensorW * _accumTorque;
     
     _speed = _speed +_linearAccel * time;
     _rotation = _rotation +_angularAccel * time;
@@ -100,11 +100,12 @@ void RigidBody::addForce(const Vector3D& force)
 void RigidBody::addForceAtBodyPoint(Vector3D& force, Vector3D& point)
 {
 	Vector3D pointMonde = _transformMatrix*point;
-    addForceAtPoint(force, point);
+    addForceAtPoint(force, pointMonde);
 }
 void RigidBody::addForceAtPoint(Vector3D& force, Vector3D& point)
 {
-	_accumForce = _accumForce+ force;
+	addForce( force);
+	_accumTorque = _accumTorque+ (point - _position).vectorProduct(force);
 }
 
 
@@ -123,7 +124,7 @@ Quaternion RigidBody::getOrientation()
 
 void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
 {
-	inverseInertiaTensor.setInverse(inertiaTensor);
+	_inverseInertiaTensorL.setInverse(inertiaTensor);
 }
 
 void RigidBody::setTransformMatrix(Matrix4 matrix)
@@ -131,11 +132,22 @@ void RigidBody::setTransformMatrix(Matrix4 matrix)
 	this->_transformMatrix = matrix;
 }
 
+void RigidBody::setOrientation(Quaternion orientation)
+{
+	this->_orientation = orientation;
+}
+
 void RigidBody::calculateDerivedData()
 {
 // Calculate the transform matrix for the body.
 calculateTransformMatrix(_transformMatrix, _position, _orientation);
 }
+
+void RigidBody::tenseurInertiaLocalToWorld(Matrix3& inertiaTenseurWorld)
+{
+	_inverseInertiaTensorW = convertMatrix4to3(_transformMatrix)* inertiaTenseurWorld ;
+}
+
 
 void RigidBody::calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3D &position,const Quaternion &orientation)
 {
@@ -171,4 +183,9 @@ void RigidBody::calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3D
 		2 * orientation.j * orientation.j;
 
 	transformMatrix.data[2][3] = position.getZ();
+}
+
+Matrix3 RigidBody::convertMatrix4to3(Matrix4 matrix)
+{
+	return Matrix3({ {{matrix.data[0][0],matrix.data[0][1],matrix.data[0][2]},{matrix.data[1][0],matrix.data[1][1],matrix.data[1][2]},{matrix.data[2][0],matrix.data[2][1],matrix.data[2][2]}} });
 }

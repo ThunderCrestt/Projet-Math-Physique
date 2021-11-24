@@ -16,7 +16,6 @@ private:
     float _damping;
     float _angularDamping;
     
-
 	Vector3D _position;
 	Vector3D _speed;
     Vector3D _acceleration; 
@@ -24,15 +23,15 @@ private:
     Vector3D _accumForce;
     Vector3D _accumTorque;
 
-//Code à décommenter lors de l'implémentation des matrices,quaternion
-
-   Matrix3 inverseInertiaTensor;
+   Matrix3 _inverseInertiaTensorL;
+   Matrix3 _inverseInertiaTensorW;
    Matrix4 _transformMatrix;
    Quaternion _orientation;
 
 public:
 
-   
+    RigidBody(Vector3D* position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie);
+
 
     //getter si besoin
     float getInverseMass();
@@ -43,6 +42,8 @@ public:
 	Vector3D getVelocity();
 	Vector3D getAcceleration();
 
+    Matrix4 getTransformMatrix();
+    Quaternion getOrientation();
 
 
     //setter si besoin
@@ -51,7 +52,9 @@ public:
 	void setPosition(Vector3D const& vector);
 	void setVelocity(Vector3D const& vector);
 	void setAcceleration(Vector3D const& vector);
-   
+    void setInverseInertiaTensor(const Matrix3& inertiaTensor);
+    void setTransformMatrix(Matrix4 matrix);
+    void setOrientation(Quaternion orientation);
 
 
     //méthod pour la gestion du rigidbody
@@ -60,22 +63,14 @@ public:
     void addForceAtPoint ( Vector3D& force , Vector3D& point );
     void addForceAtBodyPoint ( Vector3D& force , Vector3D& point );
 
-    
 
     void calculateDerivedData();
     void clearAccumulator();  
 
-
-//Code à décommenter lors de l'implémentation des matrices,quaternion
-
-    RigidBody(Vector3D *position, Quaternion orientation, float mass, float damping, float angularDamping, Matrix3 tenseurInertie);
-    Matrix4 getTransformMatrix();
-    Quaternion getOrientation();
-    void setInverseInertiaTensor(const Matrix3 &inertiaTensor);
-    void setTransformMatrix(Matrix4 matrix);
-    void setOrientation();
+    
     void calculateTransformMatrix(Matrix4& transformMatrix, const Vector3D& position, const Quaternion& orientation);
-
+    void tenseurInertiaLocalToWorld(Matrix3& inertiaTenseur);
+    Matrix3 convertMatrix4to3(Matrix4 matrix);
 }; 
 
 #endif // ! RIGIDBODY

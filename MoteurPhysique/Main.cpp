@@ -78,7 +78,7 @@ void setupGeometries(RigidBody rb) {
 
 	//Transformation de nos points
 	//Normalement une rotation devrait s'appliquer sur nos différents points, or juste une translation se fait (nous n'avons pas réussit a trouver d'où venait l'erreur)
-	float qX = rb.getOrientation().i;
+	/*float qX = rb.getOrientation().i;
 	float qY = rb.getOrientation().j;
 	float qZ = rb.getOrientation().k;
 	float qW = rb.getOrientation().r;
@@ -90,15 +90,15 @@ void setupGeometries(RigidBody rb) {
 	Matrix4 rotationMatrix = Matrix4({ {{1 - 2.0f * qY * qY - 2.0f * qZ * qZ, 2.0f * qX * qY - 2.0f * qZ * qW, 2.0f * qX * qZ + 2.0f * qY * qW, 0.0f,}
 	,{2 * qX * qY + 2.0f * qZ * qW, 1.0f - 2.0f * qX * qX - 2.0f * qZ * qZ, 2.0f * qY * qZ - 2.0f * qX * qW, 0.0f,},
 		{2.f * qX * qZ - 2.0f * qY * qW, 2.0f * qY * qZ + 2.0f * qX * qW, 1.0f - 2.0f * qX * qX - 2.0f * qY * qY, 0.0f,},
-		{0,0,0,1} } });
-	vertex1 = rotationMatrix * rb.getTransformMatrix() * vertex1;
-	vertex2 = rotationMatrix * rb.getTransformMatrix() * vertex2;
-	vertex3 = rotationMatrix * rb.getTransformMatrix() * vertex3;
-	vertex4 = rotationMatrix * rb.getTransformMatrix() * vertex4;
-	vertex5 = rotationMatrix * rb.getTransformMatrix() * vertex5;
-	vertex6 = rotationMatrix * rb.getTransformMatrix() * vertex6;
-	vertex7 = rotationMatrix * rb.getTransformMatrix() * vertex7;
-
+		{0,0,0,1} } });*/
+	vertex1 =   rb.getTransformMatrix() * vertex1;
+	vertex2 =  rb.getTransformMatrix() * vertex2;
+	vertex3 =  rb.getTransformMatrix() * vertex3;
+	vertex4 =  rb.getTransformMatrix() * vertex4;
+	vertex5 =  rb.getTransformMatrix() * vertex5;
+	vertex6 =  rb.getTransformMatrix() * vertex6;
+	vertex7 =  rb.getTransformMatrix() * vertex7;
+	
 
 	//Carré 1
 	float firstSquare[] = {
@@ -192,7 +192,7 @@ int main()
 
 	//creation de notre rigide body
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
-	Vector3D forcePousse = Vector3D(1000000, 1000000, 0);
+	Vector3D forcePousse = Vector3D(100, 100, 0);
 	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
 
 	RigidBodyManager rbManager = RigidBodyManager();
@@ -274,6 +274,7 @@ int main()
 	double deltaTime;
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
