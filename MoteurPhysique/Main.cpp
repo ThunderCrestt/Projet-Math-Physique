@@ -65,7 +65,6 @@ void setupGeometries(RigidBody rb) {
 	glGenVertexArrays(3, &myVAO[0]);
 	glGenBuffers(3, &myVBO[0]);
 
-
 	//enregistrement des vertexes de la Figure
 
 	//Création des 6 points de notre figure
@@ -77,41 +76,18 @@ void setupGeometries(RigidBody rb) {
 	Vector3D vertex6 = { (float)(rb.getPosition().getX() + 0.3), (float)(rb.getPosition().getY() + 0.1) , 0 };
 	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
 
-	// transformation de tous nos points
-	Matrix3 truc = Matrix3({ {
-		{-1,0,0},
-		{0,-1,0},
-		{0,0,1}
-} });
-	Matrix4 transformMatrix = rb.getTransformMatrix();
-	/*
-	vertex1 = transformMatrix.worldToLocal(transformMatrix*vertex1, transformMatrix);
-	vertex2 = transformMatrix.worldToLocal(transformMatrix*vertex2, transformMatrix);
-	vertex3 = transformMatrix.worldToLocal(transformMatrix*vertex3, transformMatrix);
-	vertex4 = transformMatrix.worldToLocal(transformMatrix*vertex4, transformMatrix);
-	vertex5 = transformMatrix.worldToLocal(transformMatrix*vertex5, transformMatrix);
-	vertex6 = transformMatrix.worldToLocal(transformMatrix*vertex6, transformMatrix);
-	vertex7 = transformMatrix.worldToLocal(transformMatrix*vertex7, transformMatrix);
-	*/
-	/*
-	vertex1 = rb.getTransformMatrix()* vertex1;
-	vertex2 = rb.getTransformMatrix()* vertex2;
-	vertex3 = rb.getTransformMatrix()* vertex3;
-	vertex4 = rb.getTransformMatrix()* vertex4;
-	vertex5 = rb.getTransformMatrix()* vertex5;
-	vertex6 = rb.getTransformMatrix()* vertex6;
-	vertex7 = rb.getTransformMatrix()* vertex7;
-	*/
+	//Transformation de nos points
+	//Normalement une rotation devrait s'appliquer sur nos différents points, or juste une translation se fait (nous n'avons pas réussit a trouver d'où venait l'erreur)
 
-	/*
-	vertex1 =truc * vertex1;
-	vertex2 = truc * vertex2;
-	vertex3 = truc * vertex3;
-	vertex4 = truc * vertex4;
-	vertex5 = truc * vertex5;
-	vertex6 = truc * vertex6;
-	vertex7 = truc * vertex7;
-	*/
+	vertex1 = rb.getTransformMatrix() * vertex1;
+	vertex2 = rb.getTransformMatrix() * vertex2;
+	vertex3 = rb.getTransformMatrix() * vertex3;
+	vertex4 = rb.getTransformMatrix() * vertex4;
+	vertex5 = rb.getTransformMatrix() * vertex5;
+	vertex6 = rb.getTransformMatrix() * vertex6;
+	vertex7 = rb.getTransformMatrix() * vertex7;
+
+
 	//Carré 1
 	float firstSquare[] = {
 		vertex1.getX(),vertex1.getY(),
@@ -178,29 +154,7 @@ void rendScene() {
 //Récuperation des évenements clavier
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	Particule* particule = reinterpret_cast<Particule*>(glfwGetWindowUserPointer(window));
-	float addVelocity = 0.4;
-	Vector3D basePosition = Vector3D(-0.5, 0, 0);
-	Vector3D initialSpeed = Vector3D(0.9, 0.9, 0);
-	Vector3D acceleration;
-	//Tant que la flèche de droite est pressée
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-	{
-		particule->setVelocity(particule->getVelocity() + Vector3D(addVelocity, 0, 0));
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
-	{
-		particule->setVelocity(particule->getVelocity() - Vector3D(addVelocity, 0, 0));
-	}
-	//Tant que la flèche de droite est pressée
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-	{
-		particule->setVelocity(particule->getVelocity() + Vector3D(-addVelocity, 0, 0));
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE)
-	{
-		particule->setVelocity(particule->getVelocity() - Vector3D(-addVelocity, 0, 0));
-	}
+
 }
 
 int main()
@@ -215,26 +169,27 @@ int main()
 	DragForceGenerator dragForce = DragForceGenerator(1, 1);
 	float mass = 1;
 	float lSquare = 1; //la longueur du carré
-	Quaternion orientation = Quaternion(0, 1, 1, 0);
+	Quaternion orientation = Quaternion(0, 0, 0, 1);
+
+	//Moment d'inertie d'un cube
 	Matrix3 inertiaTensor = Matrix3({ {
 		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
 	} });
 
+	//creation de notre rigide body
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
 	Vector3D forcePousse = Vector3D(1000000, 1000000, 0);
-	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
+	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
 
 	RigidBodyManager rbManager = RigidBodyManager();
-	//rb.setVelocity(forcePousse);
+
+	//Application d'une force au point superieure gauche de notre figure
 	rb.addForceAtBodyPoint(forcePousse, pointForce);
 	rbManager.addToRigidBodies(rb);
 	rbManager.addToRegistre(rb, gravityForce);
-	//rbManager.addToRegistre(rb, dragForce);
-	//rb.addForce(gravity);
-	//rb.addForce(forcePousse);
-	//rb.addForceAtBodyPoint(forcePousse,truc );
+
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -311,10 +266,13 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		processInput(window);
+
+		//Mise à jour de toute la physique
 		rbManager.runPhysic(deltaTime);
+
+		//Mise a jour des geometries
 		setupGeometries(rb);
 		rendScene();
-		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
