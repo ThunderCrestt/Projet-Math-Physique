@@ -47,7 +47,7 @@ const int iSecondSquare = 1;
 const int iPoint = 2;
 unsigned int myVBO[3];
 unsigned int myVAO[3];
-Vector3D gravityCenter = Vector3D(0.7, 0.2, 0);
+Vector3D gravityCenter = Vector3D(-0.7, -0.5, 0);
 float transformMatrice[] = { 0,-1,1,0 };
 
 
@@ -76,6 +76,14 @@ void setupGeometries(RigidBody rb) {
 	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
 
 	// transformation de tous nos points
+	rb.getTransformMatrix()* vertex1;
+	rb.getTransformMatrix()* vertex2;
+	rb.getTransformMatrix()* vertex3;
+	rb.getTransformMatrix()* vertex4;
+	rb.getTransformMatrix()* vertex5;
+	rb.getTransformMatrix()* vertex6;	
+	rb.getTransformMatrix()* vertex7;
+
 
 	//Carré 1
 	float firstSquare[] = {
@@ -185,7 +193,11 @@ int main()
 	} });
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
 	Vector3D gravity = Vector3D(0, -0.9, 0);
+	Vector3D forcePousse = Vector3D(0.5, 1, 0);
+	Vector3D truc = ((float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2), 0);
 	rb.addForce(gravity);
+	//rb.addForce(forcePousse);
+	rb.addForceAtBodyPoint(forcePousse,truc );
 	// initialisation de la fen�tre d'openGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -268,6 +280,8 @@ int main()
 		//std::cout << system.getAllParticules()[0]->getPosition().getX()<<std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		//rb.addForce(gravity);
+
 	}
 
 	glfwDestroyWindow(window);

@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3D.h"
 #include "ParticuleForceGenerator.h"
+#include "Rigidbody.h"
 class GravityForceGenerator : public ParticuleForceGenerator
 {
 private : 
@@ -12,5 +13,6 @@ public:
 	}
 
 	void updateForce(Particule* particule, float duration);
+	void updateForce(RigidBody* rb, float duration);
 };
 

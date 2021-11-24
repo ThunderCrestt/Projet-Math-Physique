@@ -28,6 +28,11 @@ Vector3D RigidBody::getAcceleration()
 	return _acceleration;
 }
 
+float  RigidBody::getMass()
+{
+	return 1 / _inverseMass;
+}
+
 
 void RigidBody::setInverseMass(float inverseMass) 
 {
@@ -88,7 +93,7 @@ void RigidBody::clearAccumulator()
     _accumTorque = Vector3D(0,0,0);
     _orientation.normalize();
 }
-void RigidBody::addForce(Vector3D& force)
+void RigidBody::addForce(const Vector3D& force)
 {
 	_accumForce = _accumForce+ force;
 }

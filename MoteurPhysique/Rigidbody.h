@@ -2,6 +2,11 @@
 #include "Matrix3.h"
 #include "Matrix4.h"
 #include "Quaternion.h"
+
+#ifndef  RIGIDBODY
+#define RIGIDBODY
+
+
 class RigidBody
 {
 
@@ -32,6 +37,7 @@ public:
     //getter si besoin
     float getInverseMass();
 	float getDamping();
+    float getMass();
 
     Vector3D getPosition();
 	Vector3D getVelocity();
@@ -50,7 +56,7 @@ public:
 
     //méthod pour la gestion du rigidbody
     void integrer(float time);
-	void addForce(Vector3D& vector);
+	void addForce(const Vector3D& vector);
     void addForceAtPoint ( Vector3D& force , Vector3D& point );
     void addForceAtBodyPoint ( Vector3D& force , Vector3D& point );
 
@@ -70,4 +76,6 @@ public:
     void setOrientation();
     void calculateTransformMatrix(Matrix4& transformMatrix, const Vector3D& position, const Quaternion& orientation);
 
-};
+}; 
+
+#endif // ! RIGIDBODY
