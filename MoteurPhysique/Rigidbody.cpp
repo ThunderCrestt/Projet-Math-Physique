@@ -116,6 +116,11 @@ Matrix4 RigidBody::getTransformMatrix()
 	return _transformMatrix;
 }
 
+Quaternion RigidBody::getOrientation()
+{
+	return _orientation;
+}
+
 void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
 {
 	inverseInertiaTensor.setInverse(inertiaTensor);

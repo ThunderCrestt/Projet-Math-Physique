@@ -78,14 +78,26 @@ void setupGeometries(RigidBody rb) {
 
 	//Transformation de nos points
 	//Normalement une rotation devrait s'appliquer sur nos différents points, or juste une translation se fait (nous n'avons pas réussit a trouver d'où venait l'erreur)
-
-	vertex1 = rb.getTransformMatrix() * vertex1;
-	vertex2 = rb.getTransformMatrix() * vertex2;
-	vertex3 = rb.getTransformMatrix() * vertex3;
-	vertex4 = rb.getTransformMatrix() * vertex4;
-	vertex5 = rb.getTransformMatrix() * vertex5;
-	vertex6 = rb.getTransformMatrix() * vertex6;
-	vertex7 = rb.getTransformMatrix() * vertex7;
+	float qX = rb.getOrientation().i;
+	float qY = rb.getOrientation().j;
+	float qZ = rb.getOrientation().k;
+	float qW = rb.getOrientation().r;
+	float n = 1 / sqrt(qX*qX+qY*qY+qZ*qZ+qW*qW);
+	qX *= n;
+	qY *= n;
+	qZ *= n;
+	qW *= n;
+	Matrix4 rotationMatrix = Matrix4({ {{1 - 2.0f * qY * qY - 2.0f * qZ * qZ, 2.0f * qX * qY - 2.0f * qZ * qW, 2.0f * qX * qZ + 2.0f * qY * qW, 0.0f,}
+	,{2 * qX * qY + 2.0f * qZ * qW, 1.0f - 2.0f * qX * qX - 2.0f * qZ * qZ, 2.0f * qY * qZ - 2.0f * qX * qW, 0.0f,},
+		{2.f * qX * qZ - 2.0f * qY * qW, 2.0f * qY * qZ + 2.0f * qX * qW, 1.0f - 2.0f * qX * qX - 2.0f * qY * qY, 0.0f,},
+		{0,0,0,1} } });
+	vertex1 = rotationMatrix * rb.getTransformMatrix() * vertex1;
+	vertex2 = rotationMatrix * rb.getTransformMatrix() * vertex2;
+	vertex3 = rotationMatrix * rb.getTransformMatrix() * vertex3;
+	vertex4 = rotationMatrix * rb.getTransformMatrix() * vertex4;
+	vertex5 = rotationMatrix * rb.getTransformMatrix() * vertex5;
+	vertex6 = rotationMatrix * rb.getTransformMatrix() * vertex6;
+	vertex7 = rotationMatrix * rb.getTransformMatrix() * vertex7;
 
 
 	//Carré 1
@@ -184,9 +196,9 @@ int main()
 	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
 
 	RigidBodyManager rbManager = RigidBodyManager();
-
+		
 	//Application d'une force au point superieure gauche de notre figure
-	rb.addForceAtBodyPoint(forcePousse, pointForce);
+	rb.addForceAtBodyPoint(forcePousse, pointForce);;
 	rbManager.addToRigidBodies(rb);
 	rbManager.addToRegistre(rb, gravityForce);
 
