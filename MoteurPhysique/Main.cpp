@@ -49,7 +49,7 @@ const int iSecondSquare = 1;
 const int iPoint = 2;
 unsigned int myVBO[3];
 unsigned int myVAO[3];
-Vector3D gravityCenter = Vector3D(-0.7, -0.5, 0);
+Vector3D gravityCenter = Vector3D(0, 0, 0);
 float transformMatrice[] = { 0,-1,1,0 };
 
 
@@ -78,7 +78,22 @@ void setupGeometries(RigidBody rb) {
 	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
 
 	// transformation de tous nos points
+	Matrix3 truc = Matrix3({ {
+		{-1,0,0},
+		{0,-1,0},
+		{0,0,1}
+} });
 	Matrix4 transformMatrix = rb.getTransformMatrix();
+	/*
+	vertex1 = transformMatrix.worldToLocal(transformMatrix*vertex1, transformMatrix);
+	vertex2 = transformMatrix.worldToLocal(transformMatrix*vertex2, transformMatrix);
+	vertex3 = transformMatrix.worldToLocal(transformMatrix*vertex3, transformMatrix);
+	vertex4 = transformMatrix.worldToLocal(transformMatrix*vertex4, transformMatrix);
+	vertex5 = transformMatrix.worldToLocal(transformMatrix*vertex5, transformMatrix);
+	vertex6 = transformMatrix.worldToLocal(transformMatrix*vertex6, transformMatrix);
+	vertex7 = transformMatrix.worldToLocal(transformMatrix*vertex7, transformMatrix);
+	*/
+	/*
 	vertex1 = rb.getTransformMatrix()* vertex1;
 	vertex2 = rb.getTransformMatrix()* vertex2;
 	vertex3 = rb.getTransformMatrix()* vertex3;
@@ -86,8 +101,17 @@ void setupGeometries(RigidBody rb) {
 	vertex5 = rb.getTransformMatrix()* vertex5;
 	vertex6 = rb.getTransformMatrix()* vertex6;
 	vertex7 = rb.getTransformMatrix()* vertex7;
+	*/
 
-
+	/*
+	vertex1 =truc * vertex1;
+	vertex2 = truc * vertex2;
+	vertex3 = truc * vertex3;
+	vertex4 = truc * vertex4;
+	vertex5 = truc * vertex5;
+	vertex6 = truc * vertex6;
+	vertex7 = truc * vertex7;
+	*/
 	//Carré 1
 	float firstSquare[] = {
 		vertex1.getX(),vertex1.getY(),
@@ -191,16 +215,20 @@ int main()
 	DragForceGenerator dragForce = DragForceGenerator(1, 1);
 	float mass = 1;
 	float lSquare = 1; //la longueur du carré
-	Quaternion orientation = Quaternion(0, 1, 1, 1);
+	Quaternion orientation = Quaternion(0, 1, 1, 0);
 	Matrix3 inertiaTensor = Matrix3({ {
 		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
 		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
 	} });
+
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
-	Vector3D forcePousse = Vector3D(1, 1, 0);
+	Vector3D forcePousse = Vector3D(1000000, 1000000, 0);
+	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
+
 	RigidBodyManager rbManager = RigidBodyManager();
-	rb.setVelocity(forcePousse);
+	//rb.setVelocity(forcePousse);
+	rb.addForceAtBodyPoint(forcePousse, pointForce);
 	rbManager.addToRigidBodies(rb);
 	rbManager.addToRegistre(rb, gravityForce);
 	//rbManager.addToRegistre(rb, dragForce);
