@@ -15,13 +15,14 @@ class BoundingSphere
 	* spheres.
 	*/
 
-	BoundingSphere( BoundingSphere& one,  BoundingSphere& two);
+	BoundingSphere(const BoundingSphere& one, const  BoundingSphere& two);
 	/**
 	* Checks if the bounding sphere overlaps with the other given
 	* bounding sphere.
 	*/
 
 	bool overlaps(const BoundingSphere* other);
+	float getGrowth(const BoundingSphere& other) const;
 };
 
 

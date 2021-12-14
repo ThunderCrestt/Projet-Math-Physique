@@ -1,4 +1,5 @@
 #include "BVH.h"
+/*
 template<class BoundingVolumeClass>
 bool BVHNode<BoundingVolumeClass>::overlaps(const BVHNode<BoundingVolumeClass>* other) const
 {
@@ -148,3 +149,5 @@ void BVHNode<BoundingVolumeClass>::insert(RigidBody* newBody, const BoundingVolu
 		}
 	}
 }
+
+*/
