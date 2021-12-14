@@ -145,7 +145,7 @@ calculateTransformMatrix(_transformMatrix, _position, _orientation);
 
 void RigidBody::tenseurInertiaLocalToWorld(Matrix3& inertiaTenseurWorld)
 {
-	_inverseInertiaTensorW = convertMatrix4to3(_transformMatrix)* inertiaTenseurWorld ;
+	_inverseInertiaTensorW =  inertiaTenseurWorld ;
 }
 
 
@@ -185,7 +185,4 @@ void RigidBody::calculateTransformMatrix(Matrix4 &transformMatrix,const Vector3D
 	transformMatrix.data[2][3] = position.getZ();
 }
 
-Matrix3 RigidBody::convertMatrix4to3(Matrix4 matrix)
-{
-	return Matrix3({ {{matrix.data[0][0],matrix.data[0][1],matrix.data[0][2]},{matrix.data[1][0],matrix.data[1][1],matrix.data[1][2]},{matrix.data[2][0],matrix.data[2][1],matrix.data[2][2]}} });
-}
+
