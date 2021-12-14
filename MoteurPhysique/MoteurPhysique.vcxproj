@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoundingVolumes.cpp" />
+    <ClCompile Include="BVH.cpp" />
     <ClCompile Include="DragForceGenerator.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GravityForceGenerator.cpp" />
@@ -180,6 +182,8 @@
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingVolumes.h" />
+    <ClInclude Include="BVH.h" />
     <ClInclude Include="DragForceGenerator.h" />
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="Matrix3.h" />

@@ -1,25 +1,4 @@
-﻿  DragForceGenerator.cpp
-  ForceGenerator.cpp
-  GravityForceGenerator.cpp
-  Main.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(182,25): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(184,46): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(213,40): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(225,84): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(314,23): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
-  Matrix4.cpp
-  Particule.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Particule.cpp(89,93): warning C4244: 'argument' : conversion de 'double' en 'const float', perte possible de données
-  ParticuleAnchoredSpring.cpp
-  ParticuleElastique.cpp
-  ParticuleFlottaison.cpp
-  ParticuleSpring.cpp
-  ParticuleSystem.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleSystem.cpp(11,89): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleSystem.cpp(100,51): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-  RegistreForceRigidBody.cpp
-  RegistreForces.cpp
-  RigidBodyManager.cpp
-  Rigidbody.cpp
+﻿  BoundingVolumes.cpp
+  BVH.cpp
   Génération de code en cours...
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe

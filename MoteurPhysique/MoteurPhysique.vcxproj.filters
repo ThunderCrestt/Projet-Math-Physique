@@ -13,6 +13,24 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\ForceGenerator">
+      <UniqueIdentifier>{f024598f-076d-48da-a74e-e73b6fe59ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Contacts">
+      <UniqueIdentifier>{5708bd78-4dd8-42c8-a226-fcbb2a6b91ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\ForcesGenerator">
+      <UniqueIdentifier>{2a29e07a-ef01-4812-aa9c-07d23f7b7dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Contacts">
+      <UniqueIdentifier>{3e861e67-79ae-4129-b471-345f9fab2054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\MathTools">
+      <UniqueIdentifier>{e1829740-8d7c-4003-a2fa-a62d879f151d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\MathTools">
+      <UniqueIdentifier>{bcb08338-ef8e-4212-b15f-5e8146b8f0d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -21,67 +39,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3D.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Particule.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="ParticuleSystem.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="RegistreForces.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GravityForceGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="DragForceGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleSpring.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleAnchoredSpring.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleElastique.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleFlottaison.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleContact.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleContactResolver.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleContactGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleRod.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleCable.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticuleLink.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleParticuleContactGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="PlaneSurface2DContactGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix3.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Quaternion.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Rigidbody.cpp">
@@ -90,75 +51,81 @@
     <ClCompile Include="RigidBodyManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="RegistreForceRigidBody.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="DragForceGenerator.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
     </ClCompile>
     <ClCompile Include="ForceGenerator.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityForceGenerator.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleAnchoredSpring.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleElastique.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleFlottaison.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleLink.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleRod.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleSpring.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistreForces.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistreForceRigidBody.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleCable.cpp">
+      <Filter>Fichiers sources\ForcesGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleContact.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleContactGenerator.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticuleContactResolver.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneSurface2DContactGenerator.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleParticuleContactGenerator.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix3.cpp">
+      <Filter>Fichiers sources\MathTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Fichiers sources\MathTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Fichiers sources\MathTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>Fichiers sources\MathTools</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingVolumes.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="BVH.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector3D.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Particule.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="ParticuleSystem.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="RegistreForces.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="GravityForceGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="DragForceGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleSpring.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleAnchoredSpring.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleElastique.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleFlottaison.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleContact.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleContactResolver.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleContactGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleLink.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleRod.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticuleCable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleParticuleContactGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="PlaneSurface2DContactGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix3.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Quaternion.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Rigidbody.h">
@@ -167,10 +134,73 @@
     <ClInclude Include="RigidBodyManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="RegistreForceRigidBody.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="DragForceGenerator.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityForceGenerator.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleAnchoredSpring.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistreForces.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleRod.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleLink.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleSpring.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleCable.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleElastique.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleFlottaison.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
     </ClInclude>
     <ClInclude Include="ForceGenerator.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleContact.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleContactGenerator.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticuleContactResolver.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneSurface2DContactGenerator.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleParticuleContactGenerator.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistreForceRigidBody.h">
+      <Filter>Fichiers d%27en-tête\ForceGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3.h">
+      <Filter>Fichiers d%27en-tête\MathTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>Fichiers d%27en-tête\MathTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3D.h">
+      <Filter>Fichiers d%27en-tête\MathTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Fichiers d%27en-tête\MathTools</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingVolumes.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="BVH.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
