@@ -60,7 +60,7 @@ Matrix3 Matrix3::operator*(const Matrix3& toMultiply)
 
 }
 
-Vector3D Matrix3::operator*(const Vector3D& vector)
+Vector3D Matrix3::operator*(const Vector3D& vector) const
 {
 	return Vector3D(vector.getX() * data[0][0] + vector.getY() * data[0][1] + vector.getZ() * data[0][2],
 		vector.getX() * data[1][0] + vector.getY() * data[1][1] + vector.getZ() * data[1][2],

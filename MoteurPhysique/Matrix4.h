@@ -20,7 +20,7 @@ public:
 	Matrix4 operator+(const Matrix4& toAdd);
 
 	Matrix4 operator*(const Matrix4& toMultiply);
-	Vector3D operator*(const Vector3D& vector);
+	Vector3D operator*(const Vector3D& vector) const;
 
 	//calcul l'inverse de la matrice m et l'applique sur la matrice actuel.
 	void setInverse(const Matrix4& m);
@@ -43,7 +43,28 @@ public:
 	*/
 	Vector3D localToWorldDir(const Vector3D& local, const Matrix4& transform);
 	Vector3D worldToLocalDir(const Vector3D& world, const Matrix4& transform);
+	/**
+	* i représente le numéro de la colonne que l'on veut comme vecteur depuis la matric
+	*/
+	Vector3D getAxisVector(int i) const
+	{
+		return Vector3D(data[0][i], data[1][i], data[2][i]);
+	}
 
+	Vector3D transform(const Vector3D& vector) const
+	{
+		return (*this) * vector;
+	}
+
+	Matrix4 operator*(float toMultiply) const
+	{
+		return Matrix4({ {
+			{this->data[0][0] * toMultiply,this->data[0][1] * toMultiply,this->data[0][2] * toMultiply,this->data[0][3] * toMultiply},
+			{this->data[1][0] * toMultiply,this->data[1][1] * toMultiply,this->data[1][2] * toMultiply,this->data[1][3] * toMultiply},
+			{this->data[2][0] * toMultiply,this->data[2][1] * toMultiply,this->data[2][2] * toMultiply,this->data[2][3] * toMultiply},
+			{0,0,0,1},
+			} });
+	}
 };
 
 #endif

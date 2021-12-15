@@ -33,7 +33,7 @@ public :
 	//get the norm of the vector
 	float getNorm(void);
 	//get the square norm of the vector
-	float getSquareNorm(void);
+	float getSquareNorm(void) const;
 
 	//normalize the vector
 	void normalize(void); //we put the coordonates on the norm of the vector
@@ -44,11 +44,17 @@ public :
 	//substract this vector by another vector(toSubstract) and apply the result to this vector
 	Vector3D toSubstractToVectorAndApplyResult(const Vector3D &toSubstract);
 	//multiply this vector by a float
-	Vector3D multiplyByScalar(float scalar);
+	Vector3D multiplyByScalar(float scalar) const;
 	//add this vector to another vector(toAdd)
-	Vector3D addToVector(const Vector3D &toAdd);
+	Vector3D addToVector(const Vector3D &toAdd) const;
 	//substract this vector by another vector(toSubstract)
-	Vector3D substractToVector(const Vector3D &toSubstract);
+	Vector3D substractToVector(const Vector3D &toSubstract) const;
+	void addScaledVector(const Vector3D& vector, float scale)
+	{
+		_x += vector.getX() * scale;
+		_y += vector.getY() * scale;
+		_z += vector.getZ() * scale;
+	}
 
 
 	//multiply the X composant with a float(scalar)
@@ -61,17 +67,17 @@ public :
 	//multiply each coordinate of the vector by the coordinate of another vector(vector)
 	Vector3D composantProduct(const Vector3D &vector);
 	//compute the scalarProduct of this vector with another vector(vector)
-	float scalarProduct(const Vector3D &vector);
+	float scalarProduct(const Vector3D &vector) const;
 	//compute the vectorProduct of this vector with another vector(vector)
 	Vector3D vectorProduct(const Vector3D &vector);
 
 	//add a vector to another
-	Vector3D operator+(const Vector3D &toAdd)
+	Vector3D operator+(const Vector3D &toAdd) const
 	{
 		return this->addToVector(toAdd);
 	}
 
-	Vector3D operator-(const Vector3D& tosubstract)
+	Vector3D operator-(const Vector3D& tosubstract) const
 	{
 		return this->substractToVector(tosubstract);
 	}
@@ -82,6 +88,29 @@ public :
 		return this->multiplyByScalar(scalar);
 	}
 
+	float operator*(const Vector3D &tomultiply) const
+	{
+		return this->scalarProduct(tomultiply);
+	}
+	Vector3D operator%(const Vector3D& vector) const
+	{
+		return Vector3D(_y * vector.getZ() - _z * vector.getY(),
+			_z * vector.getX() - _x * vector.getZ(),
+			_x * vector.getY() - _y * vector.getX());
+	}
+	float operator[](unsigned i) const
+	{
+		if (i == 0) return _x;
+		if (i == 1) return _y;
+		return _z;
+	}
+
+	float& operator[](unsigned i)
+	{
+		if (i == 0) return _x;
+		if (i == 1) return _y;
+		return _z;
+	}
 	/*
 	Vector3D operator+=(const Vector3D toAdd)
 	{
