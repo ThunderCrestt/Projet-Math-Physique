@@ -7,296 +7,285 @@
 #include<vector>
 #include <stdlib.h>
 #include "gravityForceGenerator.h"
-#include "DragForceGenerator.h"
 #include "ParticuleSpring.h"
 #include "ParticuleContactResolver.h"
 #include "PlaneSurface2DContactGenerator.h"
 #include "ParticuleCable.h"
 #include "ParticuleElastique.h"
-#include "Rigidbody.h"
-#include "Matrix3.h"
-#include "Matrix4.h"
-#include "RigidBodyManager.h"
-// vertex shader basique
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout(location = 1) in vec3 aNormal;\n"
+"out vec3 color;\n"
+"uniform vec3 personaliseColor;\n"
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 proj;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = proj * view * model * vec4(aPos, 1.0);\n"
+"	color = personaliseColor;\n" 
 "}\0";
 
 // fragment shader simple avec couleur gris clair
-const char* fragmentShaderSourceGrey = "#version 330 core\n"
+const char* fragmentShaderSource = "#version 330 core\n"
+"in vec3 color;\n"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(0.7f, 0.7f, 0.7f, 1.0f);"
+"   FragColor = vec4(color, 1.0f);"
 "}\0";
 
-// fragment shader simple avec couleur verte
-const char* fragmentShaderSourceGreen = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(0.1f, 0.5f, 0.1f, 1.0f);"
-"}\0";
+unsigned int shaderProgram;
 
-unsigned int shaderProgramGrey;
-unsigned int shaderProgramGreen;
-const int num_segments = 100;
-const int iFirstSquare = 0;
-const int iSecondSquare = 1;
-const int iPoint = 2;
-unsigned int myVBO[3];
-unsigned int myVAO[3];
-Vector3D gravityCenter = Vector3D(0, 0, 0);
-float transformMatrice[] = { 0,-1,1,0 };
+unsigned int VBO;
+unsigned int VAO;
+Vector3D gravityCenter = Vector3D(0.6, 0.6, 0);
+float halfMedian = 0.3;
 
-
-
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
-
-// recuperation des vertices pour dessiner plus tard 
-void setupGeometries(RigidBody rb) {
-	glGenVertexArrays(3, &myVAO[0]);
-	glGenBuffers(3, &myVBO[0]);
-
-	//enregistrement des vertexes de la Figure
-
-	//Création des 6 points de notre figure
-	Vector3D vertex1 = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
-	Vector3D vertex2 = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
-	Vector3D vertex3 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
-	Vector3D vertex4 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() - 0.2) , 0 };
-	Vector3D vertex5 = { (float)(rb.getPosition().getX() + 0.3), (float)(rb.getPosition().getY() + 0.2) , 0 };
-	Vector3D vertex6 = { (float)(rb.getPosition().getX() + 0.3), (float)(rb.getPosition().getY() + 0.1) , 0 };
-	Vector3D vertex7 = { (float)(rb.getPosition().getX() + 0.2), (float)(rb.getPosition().getY() + 0.1) , 0 };
-
-	//Transformation de nos points
-	//Normalement une rotation devrait s'appliquer sur nos différents points, or juste une translation se fait (nous n'avons pas réussit a trouver d'où venait l'erreur)
-	/*float qX = rb.getOrientation().i;
-	float qY = rb.getOrientation().j;
-	float qZ = rb.getOrientation().k;
-	float qW = rb.getOrientation().r;
-	float n = 1 / sqrt(qX*qX+qY*qY+qZ*qZ+qW*qW);
-	qX *= n;
-	qY *= n;
-	qZ *= n;
-	qW *= n;
-	Matrix4 rotationMatrix = Matrix4({ {{1 - 2.0f * qY * qY - 2.0f * qZ * qZ, 2.0f * qX * qY - 2.0f * qZ * qW, 2.0f * qX * qZ + 2.0f * qY * qW, 0.0f,}
-	,{2 * qX * qY + 2.0f * qZ * qW, 1.0f - 2.0f * qX * qX - 2.0f * qZ * qZ, 2.0f * qY * qZ - 2.0f * qX * qW, 0.0f,},
-		{2.f * qX * qZ - 2.0f * qY * qW, 2.0f * qY * qZ + 2.0f * qX * qW, 1.0f - 2.0f * qX * qX - 2.0f * qY * qY, 0.0f,},
-		{0,0,0,1} } });*/
-	vertex1 =   rb.getTransformMatrix() * vertex1;
-	vertex2 =  rb.getTransformMatrix() * vertex2;
-	vertex3 =  rb.getTransformMatrix() * vertex3;
-	vertex4 =  rb.getTransformMatrix() * vertex4;
-	vertex5 =  rb.getTransformMatrix() * vertex5;
-	vertex6 =  rb.getTransformMatrix() * vertex6;
-	vertex7 =  rb.getTransformMatrix() * vertex7;
-	
-
-	//Carré 1
-	float firstSquare[] = {
-		vertex1.getX(),vertex1.getY(),
-		vertex2.getX(),vertex2.getY(),
-		vertex3.getX(),vertex3.getY(),
-		vertex1.getX(),vertex1.getY(),
-		vertex4.getX(),vertex4.getY(),
-		vertex3.getX(),vertex3.getY(),
-	};
-
-	glBindVertexArray(myVAO[iFirstSquare]);
-	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iFirstSquare]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(firstSquare), firstSquare, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
-
-	//Carré 2
-	float secondSquare[] = {
-		vertex7.getX(),vertex7.getY(),
-		vertex2.getX(),vertex2.getY(),
-		vertex5.getX(),vertex5.getY(),
-		vertex7.getX(),vertex7.getY(),
-		vertex6.getX(),vertex6.getY(),
-		vertex5.getX(),vertex5.getY(),
-	};
-	glBindVertexArray(myVAO[iSecondSquare]);
-	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iSecondSquare]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(secondSquare), secondSquare, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
-
-	//point de gravité
-	float pointVertex[] = {
-		gravityCenter.getX(), gravityCenter.getY(),
-	};
-	glBindVertexArray(myVAO[iPoint]);
-	glBindBuffer(GL_ARRAY_BUFFER, myVBO[iPoint]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pointVertex), pointVertex, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
-
-}
-
-
-// dessine les formes en fonction des vertices passés dans myVAO
-void rendScene() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shaderProgramGreen);
-
-	//Dessin des plateforme:
-	glBindVertexArray(myVAO[iFirstSquare]);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	glBindVertexArray(myVAO[iSecondSquare]);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	glUseProgram(shaderProgramGrey);
-
-	//dessin point de gravité
-	glBindVertexArray(myVAO[iPoint]);
-	glDrawArrays(GL_POINTS, 0, 1);
-}
-
-//Récuperation des évenements clavier
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-
-}
-
-int main()
-{
-	//initialisation d'une particule qui sera modifié pour chaque type de projectile
-	unsigned iterationsContactResolver = 15;
-	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
-	ParticuleWorld system = ParticuleWorld();
-	system.resolver.setIterations(15);
-	Vector3D gravity = Vector3D(0, -0.9, 0);
-	GravityForceGenerator gravityForce = GravityForceGenerator(gravity);
-	DragForceGenerator dragForce = DragForceGenerator(1, 1);
-	float mass = 1;
-	float lSquare = 1; //la longueur du carré
-	Quaternion orientation = Quaternion(0, 0, 0, 1);
-
-	//Moment d'inertie d'un cube
-	Matrix3 inertiaTensor = Matrix3({ {
-		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
-		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
-		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
-	} });
-
-	//creation de notre rigide body
-	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7,inertiaTensor);
-	Vector3D forcePousse = Vector3D(100, 100, 0);
-	Vector3D pointForce = { (float)(rb.getPosition().getX() - 0.2), (float)(rb.getPosition().getY() + 0.2) , 0 };
-
-	RigidBodyManager rbManager = RigidBodyManager();
-		
-	//Application d'une force au point superieure gauche de notre figure
-	rb.addForceAtBodyPoint(forcePousse, pointForce);;
-	rbManager.addToRigidBodies(rb);
-	rbManager.addToRegistre(rb, gravityForce);
-
-	// initialisation de la fen�tre d'openGL
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	GLFWwindow* window = glfwCreateWindow(1200, 800, "test", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create a GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, key_callback);
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-
-	//parametrages des shaders (mettre dans une fonction plus tard)
+void initShadrProgramm() {
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
-	unsigned int fragmentShaderGrey;
-	fragmentShaderGrey = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderGrey, 1, &fragmentShaderSourceGrey, NULL);
-	glCompileShader(fragmentShaderGrey);
+	unsigned int fragmentShader;
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
 
-	unsigned int fragmentShaderGreen;
-	fragmentShaderGreen = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderGreen, 1, &fragmentShaderSourceGreen, NULL);
-	glCompileShader(fragmentShaderGreen);
 
-	shaderProgramGrey = glCreateProgram();
-	glAttachShader(shaderProgramGrey, vertexShader);
-	glAttachShader(shaderProgramGrey, fragmentShaderGrey);
-	glLinkProgram(shaderProgramGrey);
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
 
-	shaderProgramGreen = glCreateProgram();
-	glAttachShader(shaderProgramGreen, vertexShader);
-	glAttachShader(shaderProgramGreen, fragmentShaderGreen);
-	glLinkProgram(shaderProgramGreen);
 
-	glUseProgram(shaderProgramGreen);
+	glUseProgram(shaderProgram);
 	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShaderGrey);
-	glDeleteShader(fragmentShaderGreen);
+	glDeleteShader(fragmentShader);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+}
 
-	//affichage de la fen�tre
+void initGeometries()
+{
+	//point front face
+	Vector3D fBottomLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() + halfMedian };
+	Vector3D fBottomRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() + halfMedian };
+	Vector3D fUpRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() + halfMedian };
+	Vector3D fUpLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() + halfMedian };
+	//point back face
+	Vector3D bUpLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() - halfMedian };
+	Vector3D bBottomLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() - halfMedian };
+	Vector3D bBottomRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() - halfMedian };
+	Vector3D bUpRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() - halfMedian };
+	//Creation contour
+	Vector3D up4 = { 3,3,0 };
+	Vector3D up1 = { -3,3,0 };
+	Vector3D down1 = { -3,-3,0 };
+	Vector3D down4 = { 3,-3,0 };
+	Vector3D up2 = { -2.8,3,0 };
+	Vector3D up3 = { 2.8,3,0 };
+	Vector3D middle1 = { -2.8, 2.8,0 };
+	Vector3D middle2 = { 2.8,2.8,0 };
+	Vector3D middle3 = { -2.8,-2.8,0 };
+	Vector3D middle4 = { 2.8,-2.8,0 };
+	Vector3D down2 = { -2.8, -3, 0 };
+	Vector3D down3 = { 2.8,-3,0 };
+	
 
-	glViewport(0, 0, 1000, 1000);
-
-	setupGeometries(rb);
-
-	glClearColor(0.7f, 0.7f, 0.8f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-
-	//boucle de jeu
-	double currentFrame = glfwGetTime();
-	double lastFrame = currentFrame;
-	double deltaTime;
-	while (!glfwWindowShouldClose(window))
+	GLfloat vertices[] =
 	{
-		
-		currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-		processInput(window);
 
-		//Mise à jour de toute la physique
-		rbManager.runPhysic(deltaTime);
+		//right face
+		bBottomLeft.getX(), bBottomLeft.getY(), bBottomLeft.getZ(),
+		fBottomLeft.getX(), fBottomLeft.getY(), fBottomLeft.getZ(), 
+		fUpLeft.getX(), fUpLeft.getY(), fUpLeft.getZ(),
+		fUpLeft.getX(), fUpLeft.getY(), fUpLeft.getZ(),
+		bUpLeft.getX(), bUpLeft.getY(), bUpLeft.getZ(),
+		bBottomLeft.getX(), bBottomLeft.getY(), bBottomLeft.getZ(),
+		//left face
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(),
+		fBottomRight.getX(), fBottomRight.getY(), fBottomRight.getZ(), 
+		fUpRight.getX(), fUpRight.getY(), fUpRight.getZ(), 
+		fUpRight.getX(), fUpRight.getY(), fUpRight.getZ(), 
+		bUpRight.getX(), bUpRight.getY(), bUpRight.getZ(), 
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(), 
+		//down face
+		fBottomLeft.getX(), fBottomLeft.getY(), fBottomLeft.getZ(), 
+		fBottomRight.getX(), fBottomRight.getY(), fBottomRight.getZ(), 
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(),
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(), 
+		bBottomLeft.getX(), bBottomLeft.getY(), bBottomLeft.getZ(),
+		fBottomLeft.getX(), fBottomLeft.getY(), fBottomLeft.getZ(),
+		//front face
+		fBottomLeft.getX(), fBottomLeft.getY(), fBottomLeft.getZ(),
+		fBottomRight.getX(), fBottomRight.getY(), fBottomRight.getZ(),
+		fUpRight.getX(), fUpRight.getY(), fUpRight.getZ(),
+		fUpRight.getX(), fUpRight.getY(), fUpRight.getZ(),
+		fUpLeft.getX(), fUpLeft.getY(), fUpLeft.getZ(),
+		fBottomLeft.getX(), fBottomLeft.getY(), fBottomLeft.getZ(),
+		//back face
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(),
+		bBottomLeft.getX(), bBottomLeft.getY(), bBottomLeft.getZ(), 
+		bUpLeft.getX(), bUpLeft.getY(), bUpLeft.getZ(),
+		bUpLeft.getX(), bUpLeft.getY(), bUpLeft.getZ(), 
+		bUpRight.getX(), bUpRight.getY(), bUpRight.getZ(), 
+		bBottomRight.getX(), bBottomRight.getY(), bBottomRight.getZ(),
+		//up face
+		fUpLeft.getX(), fUpLeft.getY(), fUpLeft.getZ(),
+		fUpRight.getX(), fUpRight.getY(), fUpRight.getZ(), 
+		bUpRight.getX(), bUpRight.getY(), bUpRight.getZ(), 
+		bUpRight.getX(), bUpRight.getY(), bUpRight.getZ(),
+		bUpLeft.getX(), bUpLeft.getY(), bUpLeft.getZ(), 
+		fUpLeft.getX(), fUpLeft.getY(), fUpLeft.getZ(), 
 
-		//Mise a jour des geometries
-		setupGeometries(rb);
-		rendScene();
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		//Contour
+		//rightRect
+		down3.getX(), down3.getY(), down3.getZ(), 
+		down4.getX(), down4.getY(), down4.getZ(),
+		up4.getX(), up4.getY(), up4.getZ(),
+		down3.getX(), down3.getY(), down3.getZ(),
+		up3.getX(), up3.getY(), up3.getZ(), 
+		up4.getX(), up4.getY(), up4.getZ(),
+		//downRect
+		middle3.getX(), middle3.getY(), middle3.getZ(),
+		down2.getX(), down2.getY(), down2.getZ(), 
+		down3.getX(), down3.getY(), down3.getZ(), 
+		down3.getX(), down3.getY(), down3.getZ(), 
+		middle4.getX(), middle4.getY(), middle4.getZ(),
+		middle3.getX(), middle3.getY(), middle3.getZ(),
+		//leftRect
+		down1.getX(), down1.getY(), down1.getZ(), 
+		up1.getX(), up1.getY(), up1.getZ(),
+		up2.getX(), up2.getY(), up2.getZ(),
+		down1.getX(), down1.getY(), down1.getZ(),
+		down2.getX(), down2.getY(), down2.getZ(),
+		up2.getX(), up2.getY(), up2.getZ(),
+		//upRect
+		middle1.getX(),middle1.getY(),middle1.getZ(), 
+		up2.getX(), up2.getY(), up2.getZ(),
+		up3.getX(), up3.getY(), up3.getZ(),
+		middle1.getX(),middle1.getY(),middle1.getZ(),
+		middle2.getX(), middle2.getY(), middle2.getZ(),
+		up3.getX(), up3.getY(), up3.getZ()
 
+	};
+
+
+
+	glGenVertexArrays(2, &VAO);
+	glGenBuffers(2, &VBO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 proj = glm::mat4(1.0f);
+	view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+	proj = glm::perspective(glm::radians(122.0f), (float)(800 / 800), 0.1f, 100.0f);
+
+	int modelLoc = glGetUniformLocation(shaderProgram, "model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	int viewLoc = glGetUniformLocation(shaderProgram, "view");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	int projLoc = glGetUniformLocation(shaderProgram, "proj");
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+}
+
+// dessine les formes en fonction des vertices passés dans myVAO
+void rendScene() {
+	// Enable depth test
+	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+	glDepthFunc(GL_LESS);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	Vector3D color = { 0.2f, 0.7f, 0.2f };
+	int vertexColorLocation = glGetUniformLocation(shaderProgram, "personaliseColor");
+	glUniform3f(vertexColorLocation, color.getX(), color.getY(), color.getZ());
+
+	//Dessin du cube et du contour:
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 18);
+
+	color = { 0.2f, 0.4f, 0.2f };
+	glUniform3f(vertexColorLocation, color.getX(), color.getY(), color.getZ());
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 18, 18);
+
+	color = { 0.5f, 0.5f, 0.5f };
+	glUniform3f(vertexColorLocation, color.getX(), color.getY(), color.getZ());
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 36, 24);
+
+}
+
+
+int main(void)
+{
+	glfwInit();
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	GLFWwindow* window = glfwCreateWindow(800, 800, "Moteur Jeu", NULL, NULL);
+	if (window == NULL)
+	{
+		std::cout << "fenetre non créée" << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	gladLoadGL();
+
+	glViewport(0, 0, 800, 800);
+
+	initShadrProgramm();
+
+	initGeometries();
+	glfwSwapBuffers(window);
+
+	glClearColor(0.07f, 0.13f, 0.17f, 0.1f);
+
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
 	}
 
+	while (!glfwWindowShouldClose(window))
+	{
+
+
+		rendScene();
+
+		glfwSwapBuffers(window);
+
+
+		glfwPollEvents();
+	}
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteProgram(shaderProgram);
 	glfwDestroyWindow(window);
 	glfwTerminate();
-
-
-
-
-
 	return 0;
+
+
 }
