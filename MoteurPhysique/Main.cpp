@@ -12,6 +12,10 @@
 #include "PlaneSurface2DContactGenerator.h"
 #include "ParticuleCable.h"
 #include "ParticuleElastique.h"
+#include "DragForceGenerator.h"
+#include "Rigidbody.h"
+#include "RigidBodyManager.h"
+#include "ParticuleContactResolver.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -43,8 +47,15 @@ unsigned int shaderProgram;
 
 unsigned int VBO;
 unsigned int VAO;
-Vector3D gravityCenter = Vector3D(0.6, 0.6, 0);
+Vector3D gravityCenter = Vector3D(0.3, 0.6, 0);
 float halfMedian = 0.3;
+
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
 
 void initShadrProgramm() {
 	unsigned int vertexShader;
@@ -72,18 +83,18 @@ void initShadrProgramm() {
 	glEnableVertexAttribArray(0);
 }
 
-void initGeometries()
+void initGeometries(RigidBody rb)
 {
 	//point front face
-	Vector3D fBottomLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() + halfMedian };
-	Vector3D fBottomRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() + halfMedian };
-	Vector3D fUpRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() + halfMedian };
-	Vector3D fUpLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() + halfMedian };
+	Vector3D fBottomLeft = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() - halfMedian, (float)rb.getPosition().getZ() + halfMedian };
+	Vector3D fBottomRight = { (float)rb.getPosition().getX() + halfMedian, (float)rb.getPosition().getY() - halfMedian, (float)rb.getPosition().getZ() + halfMedian };
+	Vector3D fUpRight = { (float)rb.getPosition().getX() + halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() + halfMedian };
+	Vector3D fUpLeft = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() + halfMedian };
 	//point back face
-	Vector3D bUpLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() - halfMedian };
-	Vector3D bBottomLeft = { gravityCenter.getX() - halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() - halfMedian };
-	Vector3D bBottomRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() - halfMedian, gravityCenter.getZ() - halfMedian };
-	Vector3D bUpRight = { gravityCenter.getX() + halfMedian, gravityCenter.getY() + halfMedian, gravityCenter.getZ() - halfMedian };
+	Vector3D bUpLeft = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() - halfMedian };
+	Vector3D bBottomLeft = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() - halfMedian, (float)rb.getPosition().getZ() - halfMedian };
+	Vector3D bBottomRight = { (float)rb.getPosition().getX() + halfMedian, (float)rb.getPosition().getY() - halfMedian, (float)rb.getPosition().getZ() - halfMedian };
+	Vector3D bUpRight = { (float)rb.getPosition().getX() + halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() - halfMedian };
 	//Creation contour
 	Vector3D up4 = { 3,3,0 };
 	Vector3D up1 = { -3,3,0 };
@@ -97,6 +108,17 @@ void initGeometries()
 	Vector3D middle4 = { 2.8,-2.8,0 };
 	Vector3D down2 = { -2.8, -3, 0 };
 	Vector3D down3 = { 2.8,-3,0 };
+
+	//transformation
+	fBottomLeft = rb.getTransformMatrix() * fBottomLeft;
+	fBottomRight = rb.getTransformMatrix() * fBottomRight;
+	fUpRight = rb.getTransformMatrix() * fUpRight;
+	fUpLeft = rb.getTransformMatrix() * fUpLeft;
+	bUpLeft = rb.getTransformMatrix() * bUpLeft;
+	bBottomRight = rb.getTransformMatrix() * bBottomRight;
+	bBottomLeft = rb.getTransformMatrix() * bBottomLeft;
+	bUpRight = rb.getTransformMatrix() * bUpRight;
+
 	
 
 	GLfloat vertices[] =
@@ -237,6 +259,39 @@ void rendScene() {
 
 int main(void)
 {
+	//initialisation d'une particule qui sera modifié pour chaque type de projectile
+	unsigned iterationsContactResolver = 15;
+	//ParticuleContactResolver resolver=ParticuleContactResolver(iterationsContactResolver);
+	ParticuleWorld system = ParticuleWorld();
+	system.resolver.setIterations(15);
+	Vector3D gravity = Vector3D(0, -0.9, 0);
+	GravityForceGenerator gravityForce = GravityForceGenerator(gravity);
+	//Vector3D addVelocity = { 0.4, 0.5, 0.5 };
+	float mass = 10;
+	float lSquare = 0.4; //la longueur du carré
+	Quaternion orientation = Quaternion(0, 0, 0, 1 );
+
+	//Moment d'inertie d'un cube
+	Matrix3 inertiaTensor = Matrix3({ {
+		{(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
+		{-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare},
+		{-(1 / 4) * mass * lSquare * lSquare,-(1 / 4) * mass * lSquare * lSquare,(2 / 3) * mass * lSquare * lSquare}
+	} });
+
+	//creation de notre rigide body
+	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7, inertiaTensor);
+	Vector3D forcePousse = Vector3D(0.01, 0, 0);
+	Vector3D pointForce = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() - halfMedian };
+
+	RigidBodyManager rbManager = RigidBodyManager();
+
+	//Application d'une force au point superieure gauche de notre figure
+	rb.addForceAtBodyPoint(forcePousse, pointForce);
+	rbManager.addToRigidBodies(rb);
+	rbManager.addToRegistre(rb, gravityForce);
+	//rb.setVelocity({ 10,0,0 });
+
+
 	glfwInit();
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -258,7 +313,7 @@ int main(void)
 
 	initShadrProgramm();
 
-	initGeometries();
+	initGeometries(rb);
 	glfwSwapBuffers(window);
 
 	glClearColor(0.07f, 0.13f, 0.17f, 0.1f);
@@ -269,9 +324,21 @@ int main(void)
 		return -1;
 	}
 
+	double currentFrame = glfwGetTime();
+	double lastFrame = currentFrame;
+	double deltaTime;
 	while (!glfwWindowShouldClose(window))
 	{
 
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		processInput(window);
+
+		//Mise à jour de toute la physique
+		rbManager.runPhysic(deltaTime);
+		rb.clearAccumulator();
+		initGeometries(rb);
 
 		rendScene();
 
