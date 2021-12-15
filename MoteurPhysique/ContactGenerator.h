@@ -4,6 +4,7 @@
  * applying to rigid bodies.
  */
 #include "Contact.h"
+#include <vector>
 class ContactGenerator
 {
 public:
@@ -15,5 +16,5 @@ public:
      * to. The method returns the number of contacts that have
      * been written.
      */
-    virtual unsigned addContact(Contact* contact, unsigned limit) const = 0;
+    virtual unsigned addContact(std::vector<Contact*>* contact, unsigned limit) const = 0;
 };
