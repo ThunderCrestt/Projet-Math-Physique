@@ -270,7 +270,7 @@ int main(void)
 	//Vector3D addVelocity = { 0.4, 0.5, 0.5 };
 	float mass = 10;
 	float lSquare = 0.4; //la longueur du carré
-	Quaternion orientation = Quaternion(0, 0, 0, 1 );
+	Quaternion orientation = Quaternion(1, 0, 0, 0 );
 
 	//Moment d'inertie d'un cube
 	Matrix3 inertiaTensor = Matrix3({ {

@@ -20,7 +20,6 @@ void RigidBodyManager::addToRigidBodies(RigidBody& rb)
 void RigidBodyManager::removeFromRigidBodies(RigidBody& rb)
 {
 	this->rigidBodies.erase(std::remove(this->rigidBodies.begin(), this->rigidBodies.end(), &rb), this->rigidBodies.end());
-
 }
 
 

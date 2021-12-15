@@ -1,8 +1,4 @@
-﻿  CollisionData.cpp
-  Contact.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Contact.cpp(307,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-  ContactGenerator.cpp
-  Main.cpp
+﻿  Main.cpp
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(51,46): warning C4305: 'argument' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(52,23): warning C4305: 'initialisation' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(104,28): warning C4305: 'argument' : troncation de 'double' à 'float'
@@ -18,12 +14,4 @@ C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(272,21): warn
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(283,85): warning C4305: 'argument' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(284,44): warning C4305: 'argument' : troncation de 'double' à 'float'
 C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(340,23): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
-  NarrowCollisionDetection.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(443,46): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(450,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(458,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-  RegistreForceRigidBody.cpp
-  RigidBodyManager.cpp
-  Génération de code en cours...
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\RegistreForceRigidBody.cpp(39): warning C4715: 'RegistreForceRigidBody::findPrimitiveInRegistre' : les chemins de contrôle ne retournent pas tous une valeur
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe

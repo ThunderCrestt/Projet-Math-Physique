@@ -115,9 +115,6 @@ void RigidBody::integrer(float time)
     _speed = _speed +_linearAccel * time;
     _rotation = _rotation +_angularAccel * time;
 
-    //Impose Drag 
-    _speed = _speed* pow(_damping, time);
-    _rotation = _rotation*pow(_angularDamping, time) ;
 
     
     _position =_position+ _speed * (time);
@@ -131,6 +128,7 @@ void RigidBody::integrer(float time)
 	calculateDerivedData();
     // Clear accumulators.
     clearAccumulator();
+	
 	if (canSleep) {
 		float currentMotion = _speed.scalarProduct(_speed) +
 			_rotation.scalarProduct(_rotation);

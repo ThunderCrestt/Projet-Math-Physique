@@ -73,24 +73,7 @@
         //calcul une base orthonormale pour le point de contact
         void calculateContactBasis();
 
-        //applique une impulsion sur le rigidBody et retourne la velocité
-        void applyImpulse(const Vector3D& impulse, RigidBody* body,
-            Vector3D* velocityChange, Vector3D* rotationChange);
 
-        //applique une velocité en fonction de la resolution
-        void applyVelocityChange(Vector3D velocityChange[2],
-            Vector3D rotationChange[2]);
-
-        //Effectue une résolution de pénétration pondérée par l'inertie du contact seul
-        void applyPositionChange(Vector3D linearChange[2],
-            Vector3D angularChange[2],
-            float penetration);
-
-        //Calcule des impulsions dont on a besoin pour resoudre le contact (le contact ne doit pas avoir de friction)
-        Vector3D calculateFrictionlessImpulse(Matrix3* inverseInertiaTensor);
-
-        //Calcule des impulsions dont on a besoin pour resoudre le contact, mais cette fois avec friction
-        Vector3D calculateFrictionImpulse(Matrix3* inverseInertiaTensor);
     };
 
    
