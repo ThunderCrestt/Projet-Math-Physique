@@ -9,6 +9,7 @@ void CollisionPrimitive::calculateInternals()
     transform = body->getTransformMatrix() * offset;
 }
 
+//TODO : generateContact(prim1,prim2,collisionData) est équivalent à toutes les fonctions suivantes
 bool IntersectionTests::sphereAndHalfSpace(const CollisionSphere &sphere,const CollisionPlane &plane)
 {
     // Find the distance from the origin

@@ -158,13 +158,6 @@
      */
     struct CollisionData
     {
-        /**
-         * Holds the base of the collision data: the first contact
-         * in the array. This is used so that the contact pointer (below)
-         * can be incremented each time a contact is detected, while
-         * this pointer points to the first contact found.
-         */
-        Contact* contactArray;
 
         /** Holds the contact array to write into. */
         Contact* contacts;
@@ -203,7 +196,7 @@
         {
             contactsLeft = maxContacts;
             contactCount = 0;
-            contacts = contactArray;
+            contacts = 0; //TODO: was contactArray that was deleted
         }
 
         /**

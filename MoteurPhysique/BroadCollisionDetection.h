@@ -117,6 +117,7 @@ unsigned BVHNode<BoundingVolumeClass>::getPotentialContacts(PotentialContact* co
 	);
 }
 
+//TODO : à utiliser pour avoir les contacts potentiels !
 template<class BoundingVolumeClass>
 unsigned BVHNode<BoundingVolumeClass>::getPotentialContactsWith(const BVHNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit) const
 {
