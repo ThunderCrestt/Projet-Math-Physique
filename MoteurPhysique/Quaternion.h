@@ -34,6 +34,7 @@ public:
 		*/
 		std::array<float,4> data;
 	};
+	Quaternion() : r(1), i(0), j(0), k(0) {}
 	Quaternion(float r, float i, float j, float k)
 	{
 		this->r = r;

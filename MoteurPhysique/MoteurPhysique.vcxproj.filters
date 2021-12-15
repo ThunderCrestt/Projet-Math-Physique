@@ -117,8 +117,14 @@
     <ClCompile Include="BoundingVolumes.cpp">
       <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
-    <ClCompile Include="BVH.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="BroadCollisionDetection.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="Contact.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="NarrowCollisionDetection.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,8 +206,14 @@
     <ClInclude Include="BoundingVolumes.h">
       <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
-    <ClInclude Include="BVH.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="BroadCollisionDetection.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="Contact.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="NarrowCollisionDetection.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

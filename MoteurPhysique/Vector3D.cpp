@@ -35,7 +35,7 @@ float Vector3D::getNorm()
 	return sqrt(pow(getX(),2) + pow(getY(),2) + pow(getZ(),2));
 }
 
-float Vector3D::getSquareNorm()
+float Vector3D::getSquareNorm() const
 {
 	return pow(getX(), 2) + pow(getY(), 2) + pow(getZ(), 2);
 }
@@ -74,19 +74,19 @@ Vector3D Vector3D::toSubstractToVectorAndApplyResult(const Vector3D &toSubstract
 	return *this;
 }
 
-Vector3D Vector3D::multiplyByScalar(float scalar)
+Vector3D Vector3D::multiplyByScalar(float scalar) const
 {
 	Vector3D result = Vector3D(scalar * getX(), scalar * getY(), scalar * getZ());
 	return result;
 }
 
-Vector3D Vector3D::addToVector(const Vector3D &toAdd)
+Vector3D Vector3D::addToVector(const Vector3D &toAdd) const
 {
 	Vector3D result = Vector3D(this->getX() + toAdd.getX(), this->getY()+toAdd.getY(), this->getZ() + toAdd.getZ());
 	return result;
 }
 
-Vector3D Vector3D::substractToVector(const Vector3D &toSubstract)
+Vector3D Vector3D::substractToVector(const Vector3D &toSubstract) const
 {
 	Vector3D result = Vector3D(this->getX() - toSubstract.getX(), this->getY() - toSubstract.getY(), this->getZ() - toSubstract.getZ());
 	return result;
@@ -112,7 +112,7 @@ Vector3D Vector3D::composantProduct(const Vector3D &vector)
 	return Vector3D(getX() * vector.getX(), getY() * vector.getY(), getZ() * vector.getZ());
 }
 
-float Vector3D::scalarProduct(const Vector3D &vector)
+float Vector3D::scalarProduct(const Vector3D &vector) const
 {
 	return getX() * vector.getX() + getY() * vector.getY() + getZ() * vector.getZ();
 }

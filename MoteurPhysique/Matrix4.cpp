@@ -85,7 +85,7 @@ Matrix4 Matrix4::operator*(const Matrix4& toMultiply)
 
 }
 
-Vector3D Matrix4::operator*(const Vector3D& vector)
+Vector3D Matrix4::operator*(const Vector3D& vector) const
 {
 	return Vector3D(vector.getX() * data[0][0] + vector.getY() * data[0][1] + vector.getZ() * data[0][2]+data[0][3],
 		vector.getX() * data[1][0] + vector.getY() * data[1][1] + vector.getZ() * data[1][2] + data[1][3],

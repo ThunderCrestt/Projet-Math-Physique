@@ -4,7 +4,38 @@ RigidBody::RigidBody(Vector3D *position, Quaternion orientation, float mass, flo
 _accumForce(Vector3D(0, 0, 0)), _accumTorque(Vector3D(0, 0, 0)){
 	this->setInverseInertiaTensor(tenseurInertie);
 }
+void RigidBody::setAwake(const bool awake)
+{
+	if (awake) {
+		isAwake = true;
 
+		// Add a bit of motion to avoid it falling asleep immediately.
+		motion = sleepEpsilon * 2.0f;
+	}
+	else {
+		isAwake = false;
+		this->getVelocity().clear();
+		this->getRotation().clear();
+	}
+}
+bool RigidBody::getAwake()
+{
+	return isAwake;
+}
+
+void RigidBody::addVelocity(const Vector3D& deltaVelocity)
+{
+	_speed = _speed + deltaVelocity;
+}
+
+void RigidBody::addRotation(const Vector3D& deltaRotation)
+{
+	_rotation = _rotation+ deltaRotation;
+}
+Vector3D RigidBody::getRotation()
+{
+	return this->_rotation;
+}
 
 float RigidBody::getInverseMass()
 {
@@ -19,6 +50,10 @@ Vector3D RigidBody::getPosition()
 {
 	return _position;
 }
+void RigidBody::getPosition(Vector3D* position) const
+{
+	*position = RigidBody::_position;
+}	
 Vector3D RigidBody::getVelocity()
 {
 	return _speed;
@@ -54,6 +89,17 @@ void RigidBody::setVelocity(Vector3D const& vector)
 {
 	this->_speed = vector;
 }
+
+void RigidBody::setRotation(const float x, const float y, const float z)
+{
+	_rotation.setX(x);
+	_rotation.setY(y);
+	_rotation.setZ(z);
+}
+void RigidBody::setRotation(const Vector3D& rotation)
+{
+	RigidBody::_rotation = rotation;
+}
 void RigidBody::setAcceleration(Vector3D const& vector)
 {
 	this->_acceleration = vector;
@@ -85,7 +131,26 @@ void RigidBody::integrer(float time)
 	calculateDerivedData();
     // Clear accumulators.
     clearAccumulator();
+	if (canSleep) {
+		float currentMotion = _speed.scalarProduct(_speed) +
+			_rotation.scalarProduct(_rotation);
 
+		float bias = pow(0.5, time);
+		motion = bias * motion + (1 - bias) * currentMotion;
+
+		if (motion < sleepEpsilon) setAwake(false);
+		else if (motion > 10 * sleepEpsilon) motion = 10 * sleepEpsilon;
+	}
+
+}
+void RigidBody::getLastFrameAcceleration(Vector3D* acceleration) const
+{
+	*acceleration = lastFrameAcceleration;
+}
+
+Vector3D RigidBody::getLastFrameAcceleration() const
+{
+	return lastFrameAcceleration;
 }
 void RigidBody::clearAccumulator()
 {
@@ -110,7 +175,21 @@ void RigidBody::addForceAtPoint(Vector3D& force, Vector3D& point)
 
 
 //Code à décommenter lors de l'implémentation des matrices,quaternion
+Matrix3 RigidBody::getInverseInertiaTensor() const
+{
+	return this->_inverseInertiaTensorL;
+}
 
+void RigidBody::getInverseInertiaTensorWorld(Matrix3* inverseInertiaTensor) const
+{
+	*inverseInertiaTensor =  this->_inverseInertiaTensorW;
+
+}
+
+Matrix3 RigidBody::getInverseInertiaTensorWorld() const
+{
+	return this->_inverseInertiaTensorW;
+}
 
 Matrix4 RigidBody::getTransformMatrix()
 {
@@ -121,6 +200,35 @@ Quaternion RigidBody::getOrientation()
 {
 	return _orientation;
 }
+void RigidBody::getOrientation(Quaternion* orientation) const
+{
+	*orientation = RigidBody::_orientation;
+}
+
+Quaternion RigidBody::getOrientation() const
+{
+	return _orientation;
+}
+
+void RigidBody::getOrientation(Matrix3* matrix) const
+{
+	getOrientation(matrix->data);
+}
+void RigidBody::getOrientation(std::array<std::array<float, 3>, 3> matrix) const
+{
+	matrix[0][0] = _transformMatrix.data[0][0];
+	matrix[0][1] = _transformMatrix.data[0][1];
+	matrix[0][2] = _transformMatrix.data[0][2];
+
+	matrix[1][0] = _transformMatrix.data[1][0];
+	matrix[1][1] = _transformMatrix.data[1][1];
+	matrix[1][2] = _transformMatrix.data[1][2];
+
+	matrix[2][0] = _transformMatrix.data[2][0];
+	matrix[2][1] = _transformMatrix.data[2][1];
+	matrix[2][2] = _transformMatrix.data[2][2];
+}
+
 
 void RigidBody::setInverseInertiaTensor(const Matrix3 &inertiaTensor)
 {
