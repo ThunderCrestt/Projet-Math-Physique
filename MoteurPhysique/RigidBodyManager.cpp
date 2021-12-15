@@ -47,6 +47,7 @@ void RigidBodyManager::integerAllRigidBodies(float duration)
 void RigidBodyManager::startFrame()
 {
 	//TODO : clear accumulator ?
+	//TODO : insérer ici les boundingVolume et BVH ?
 }
 
 void RigidBodyManager::runPhysic(float duration)
@@ -55,4 +56,8 @@ void RigidBodyManager::runPhysic(float duration)
 	//on update les forces;
 	this->getRegistre().updateForces(duration);
 	integerAllRigidBodies(duration);
+	//TODO : comment on insère un BVHnode ?
+	//TODO : call broadPhase -> doit donner tous les contacts potentiels avec getPotentialContact
+	//TODO : call narrowPhase -> doit créer et utiliser la collisionData -> quelle résolution appelé ?
+	//TODO : if Collisions return true and pause the game
 }

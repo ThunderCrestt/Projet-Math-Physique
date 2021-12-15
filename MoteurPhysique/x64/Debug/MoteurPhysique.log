@@ -1,5 +1,2 @@
-﻿  NarrowCollisionDetection.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(534,46): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(541,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(549,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
+﻿  RigidBodyManager.cpp
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
