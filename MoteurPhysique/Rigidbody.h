@@ -88,6 +88,14 @@ public:
     void calculateTransformMatrix(Matrix4& transformMatrix, const Vector3D& position, const Quaternion& orientation);
     void tenseurInertiaLocalToWorld(Matrix3& inertiaTenseur);
     Matrix3 convertMatrix4to3(Matrix4 matrix);
+    bool operator==(const RigidBody &rb)
+    {
+        return (rb._acceleration == this->_acceleration 
+            && rb._speed==this->_speed
+            && rb._position==this->_position
+            && rb._rotation == this->_rotation
+            && rb._inverseMass==this->getInverseMass());
+    }
 }; 
 
 #endif // ! RIGIDBODY

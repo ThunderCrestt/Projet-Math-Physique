@@ -23,9 +23,9 @@ public :
 	void addToRigidBodies(RigidBody& rb);
 	void removeFromRigidBodies(RigidBody& rb);
 	void integerAllRigidBodies(float duration);
-	void addToRegistre(RigidBody& rb, ForceGenerator& fg);
-	void removeFromRegistre(RigidBody& rb, ForceGenerator& fg);
-	//TODO : ajouter des fonctions de gestionnaires de registre de primitive ou modifier celles du registres
+	void addToRegistre(CollisionPrimitive& primitive, ForceGenerator& fg);
+	void removeFromRegistre(CollisionPrimitive& primitive, ForceGenerator& fg);
+	CollisionPrimitive findPrimitiveInRegistre(RigidBody& rb);
 	void startFrame();
 	void runPhysic(float duration);
 	RegistreForceRigidBody getRegistre();

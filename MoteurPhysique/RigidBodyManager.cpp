@@ -24,22 +24,28 @@ void RigidBodyManager::removeFromRigidBodies(RigidBody& rb)
 }
 
 
-void RigidBodyManager::addToRegistre(RigidBody& rb, ForceGenerator& fg)
+void RigidBodyManager::addToRegistre(CollisionPrimitive& primitive, ForceGenerator& fg)
 {
-	registre.addToRegistre(rb, fg);
+	registre.addToRegistre(primitive, fg);
 
 }
-void RigidBodyManager::removeFromRegistre(RigidBody& rb, ForceGenerator& fg)
+void RigidBodyManager::removeFromRegistre(CollisionPrimitive& primitive, ForceGenerator& fg)
 {
-	registre.removeFromRegistre(rb, fg);
+	registre.removeFromRegistre(primitive, fg);
 }
+
+CollisionPrimitive RigidBodyManager::findPrimitiveInRegistre(RigidBody& rb)
+{
+	return registre.findPrimitiveInRegistre(rb);
+}
+
 
 void RigidBodyManager::integerAllRigidBodies(float duration)
 {
 	
 	for (auto& elem : this->getRegistre().getRegistre())
 	{
-		elem.rb->integrer(duration);
+		elem.primitive->body->integrer(duration);
 	}
 	
 	
@@ -47,25 +53,7 @@ void RigidBodyManager::integerAllRigidBodies(float duration)
 
 unsigned  RigidBodyManager::generateContacts()
 {
-	//unsigned limit = maxContacts;
-	//Contact* nextContact = contacts;
-
-	//ContactGenRegistration* reg = firstContactGen;
-	//while (reg)
-	//{
-	//	unsigned used = reg->gen->addContact(nextContact, limit);
-	//	limit -= used;
-	//	nextContact += used;
-
-	//	// We've run out of contacts to fill. This means we're missing
-	//	// contacts.
-	//	if (limit <= 0) break;
-
-	//	reg = reg->next;
-	//}
-
-	//// Return the number of contacts used.
-	//return maxContacts - limit;
+	//must choose wich function from collisionDetector to call
 	return 0;
 }
 
@@ -88,8 +76,20 @@ void RigidBodyManager::runPhysic(float duration)
 	//à faire pour tout le bvh si jamais ça le fais pas la
 	// call broadPhase -> doit donner tous les contacts potentiels avec getPotentialContact on obtient des potentialContact avec les deux rigiBody potentiellement en contact
 	BVHtree[0].getPotentialContacts(pContact,limit);
+	if (sizeof(pContact->body)>0)
+	{
+		//avec les rigidBody trouvé dans le contact potentiel on cherche les primitives correspondant
+		//dans une liste de primitive
+		CollisionPrimitive prim1 = findPrimitiveInRegistre(*pContact->body[0]);
+		CollisionPrimitive prim2 = findPrimitiveInRegistre(*pContact->body[1]);
+		collisionData->friction = 0;
+		collisionData->restitution = 1;
+		//TODO : generateContact(prim1,prim2,collisionData);
+	}
+	else {
+		return;
+	}
 	//TODO : ici soit créer un collisionData à remplir avec seulement friction et restitution de set à 0 et 1 soit dans le setBodyData de la narrowDetection enlever les data.friction
-	//TODO: avec les rigidBody on cherche les primitives correspondant dans une liste de primitive ( ou liste de primitive lié à un contact generator ?)
 	//TODO : on appelle une fonction qui vient choisir quel type de collision c'est en fonction des deux primitives ( shpere and sphere ..) et rempli le collisionData
 	//TODO : if CollisionsData est non vide return true and pause the game
 }

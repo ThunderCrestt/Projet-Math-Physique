@@ -22,23 +22,20 @@ class BoundingSphere
 		Vector3D center;
 		float radius;
 	/**
-	* Creates a new bounding sphere at the given center and radius.
+	* Créer un boundingVolume en forme de sphère au centrer center et de rayon radius
 	*/
 	BoundingSphere(const Vector3D& center, float radius);
 
 	/**
-	* Creates a bounding sphere to enclose the two given bounding
-	* spheres.
+	* Créer une boundingSphere comprennant les deux boundingSphere passé
 	*/
 
 	BoundingSphere(const BoundingSphere& one, const  BoundingSphere& two);
 	void calculateNewBoundingVolume(const BoundingSphere& one, const  BoundingSphere& two);
 
 	/**
-	* Checks if the bounding sphere overlaps with the other given
-	* bounding sphere.
+	* Vérifie la superposition des deux sphères
 	*/
-
 	bool overlaps(const BoundingSphere* other);
 	float getGrowth(const BoundingSphere& other) const;
 	float getSize();

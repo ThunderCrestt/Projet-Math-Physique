@@ -3,8 +3,7 @@
 
 #include "Contact.h"
 #include "Vector3D.h"
-
-
+#include "CollisionData.h"
     // Forward declarations of primitive friends
     class IntersectionTests;
     class CollisionDetector;
@@ -57,7 +56,13 @@
         {
             return transform;
         }
-        //TODO : create constructeur avec rigiBody et offset
+        //TODO : create constructeur y
+        CollisionPrimitive()
+        {
+
+        }
+        CollisionPrimitive( RigidBody& rb, const Matrix4& offset);
+
 
 
     protected:
@@ -81,6 +86,8 @@
          */
         float radius;
         //TODO : create constructeur 
+        CollisionSphere(){}
+        CollisionSphere( RigidBody& rb, const Matrix4& offset,float radius);
 
     };
 
@@ -155,78 +162,11 @@
     };
 
 
-    /**
-     * A helper structure that contains information for the detector to use
-     * in building its contact data.
-     */
-
-
-    //TODO : à mettre dans un autre fichier 
-    struct CollisionData
-    {
-
-        /** Holds the contact array to write into. */
-        Contact* contacts;
-
-        /** Holds the maximum number of contacts the array can take. */
-        int contactsLeft;
-
-        /** Holds the number of contacts found so far. */
-        unsigned contactCount;
-
-        /** Holds the friction value to write into any collisions. */
-        float friction;
-
-        /** Holds the restitution value to write into any collisions. */
-        float restitution;
-
-        /**
-         * Checks if there are more contacts available in the contact
-         * data.
-         */
-        bool hasMoreContacts()
-        {
-            return contactsLeft > 0;
-        }
-
-        /**
-         * Resets the data so that it has no used contacts recorded.
-         */
-        void reset(unsigned maxContacts)
-        {
-            contactsLeft = maxContacts;
-            contactCount = 0;
-            contacts = 0; //TODO: was contactArray that was deleted
-        }
-
-        /**
-         * Notifies the data that the given number of contacts have
-         * been added.
-         */
-        void addContacts(unsigned count)
-        {
-            // Reduce the number of contacts remaining, add number used
-            contactsLeft -= count;
-            contactCount += count;
-
-            // Move the array forward
-            contacts += count;
-        }
-    };
-
-    /**
-     * A wrapper class that holds the fine grained collision detection
-     * routines.
-     *
-     * Each of the functions has the same format: it takes the details
-     * of two objects, and a pointer to a contact array to fill. It
-     * returns the number of contacts it wrote into the array.
-     */
-
-    //TODO : à mettre dans un autre fichier
     class CollisionDetector
     {
     public:
+        static unsigned generateContact(CollisionPrimitive* prim1, CollisionPrimitive* prim2, CollisionData* data);
+
 
         static unsigned sphereAndHalfSpace(
             const CollisionSphere& sphere,
@@ -276,8 +216,5 @@
         );
     };
 
-
-
-// namespace cyclone
 
 #endif // CYCLONE_COLLISION_FINE_H

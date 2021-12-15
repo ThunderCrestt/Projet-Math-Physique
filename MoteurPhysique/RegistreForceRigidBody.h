@@ -2,22 +2,22 @@
 #include "RigidBody.h"
 #include "ForceGenerator.h"
 #include <vector>
-
+#include "NarrowCollisionDetection.h"
 #ifndef REGISTREFORCERIGIDBODY_h
 #define REGISTREFORCERIGIDBODY_h
 
 
 struct EnregistrementForceRigidBody {
-	RigidBody* rb;
+	CollisionPrimitive* primitive;
 	ForceGenerator* fg;
-	EnregistrementForceRigidBody(RigidBody& _rb, ForceGenerator& _fg)
+	EnregistrementForceRigidBody(CollisionPrimitive& _rb, ForceGenerator& _fg)
 	{
-		rb = &_rb;
+		primitive = &_rb;
 		fg = &_fg;
 	}
 	bool operator==(const EnregistrementForceRigidBody& ef)
 	{
-		if (this->rb == ef.rb && this->fg == ef.fg)
+		if (this->primitive == ef.primitive && this->fg == ef.fg)
 		{
 			return true;
 		}
@@ -34,8 +34,9 @@ private:
 public:
 	RegistreRigidBody _registre;
 	RegistreForceRigidBody();
-	void addToRegistre(RigidBody &rb, ForceGenerator& fg);
-	void removeFromRegistre(RigidBody& rb, ForceGenerator& fg);
+	void addToRegistre(CollisionPrimitive&primitive, ForceGenerator& fg);
+	void removeFromRegistre(CollisionPrimitive& primitive, ForceGenerator& fg);
+	CollisionPrimitive findPrimitiveInRegistre(RigidBody &rb);
 	EnregistrementForceRigidBody getEnregistrementAtPos(int pos);
 	RegistreRigidBody getRegistre();
 	void clear();

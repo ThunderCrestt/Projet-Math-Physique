@@ -17,7 +17,7 @@ BoundingSphere::BoundingSphere(const BoundingSphere& one,const BoundingSphere& t
     float distance = centreOffset.getSquareNorm();
     float radiusDiff = two.radius - one.radius;
 
-    // Check if the larger sphere encloses the small one
+    // Est ce que la grand sphère contient la petite ?
     if (radiusDiff * radiusDiff >= distance)
     {
         if (one.radius > two.radius)
@@ -32,16 +32,13 @@ BoundingSphere::BoundingSphere(const BoundingSphere& one,const BoundingSphere& t
         }
     }
 
-    // Otherwise we need to work with partially
-    // overlapping spheres
+    //sinon on travail avec des shpères qui se superposent partiellement
     else
     {
         distance = sqrt(distance);
         radius = (distance + one.radius + two.radius) * ((float)0.5f);
 
-        // The new centre is based on one's centre, moved towards
-        // two's centre by an ammount proportional to the spheres'
-        // radii.
+        // le nouveau centre est le centre de one décaler vers le centre de two d'une certaine distance
         center = one.center;
         if (distance > 0)
         {
@@ -61,8 +58,7 @@ float BoundingSphere::getGrowth(const BoundingSphere& other) const
 {
     BoundingSphere newSphere= BoundingSphere(*this, other);
 
-    // We return a value proportional to the change in surface
-    // area of the sphere.
+    // On retourne une valeur proportionnel à la surface de la sphère
     return newSphere.radius * newSphere.radius - radius * radius;
 }
 
@@ -79,7 +75,7 @@ void BoundingSphere::calculateNewBoundingVolume(const BoundingSphere& one, const
     float distance = centreOffset.getSquareNorm();
     float radiusDiff = two.radius - one.radius;
 
-    // Check if the larger sphere encloses the small one
+    // On regarde si la grande sphère comprends la petite
     if (radiusDiff * radiusDiff >= distance)
     {
         if (one.radius > two.radius)
@@ -94,16 +90,14 @@ void BoundingSphere::calculateNewBoundingVolume(const BoundingSphere& one, const
         }
     }
 
-    // Otherwise we need to work with partially
-    // overlapping spheres
+    //sinon on travail avec des shpères qui se superposent partiellement
+
     else
     {
         distance = sqrt(distance);
         radius = (distance + one.radius + two.radius) * ((float)0.5f);
 
-        // The new centre is based on one's centre, moved towards
-        // two's centre by an ammount proportional to the spheres'
-        // radii.
+        // le nouveau centre est le centre de one décaler vers le centre de two d'une certaine distance
         center = one.center;
         if (distance > 0)
         {

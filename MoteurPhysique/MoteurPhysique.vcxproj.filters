@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -126,10 +123,13 @@
     <ClCompile Include="NarrowCollisionDetection.cpp">
       <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
-    <ClCompile Include="ContactResolver.cpp">
+    <ClCompile Include="ContactGenerator.cpp">
       <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
-    <ClCompile Include="ContactGenerator.cpp">
+    <ClCompile Include="glad.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionData.cpp">
       <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -224,7 +224,7 @@
     <ClInclude Include="ContactGenerator.h">
       <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
-    <ClInclude Include="ContactResolver.h">
+    <ClInclude Include="CollisionData.h">
       <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
   </ItemGroup>

@@ -111,6 +111,10 @@ public :
 		if (i == 1) return _y;
 		return _z;
 	}
+	bool operator==(const Vector3D toCompare) const
+	{
+		return (_x == toCompare.getX() && _y == toCompare.getY() && _z == toCompare.getZ());
+	}
 	/*
 	Vector3D operator+=(const Vector3D toAdd)
 	{
