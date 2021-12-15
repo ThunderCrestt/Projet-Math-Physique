@@ -126,6 +126,12 @@
     <ClCompile Include="NarrowCollisionDetection.cpp">
       <Filter>Fichiers sources\Contacts</Filter>
     </ClCompile>
+    <ClCompile Include="ContactResolver.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactGenerator.cpp">
+      <Filter>Fichiers sources\Contacts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Particule.h">
@@ -213,6 +219,12 @@
       <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
     <ClInclude Include="NarrowCollisionDetection.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactGenerator.h">
+      <Filter>Fichiers d%27en-tête\Contacts</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactResolver.h">
       <Filter>Fichiers d%27en-tête\Contacts</Filter>
     </ClInclude>
   </ItemGroup>

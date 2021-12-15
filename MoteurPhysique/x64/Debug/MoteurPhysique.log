@@ -1,34 +1,3 @@
-﻿  BroadCollisionDetection.cpp
-  Contact.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Contact.cpp(424,20): warning C4244: 'initialisation' : conversion de 'int' en 'float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Contact.cpp(630,32): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-  DragForceGenerator.cpp
-  ForceGenerator.cpp
-  GravityForceGenerator.cpp
-  Main.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(179,40): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(194,84): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Main.cpp(284,23): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
-  Matrix3.cpp
-  Matrix4.cpp
-  NarrowCollisionDetection.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(533,46): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(540,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\NarrowCollisionDetection.cpp(548,50): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
-  Particule.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Particule.cpp(89,93): warning C4244: 'argument' : conversion de 'double' en 'const float', perte possible de données
-  ParticuleAnchoredSpring.cpp
-  ParticuleElastique.cpp
-  ParticuleFlottaison.cpp
-  ParticuleSpring.cpp
-  ParticuleSystem.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleSystem.cpp(11,89): warning C4305: 'argument' : troncation de 'double' à 'float'
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ParticuleSystem.cpp(100,51): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-  Quaternion.cpp
-  RegistreForceRigidBody.cpp
-  RegistreForces.cpp
-  RigidBodyManager.cpp
-  Rigidbody.cpp
-C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\Rigidbody.cpp(138,14): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-  Génération de code en cours...
+﻿  ContactResolver.cpp
+C:\Users\pierr\source\repos\MoteurPhysique\MoteurPhysique\ContactResolver.cpp(124,32): warning C4244: 'argument' : conversion de 'int' en 'const float', perte possible de données
   MoteurPhysique.vcxproj -> C:\Users\pierr\source\repos\MoteurPhysique\x64\Debug\MoteurPhysique.exe
