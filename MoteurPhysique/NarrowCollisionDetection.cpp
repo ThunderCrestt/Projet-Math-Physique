@@ -21,35 +21,10 @@ CollisionSphere::CollisionSphere( RigidBody& rb, const Matrix4& offset,float rad
     this->offset = offset;
     this->radius = radius;
 }
-
-
-//TODO : generateContact(prim1,prim2,collisionData) est équivalent à toutes les fonctions suivantes
-bool IntersectionTests::sphereAndHalfSpace(const CollisionSphere &sphere,const CollisionPlane &plane)
-{
-    // trouve la distance depuis l'origine
-    CollisionPlane plan = plane;
-    float ballDistance = (plan.direction.scalarProduct(sphere.getAxis(3)))-sphere.radius;
-
-    // y a t il une intersection ?
-    return ballDistance <= plane.offset;
-}
-
-bool IntersectionTests::sphereAndSphere(
-    const CollisionSphere &one,
-    const CollisionSphere &two)
-{
-    // calcul du vecteur décrit entre les objets
-    Vector3D midline = one.getAxis(3) - two.getAxis(3);
-
-    //est il assez grand ?
-    return midline.getSquareNorm() <
-        (one.radius+two.radius)*(one.radius+two.radius);
-}
-
 static inline float transformToAxis(
-    const CollisionBox &box,
-    const Vector3D &axis
-    )
+    const CollisionBox& box,
+    const Vector3D& axis
+)
 {
     return
         box.halfSize.getX() * abs(axis.scalarProduct(box.getAxis(0))) +
@@ -57,79 +32,7 @@ static inline float transformToAxis(
         box.halfSize.getZ() * abs(axis.scalarProduct(box.getAxis(2)));
 }
 
-/**
- * Cette fonction regarde si deux boites sont superposé sur l'axe donné
- */
-static inline bool overlapOnAxis(
-    const CollisionBox &one,
-    const CollisionBox &two,
-    const Vector3D &axis,
-    const Vector3D &toCentre
-    )
-{
 
-    float oneProject = transformToAxis(one, axis);
-    float twoProject = transformToAxis(two, axis);
-
-    // On projète sur notre axe
-    float distance = abs(toCentre.scalarProduct(axis));
-
-    // y a il superposition ?
-    return (distance < oneProject + twoProject);
-}
-
-#define TEST_OVERLAP(axis) overlapOnAxis(one, two, (axis), toCentre)
-
-bool IntersectionTests::boxAndBox(
-    const CollisionBox &one,
-    const CollisionBox &two
-    )
-{
-    //Vecteur entre les deux centres
-    Vector3D toCentre = two.getAxis(3) - one.getAxis(3);
-
-    return (
-        // Check on box one's axes first
-        TEST_OVERLAP(one.getAxis(0)) &&
-        TEST_OVERLAP(one.getAxis(1)) &&
-        TEST_OVERLAP(one.getAxis(2)) &&
-
-        // And on two's
-        TEST_OVERLAP(two.getAxis(0)) &&
-        TEST_OVERLAP(two.getAxis(1)) &&
-        TEST_OVERLAP(two.getAxis(2)) &&
-
-        // Now on the cross products
-        TEST_OVERLAP(one.getAxis(0) % two.getAxis(0)) &&
-        TEST_OVERLAP(one.getAxis(0) % two.getAxis(1)) &&
-        TEST_OVERLAP(one.getAxis(0) % two.getAxis(2)) &&
-        TEST_OVERLAP(one.getAxis(1) % two.getAxis(0)) &&
-        TEST_OVERLAP(one.getAxis(1) % two.getAxis(1)) &&
-        TEST_OVERLAP(one.getAxis(1) % two.getAxis(2)) &&
-        TEST_OVERLAP(one.getAxis(2) % two.getAxis(0)) &&
-        TEST_OVERLAP(one.getAxis(2) % two.getAxis(1)) &&
-        TEST_OVERLAP(one.getAxis(2) % two.getAxis(2))
-    );
-}
-#undef TEST_OVERLAP
-
-bool IntersectionTests::boxAndHalfSpace(
-    const CollisionBox &box,
-    const CollisionPlane &plane
-    )
-{
-    // Work out the projected radius of the box onto the plane direction
-    float projectedRadius = transformToAxis(box, plane.direction);
-
-    // Work out how far the box is from the origin
-    float boxDistance =
-        plane.direction.scalarProduct(
-        box.getAxis(3)) -
-        projectedRadius;
-
-    // Check for the intersection
-    return boxDistance <= plane.offset;
-}
 
 //collision Detector implémentation
 unsigned CollisionDetector::generateContact(CollisionPrimitive* prim1, CollisionPrimitive* prim2, CollisionData* data)
@@ -164,22 +67,21 @@ unsigned CollisionDetector::sphereAndTruePlane(
     CollisionData* data
 )
 {
-    // Make sure we have contacts
-    if (data->contactsLeft <= 0) return 0;
 
-    // Cache the sphere position
+
+    // sauvegarde de la position de la sphère
     Vector3D position = sphere.getAxis(3);
 
-    // Find the distance from the plane
+    // Trouve la distance entre le plan et la sphère
     float centreDistance = plane.direction.scalarProduct(position) - plane.offset;
 
-    // Check if we're within radius
+    // Est on dans le rayon de la sphère 
     if (centreDistance * centreDistance > sphere.radius * sphere.radius)
     {
         return 0;
     }
 
-    // Check which side of the plane we're on
+    // de quel côté du plan est on ?
     Vector3D normal = plane.direction;
     float penetration = -centreDistance;
     if (centreDistance < 0)
@@ -189,7 +91,7 @@ unsigned CollisionDetector::sphereAndTruePlane(
     }
     penetration += sphere.radius;
 
-    // Create the contact - it has a normal in the plane direction.
+    // On créer le contact et la collisionData
     //TODO : change collisionData
     Contact* contact = new Contact();
     contact->contactNormal = normal;
@@ -211,28 +113,27 @@ unsigned CollisionDetector::sphereAndHalfSpace(
     CollisionData* data
 )
 {
-    // Make sure we have contacts
-    if (data->contactsLeft <= 0) return 0;
 
-    // Cache the sphere position
+
+    // sauvegarde de la position de la sphère
     Vector3D position = sphere.getAxis(3);
 
-    // Find the distance from the plane
+    //On trouve la distance entre le plan et la sphère
     float ballDistance =
         plane.direction.scalarProduct(position) -
         sphere.radius - plane.offset;
 
     if (ballDistance >= 0) return 0;
 
-    // Create the contact - it has a normal in the plane direction.
-    Contact* contact = data->contacts;
+    // On créer le contact et la collisionData
+    Contact* contact = new Contact();
     contact->contactNormal = plane.direction;
     contact->penetration = -ballDistance;
     contact->contactPoint =
         position - plane.direction.multiplyByScalar(ballDistance + sphere.radius);
     contact->setBodyData(sphere.body, NULL,
         data->friction, data->restitution);
-
+    data->contacts = contact;
     data->addContacts(1);
     return 1;
 }
@@ -243,34 +144,31 @@ unsigned CollisionDetector::sphereAndSphere(
     CollisionData* data
 )
 {
-    // Make sure we have contacts
-    if (data->contactsLeft <= 0) return 0;
-
-    // Cache the sphere positions
+    // Sauvegarde des positions des sphères
     Vector3D positionOne = one.getAxis(3);
     Vector3D positionTwo = two.getAxis(3);
 
-    // Find the vector between the objects
+    // Calcul du vecteur entre les deux sphères
     Vector3D midline = positionOne - positionTwo;
     float size = midline.getNorm();
 
-    // See if it is large enough.
+    // On regarde si le vecteur midline est assez grand
     if (size <= 0.0f || size >= one.radius + two.radius)
     {
         return 0;
     }
 
-    // We manually create the normal, because we have the
-    // size to hand.
+    // On créer la normal manuellement
     Vector3D normal = midline * (((float)1.0f) / size);
 
-    Contact* contact = data->contacts;
+    // On créer le contact et la collisionData
+    Contact* contact = new Contact();
     contact->contactNormal = normal;
     contact->contactPoint = positionOne + midline * (float)0.5f;
     contact->penetration = (one.radius + two.radius - size);
     contact->setBodyData(one.body, two.body,
         data->friction, data->restitution);
-
+    data->contacts = contact;
     data->addContacts(1);
     return 1;
 }
@@ -279,11 +177,8 @@ unsigned CollisionDetector::sphereAndSphere(
 
 
 /*
- * This function checks if the two boxes overlap
- * along the given axis, returning the ammount of overlap.
- * The final parameter toCentre
- * is used to pass in the vector between the boxes centre
- * points, to avoid having to recalculate it each time.
+ * Cette fonction permet de vérifier si deux boites se superposent sur l'axe donnée axis,
+ * toCentre est un vecteur entre les deux centres des boites
  */
 static inline float penetrationOnAxis(
     const CollisionBox& one,
@@ -292,15 +187,13 @@ static inline float penetrationOnAxis(
     const Vector3D& toCentre
 )
 {
-    // Project the half-size of one onto axis
     float oneProject = transformToAxis(one, axis);
     float twoProject = transformToAxis(two, axis);
 
-    // Project this onto the axis
+    // On projète sur l'axe
     float distance = abs(toCentre.scalarProduct(axis));
 
-    // Return the overlap (i.e. positive indicates
-    // overlap, negative indicates separation).
+    // retourne à quel point les objets se superposent
     return oneProject + twoProject - distance;
 }
 
@@ -312,12 +205,11 @@ static inline bool tryAxis(
     const Vector3D& toCentre,
     unsigned index,
 
-    // These values may be updated
     float& smallestPenetration,
     unsigned& smallestCase
 )
 {
-    // Make sure we have a normalized axis, and don't check almost parallel axes
+    // On doit bien avoir un axe normaliser
     if (axis.getSquareNorm() < 0.0001) return true;
     axis.normalize();
 
@@ -340,33 +232,31 @@ void fillPointFaceBoxBox(
     float pen
 )
 {
-    // This method is called when we know that a vertex from
-    // box two is in contact with box one.
 
-    Contact* contact = data->contacts;
+    //cette méthode est appelé quand on sait qu'un vertex de la boite est en contact avec la deuxième boite
+    Contact* contact = new Contact();
 
-    // We know which axis the collision is on (i.e. best),
-    // but we need to work out which of the two faces on
-    // this axis.
+   
+    //on sait sur quel axe la collision a lieu mais on doit savoir sur quel face de la boite
     Vector3D normal = one.getAxis(best);
     if (one.getAxis(best) * toCentre > 0)
     {
         normal = normal * -1.0f;
     }
 
-    // Work out which vertex of box two we're colliding with.
-    // Using toCentre doesn't work!
+    //travail pour trouver le vertex avec lequel on collide
     Vector3D vertex = two.halfSize;
     if ((two.getAxis(0).scalarProduct(normal)) < 0) { vertex.setX(vertex.getX() * -1); }
     if ((two.getAxis(1).scalarProduct(normal)) < 0) { vertex.setY(vertex.getY() * -1); }
     if ((two.getAxis(2).scalarProduct(normal)) < 0) { vertex.setZ(vertex.getZ() * -1); }
-
-    // Create the contact data
+    // On créer le contact et la collisionData
     contact->contactNormal = normal;
     contact->penetration = pen;
     contact->contactPoint = two.getTransform() * vertex;
     contact->setBodyData(one.body, two.body,
         data->friction, data->restitution);
+    data->contacts = contact;
+
 }
 
 static inline Vector3D contactPoint(
@@ -376,10 +266,7 @@ static inline Vector3D contactPoint(
     const Vector3D& pTwo,
     const Vector3D& dTwo,
     float twoSize,
-
-    // If this is true, and the contact point is outside
-    // the edge (in the case of an edge-face contact) then
-    // we use one's midpoint, otherwise we use two's.
+    //si true and que contact en dehors des coins alors on utilise qu'un point et non deux
     bool useOne)
 {
     Vector3D toSt, cOne, cTwo;
@@ -396,7 +283,7 @@ static inline Vector3D contactPoint(
 
     denom = smOne * smTwo - dpOneTwo * dpOneTwo;
 
-    // Zero denominator indicates parrallel lines
+    //un denominateur à zero indique des lignes paralelle
     if (abs(denom) < 0.0001f) {
         return useOne ? pOne : pTwo;
     }
@@ -404,10 +291,7 @@ static inline Vector3D contactPoint(
     mua = (dpOneTwo * dpStaTwo - smTwo * dpStaOne) / denom;
     mub = (smOne * dpStaTwo - dpOneTwo * dpStaOne) / denom;
 
-    // If either of the edges has the nearest point out
-    // of bounds, then the edges aren't crossed, we have
-    // an edge-face contact. Our point is on the edge, which
-    // we know from the useOne parameter.
+    //si tous les coins ont leur point en dehors de la figure alors on un a edge-face contact
     if (mua > oneSize ||
         mua < -oneSize ||
         mub > twoSize ||
@@ -424,8 +308,8 @@ static inline Vector3D contactPoint(
     }
 }
 
-// This preprocessor definition is only used as a convenience
-// in the boxAndBox contact generation method.
+// définition bien utile dans toute l'implémentation de boxAndBox
+
 #define CHECK_OVERLAP(axis, index) \
     if (!tryAxis(one, two, (axis), toCentre, (index), pen, best)) return 0;
 
@@ -435,18 +319,18 @@ unsigned CollisionDetector::boxAndBox(
     CollisionData* data
 )
 {
-    //if (!IntersectionTests::boxAndBox(one, two)) return 0;
-
-    // Find the vector between the two centres
+    // trouve le vecteur entre les deux centres des boites
     Vector3D toCentre = two.getAxis(3) - one.getAxis(3);
 
-    // We start assuming there is no contact
+    //On commence par dire qu'il n'y pas de contact
     float pen = 15; //REAL_MAX
     unsigned best = 0xffffff;
 
     // Now we check each axes, returning if it gives us
     // a separating axis, and keeping track of the axis with
     // the smallest penetration otherwise.
+
+    //on vient regarder sur chaque axe si il nous donne un axe séparatoire 
     CHECK_OVERLAP(one.getAxis(0), 0);
     CHECK_OVERLAP(one.getAxis(1), 1);
     CHECK_OVERLAP(one.getAxis(2), 2);
@@ -469,33 +353,27 @@ unsigned CollisionDetector::boxAndBox(
     CHECK_OVERLAP(one.getAxis(2) % two.getAxis(1), 13);
     CHECK_OVERLAP(one.getAxis(2) % two.getAxis(2), 14);
 
-    // Make sure we've got a result.
+    // on vveut être sur d'avoir un résultat
     assert(best != 0xffffff);
 
-    // We now know there's a collision, and we know which
-    // of the axes gave the smallest penetration. We now
-    // can deal with it in different ways depending on
-    // the case.
+    // on sait désormais qu'il y a une collision et sur quel axe avec la plus petite pénétration. on choisit désormait comment on résout ce cas
     if (best < 3)
     {
-        // We've got a vertex of box two on a face of box one.
+        //Un vertex de one est sur une face de two
         fillPointFaceBoxBox(one, two, toCentre, data, best, pen);
         data->addContacts(1);
         return 1;
     }
     else if (best < 6)
     {
-        // We've got a vertex of box one on a face of box two.
-        // We use the same algorithm as above, but swap around
-        // one and two (and therefore also the vector between their
-        // centres).
+        //Un vertex de one est sur une face de two
         fillPointFaceBoxBox(two, one, toCentre * -1.0f, data, best - 3, pen);
         data->addContacts(1);
         return 1;
     }
     else
     {
-        // We've got an edge-edge contact. Find out which axes
+        //on a un edge-edge contact, on cherche sur quel axe
         best -= 6;
         unsigned oneAxisIndex = best / 3;
         unsigned twoAxisIndex = best % 3;
@@ -504,15 +382,9 @@ unsigned CollisionDetector::boxAndBox(
         Vector3D axis = oneAxis % twoAxis;
         axis.normalize();
 
-        // The axis should point from box one to box two.
+        // l'axe doit pointer de la boite 1 à la boite 2
         if (axis * toCentre > 0) axis = axis * -1.0f;
 
-        // We have the axes, but not the edges: each axis has 4 edges parallel
-        // to it, we need to find which of the 4 for each object. We do
-        // that by finding the point in the centre of the edge. We know
-        // its component in the direction of the box's collision axis is zero
-        // (its a mid-point) and we determine which of the extremes in each
-        // of the other axes is closest.
         Vector3D ptOnOneEdge = one.halfSize;
         Vector3D ptOnTwoEdge = two.halfSize;
         for (unsigned i = 0; i < 3; i++)
@@ -524,14 +396,11 @@ unsigned CollisionDetector::boxAndBox(
             else if (two.getAxis(i) * axis < 0) ptOnTwoEdge[i] = -ptOnTwoEdge[i];
         }
 
-        // Move them into world coordinates (they are already oriented
-        // correctly, since they have been derived from the axes).
+        //on les met dans les coordonnées world
         ptOnOneEdge = one.transform * ptOnOneEdge;
         ptOnTwoEdge = two.transform * ptOnTwoEdge;
 
-        // So we have a point and a direction for the colliding edges.
-        // We need to find out point of closest approach of the two
-        // line-segments.
+        // on a un point et une direction on doit trouver le point le plus proche des demis distances
         Vector3D vertex = contactPoint(
             ptOnOneEdge, oneAxis, one.halfSize[oneAxisIndex],
             ptOnTwoEdge, twoAxis, two.halfSize[twoAxisIndex],
@@ -539,7 +408,7 @@ unsigned CollisionDetector::boxAndBox(
         );
 
         // We can fill the contact.
-        Contact* contact = data->contacts;
+        Contact* contact = new Contact();
 
         contact->penetration = pen;
         contact->contactNormal = axis;
@@ -547,6 +416,7 @@ unsigned CollisionDetector::boxAndBox(
         contact->setBodyData(one.body, two.body,
             data->friction, data->restitution);
         data->addContacts(1);
+        data->contacts = contact;
         return 1;
     }
     return 0;
@@ -562,13 +432,12 @@ unsigned CollisionDetector::boxAndPoint(
     CollisionData* data
 )
 {
-    // Transform the point into box coordinates
+    //on récupère les coordonnées de la boite
     Vector3D relPt = box.transform.transformInverse(point);
 
     Vector3D normal;
 
-    // Check each axis, looking for the axis on which the
-    // penetration is least deep.
+    // on vérifie sur chaque axe la pénétration minimum
     float min_depth = box.halfSize.getX() - abs(relPt.getX());
     if (min_depth < 0) return 0;
     normal = box.getAxis(0) * ((relPt.getX() < 0) ? -1 : 1);
@@ -590,17 +459,15 @@ unsigned CollisionDetector::boxAndPoint(
     }
 
     // Compile the contact
-    Contact* contact = data->contacts;
+    Contact* contact = new Contact();
     contact->contactNormal = normal;
     contact->contactPoint = point;
     contact->penetration = min_depth;
 
-    // Note that we don't know what rigid body the point
-    // belongs to, so we just use NULL. Where this is called
-    // this value can be left, or filled in.
+    // on ne sait pas a quel rigidbody le point appartient on met alors à null
     contact->setBodyData(box.body, NULL,
         data->friction, data->restitution);
-
+    data->contacts = contact;
     data->addContacts(1);
     return 1;
 }
@@ -611,11 +478,11 @@ unsigned CollisionDetector::boxAndSphere(
     CollisionData* data
 )
 {
-    // Transform the centre of the sphere into box coordinates
+    //on récupère les coordonnées de la boite
     Vector3D centre = sphere.getAxis(3);
     Vector3D relCentre = box.transform.transformInverse(centre);
 
-    // Early out check to see if we can exclude the contact
+    // peut on éléminer certains contacts 
     if (abs(relCentre.getX()) - sphere.radius > box.halfSize.getX() ||
         abs(relCentre.getY()) - sphere.radius > box.halfSize.getY() ||
         abs(relCentre.getZ()) - sphere.radius > box.halfSize.getZ())
@@ -626,7 +493,6 @@ unsigned CollisionDetector::boxAndSphere(
     Vector3D closestPt(0, 0, 0);
     float dist;
 
-    // Clamp each coordinate to the box.
     dist = relCentre.getX();
     if (dist > box.halfSize.getX()) dist = box.halfSize.getX();
     if (dist < -box.halfSize.getX()) dist = -box.halfSize.getX();
@@ -642,20 +508,21 @@ unsigned CollisionDetector::boxAndSphere(
     if (dist < -box.halfSize.getZ()) dist = -box.halfSize.getZ();
     closestPt.setZ(dist);
 
-    // Check we're in contact
+    // est on en contact
     dist = (closestPt - relCentre).getSquareNorm();
     if (dist > sphere.radius * sphere.radius) return 0;
 
     // Compile the contact
     Vector3D closestPtWorld = box.transform.transform(closestPt);
 
-    Contact* contact = data->contacts;
+    Contact* contact = new Contact();
     contact->contactNormal = (closestPtWorld - centre);
     contact->contactNormal.normalize();
     contact->contactPoint = closestPtWorld;
     contact->penetration = sphere.radius - sqrt(dist);
     contact->setBodyData(box.body, sphere.body,
         data->friction, data->restitution);
+    data->contacts = contact;
 
     data->addContacts(1);
     return 1;
@@ -667,20 +534,14 @@ unsigned CollisionDetector::boxAndHalfSpace(
     CollisionData* data
 )
 {
-    // Make sure we have contacts
-    if (data->contactsLeft <= 0) return 0;
-
-    // Check for intersection
+    // Check les intersections
     if (!IntersectionTests::boxAndHalfSpace(box, plane))
     {
         return 0;
     }
 
-    // We have an intersection, so find the intersection points. We can make
-    // do with only checking vertices. If the box is resting on a plane
-    // or on an edge, it will be reported as four or two contact points.
 
-    // Go through each combination of + and - for each half-size
+    //on a une intersection, on cherche les points d'intersection
     static float mults[8][3] = { {1,1,1},{-1,1,1},{1,-1,1},{-1,-1,1},
                                {1,1,-1},{-1,1,-1},{1,-1,-1},{-1,-1,-1} };
 
@@ -688,18 +549,18 @@ unsigned CollisionDetector::boxAndHalfSpace(
     unsigned contactsUsed = 0;
     for (unsigned i = 0; i < 8; i++) {
 
-        // Calculate the position of each vertex
+        // calcul de la position des vertex
         Vector3D vertexPos(mults[i][0], mults[i][1], mults[i][2]);
         vertexPos = vertexPos.composantProduct(box.halfSize);
         vertexPos = box.transform.transform(vertexPos);
 
-        // Calculate the distance from the plane
+        // calcul de la distance depuis le plan
         float vertexDistance = vertexPos * plane.direction;
 
-        // Compare this to the plane's distance
+        // on compare à la distance plan
         if (vertexDistance <= plane.offset)
         {
-            // Create the contact data.
+            // on créer le contact
 
             // The contact point is halfway between the vertex and the
             // plane - we multiply the direction by half the separation
@@ -720,7 +581,106 @@ unsigned CollisionDetector::boxAndHalfSpace(
             if (contactsUsed == (unsigned)data->contactsLeft) return contactsUsed;
         }
     }
-
+    data->contacts = contact;
     data->addContacts(contactsUsed);
     return contactsUsed;
+}
+
+
+//TODO : generateContact(prim1,prim2,collisionData) est équivalent à toutes les fonctions suivantes
+bool IntersectionTests::sphereAndHalfSpace(const CollisionSphere& sphere, const CollisionPlane& plane)
+{
+    // trouve la distance depuis l'origine
+    CollisionPlane plan = plane;
+    float ballDistance = (plan.direction.scalarProduct(sphere.getAxis(3))) - sphere.radius;
+
+    // y a t il une intersection ?
+    return ballDistance <= plane.offset;
+}
+
+bool IntersectionTests::sphereAndSphere(
+    const CollisionSphere& one,
+    const CollisionSphere& two)
+{
+    // calcul du vecteur décrit entre les objets
+    Vector3D midline = one.getAxis(3) - two.getAxis(3);
+
+    //est il assez grand ?
+    return midline.getSquareNorm() <
+        (one.radius + two.radius) * (one.radius + two.radius);
+}
+
+
+/**
+ * Cette fonction regarde si deux boites sont superposé sur l'axe donné
+ */
+static inline bool overlapOnAxis(
+    const CollisionBox& one,
+    const CollisionBox& two,
+    const Vector3D& axis,
+    const Vector3D& toCentre
+)
+{
+
+    float oneProject = transformToAxis(one, axis);
+    float twoProject = transformToAxis(two, axis);
+
+    // On projète sur notre axe
+    float distance = abs(toCentre.scalarProduct(axis));
+
+    // y a il superposition ?
+    return (distance < oneProject + twoProject);
+}
+
+#define TEST_OVERLAP(axis) overlapOnAxis(one, two, (axis), toCentre)
+
+bool IntersectionTests::boxAndBox(
+    const CollisionBox& one,
+    const CollisionBox& two
+)
+{
+    //Vecteur entre les deux centres
+    Vector3D toCentre = two.getAxis(3) - one.getAxis(3);
+
+    return (
+        // On regarde sur les axe de one d'abord
+        TEST_OVERLAP(one.getAxis(0)) &&
+        TEST_OVERLAP(one.getAxis(1)) &&
+        TEST_OVERLAP(one.getAxis(2)) &&
+
+        // Puis sur ceux de two
+        TEST_OVERLAP(two.getAxis(0)) &&
+        TEST_OVERLAP(two.getAxis(1)) &&
+        TEST_OVERLAP(two.getAxis(2)) &&
+
+        // Produit en croix
+        TEST_OVERLAP(one.getAxis(0) % two.getAxis(0)) &&
+        TEST_OVERLAP(one.getAxis(0) % two.getAxis(1)) &&
+        TEST_OVERLAP(one.getAxis(0) % two.getAxis(2)) &&
+        TEST_OVERLAP(one.getAxis(1) % two.getAxis(0)) &&
+        TEST_OVERLAP(one.getAxis(1) % two.getAxis(1)) &&
+        TEST_OVERLAP(one.getAxis(1) % two.getAxis(2)) &&
+        TEST_OVERLAP(one.getAxis(2) % two.getAxis(0)) &&
+        TEST_OVERLAP(one.getAxis(2) % two.getAxis(1)) &&
+        TEST_OVERLAP(one.getAxis(2) % two.getAxis(2))
+        );
+}
+#undef TEST_OVERLAP
+
+bool IntersectionTests::boxAndHalfSpace(
+    const CollisionBox& box,
+    const CollisionPlane& plane
+)
+{
+    // Work out the projected radius of the box onto the plane direction
+    float projectedRadius = transformToAxis(box, plane.direction);
+
+    // Work out how far the box is from the origin
+    float boxDistance =
+        plane.direction.scalarProduct(
+            box.getAxis(3)) -
+        projectedRadius;
+
+    // Check for the intersection
+    return boxDistance <= plane.offset;
 }

@@ -2,42 +2,33 @@
 #include "Rigidbody.h"
 #include "BoundingVolumes.h"
 /**
-* Stores a potential contact to check later.
+* Contient les contacts potentiels
 */
 struct PotentialContact
 {
 	/**
-	* Holds the bodies that might be in contact.
+	* contient les deux rigiBody potentiellement en contact
 	*/
 	RigidBody* body[2];
 };
 /**
-* A base class for nodes in a bounding volume hierarchy.
-*
-* This class uses a binary tree to store the bounding
-* volumes.
+* une classe décrivant les noeud d'un BVH 
 */
 template <class boundingVolume>
 class BVHNode
 {
 public:
 	/**
-	* Holds the child nodes of this node.
+	* Contient les enfants du ce noeud pour un maximum de deux comme conseiller dans le livre de ian Millington
 	*/
 	BVHNode* children[2];
 	BVHNode* parent;
 	/**
-	* Holds a single bounding volume encompassing all the
-	* descendents of this node.
+	* Contient un boundingVOlume
 	*/
 	boundingVolume *volume;
 	/**
-	* Holds the rigid body at this node of the hierarchy.
-	* Only leaf nodes can have a rigid body defined (see isLeaf).
-	* Note that it is possible to rewrite the algorithms in this
-	* class to handle objects at all levels of the hierarchy,
-	* but the code provided ignores this vector unless firstChild
-	* is NULL.
+	* Contient le rigidBody du noeud, seules les feuilles de l'arbre peuvent avoir un body
 	*/
 	RigidBody* body;
 
@@ -46,10 +37,7 @@ public:
 		return (body != NULL);
 	}
 	/**
-	* Checks the potential contacts from this node downward in
-	* the hierarchy, writing them to the given array (up to the
-	* given limit). Returns the number of potential contacts it
-	* found.
+	* trouve les contacts potentiels
 	*/
 	unsigned getPotentialContacts(PotentialContact* contacts,unsigned limit) const;
 	unsigned getPotentialContactsWith(const BVHNode<boundingVolume>* other, PotentialContact* contacts, unsigned limit) const;
@@ -69,30 +57,30 @@ bool BVHNode<boundingVolume>::overlaps(const BVHNode* other) const
 template <class boundingVolume>
 BVHNode<boundingVolume>::~BVHNode()
 {
-	// If we don’t have a parent, then we ignore the sibling processing.
+	//Si le noeud n'a pas de parent,  pas besoin de chercher de noeud soeurs
 	if (parent)
 	{
-		// Find our sibling.
+		// trouver le noeud soeur
 		BVHNode* sibling;
 		if (parent->children[0] == this) sibling = parent->children[1];
 		else sibling = parent->children[0];
-		// Write its data to our parent.
+		// écrire les données
 		parent->volume = sibling->volume;
 		parent->body = sibling->body;
 		parent->children[0] = sibling->children[0];
 		parent->children[1] = sibling->children[1];
-		// Delete the sibling (we blank its parent and
-		// children to avoid processing/deleting them).
+
+		//On supprime le noeud soeur
+		//et on rend vide les parents et les enfants pour éviter de les rappeler
 		sibling->parent = NULL;
 		sibling->body = NULL;
 		sibling->children[0] = NULL;
 		sibling->children[1] = NULL;
 		delete sibling;
-		// Recalculate the parent’s bounding volume.
+		// on reclacul le boundingVolume
 		parent->recalculateBoundingVolume(true);
 	}
-	// Delete our children (again we remove their parent data so
-	// we don’t try to process their siblings as they are deleted).
+	//On supprime le noeud enfant et on rend null le noeud parent
 	if (children[0]) {
 		children[0]->parent = NULL;
 		delete children[0];
@@ -106,11 +94,9 @@ BVHNode<boundingVolume>::~BVHNode()
 template <class boundingVolume>
 unsigned BVHNode<boundingVolume>::getPotentialContacts(PotentialContact* contacts, unsigned limit) const
 {
-	// Early out if we don’t have the room for contacts, or
-	// if we’re a leaf node.
+
 	if (isLeaf() || limit == 0) return 0;
-	// Get the potential contacts of one of our children with
-	// the other.
+	// Récupère les contact potentiels entre les deux enfants.
 	return children[0]->getPotentialContactsWith(
 		children[1], contacts, limit
 	);
@@ -118,27 +104,23 @@ unsigned BVHNode<boundingVolume>::getPotentialContacts(PotentialContact* contact
 template <class boundingVolume>
 unsigned BVHNode<boundingVolume>::getPotentialContactsWith(const BVHNode<boundingVolume>* other, PotentialContact* contacts, unsigned limit) const
 {
-	// Early-out if we don’t overlap or if we have no room
-	// to report contacts.
+
 	if (!overlaps(other) || limit == 0) return 0;
-	// If we’re both at leaf nodes, then we have a potential contact.
 	if (isLeaf() && other->isLeaf())
 	{
 		contacts->body[0] = body;
 		contacts->body[1] = other->body;
 		return 1;
 	}
-	// Determine which node to descend into. If either is
-	// a leaf, then we descend the other. If both are branches,
-	// then we use the one with the largest size.
+	//on détermine ou déscendre en fonction de si c'est une branche ou une feuille, dans le cas d'une branche on prendra la plus grande
 	if (other->isLeaf() ||
 		(!isLeaf() && volume->getSize() >= other->volume->getSize()))
 	{
-		// Recurse into ourself.
+		//appel récursif
 		unsigned count = children[0]->getPotentialContactsWith(
 			other, contacts, limit
 		);
-		// Check whether we have enough slots to do the other side too.
+		//On vérifie qu'on peut vérifier l'autre côté
 		if (limit > count) {
 			return count + children[1]->getPotentialContactsWith(
 				other, contacts + count, limit - count
@@ -150,11 +132,11 @@ unsigned BVHNode<boundingVolume>::getPotentialContactsWith(const BVHNode<boundin
 	}
 	else
 	{
-		// Recurse into the other node.
+		//appel récursif sur l'autre noeud
 		unsigned count = getPotentialContactsWith(
 			other->children[0], contacts, limit
 		);
-		// Check whether we have enough slots to do the other side too.
+		//On vérifie qu'on peut vérifier l'autre côté
 		if (limit > count) {
 			return count + getPotentialContactsWith(
 				other->children[1], contacts + count, limit - count
@@ -171,50 +153,46 @@ void BVHNode<boundingVolume>::recalculateBoundingVolume(bool recurse)
 {
 	if (isLeaf()) return;
 
-	// Use the bounding volume combining constructor.
 	volume->calculateNewBoundingVolume(*children[0]->volume,*children[1]->volume);
 	//volume = BoundingVolumeClass(
 	//	children[0]->volume,
 	//	children[1]->volume
 	//);
 
-	// Recurse up the tree
 	if (parent) parent->recalculateBoundingVolume(true);
 }
 template <class boundingVolume>
 
 void BVHNode<boundingVolume>::insert(RigidBody* newBody, const BoundingVolumeClass& newVolume)
 {
-	// If we don't have a parent, then we ignore the sibling
-	// processing
+	// si pas de parent, pas de noeud soeurs à trouver
 	if (parent)
 	{
-		// Find our sibling
+		// trouver le noeud soeur
 		BVHNode* sibling;
 		if (parent->children[0] == this) sibling = parent->children[1];
 		else sibling = parent->children[0];
 
-		// Write its data to our parent
+		//écritures des données
 		parent->volume = sibling->volume;
 		parent->body = sibling->body;
 		parent->children[0] = sibling->children[0];
 		parent->children[1] = sibling->children[1];
 
-		// Delete the sibling (we blank its parent and
-		// children to avoid processing/deleting them)
+		//On supprime le noeud soeur
+		//et on rend vide les parents et les enfants pour éviter de les rappeler
 		sibling->parent = NULL;
 		sibling->body = NULL;
 		sibling->children[0] = NULL;
 		sibling->children[1] = NULL;
 		delete sibling;
 
-		// Recalculate the parent's bounding volume
+		//On calcul le nouveau bounding volume
 		parent->recalculateBoundingVolume(true);
 	}
 
-	// Delete our children (again we remove their
-	// parent data so we don't try to process their siblings
-	// as they are deleted).
+	//On supprime le noeud soeur
+	//et on rend vide les parents et les enfants pour éviter de les rappeler
 	if (children[0]) {
 		children[0]->parent = NULL;
 		delete children[0];
