@@ -18,6 +18,7 @@
 #include "ParticuleContactResolver.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "NarrowCollisionDetection.h"
 
 
 const char* vertexShaderSource = "#version 330 core\n"
@@ -282,13 +283,13 @@ int main(void)
 	RigidBody rb = RigidBody(&gravityCenter, orientation, mass, 0.7, 0.7, inertiaTensor);
 	Vector3D forcePousse = Vector3D(0.01, 0, 0);
 	Vector3D pointForce = { (float)rb.getPosition().getX() - halfMedian, (float)rb.getPosition().getY() + halfMedian, (float)rb.getPosition().getZ() - halfMedian };
-
+	Matrix4 offset = Matrix4();
 	RigidBodyManager rbManager = RigidBodyManager();
-
+	CollisionSphere spherePrimitive = CollisionSphere(rb, offset, 0.5);
 	//Application d'une force au point superieure gauche de notre figure
 	rb.addForceAtBodyPoint(forcePousse, pointForce);
 	rbManager.addToRigidBodies(rb);
-	rbManager.addToRegistre(rb, gravityForce);
+	rbManager.addToRegistre(spherePrimitive, gravityForce);
 	//rb.setVelocity({ 10,0,0 });
 
 

@@ -183,14 +183,6 @@
          */
         Vector3D calculateFrictionlessImpulse(Matrix3* inverseInertiaTensor);
 
-        /**
-         * Calculates the impulse needed to resolve this contact,
-         * given that the contact has a non-zero coefficient of
-         * friction. A pair of inertia tensors - one for each contact
-         * object - is specified to save calculation time: the calling
-         * function has access to these anyway.
-         */
-        Vector3D calculateFrictionImpulse(Matrix3* inverseInertiaTensor);
     };
 
    
