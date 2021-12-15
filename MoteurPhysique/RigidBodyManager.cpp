@@ -44,6 +44,31 @@ void RigidBodyManager::integerAllRigidBodies(float duration)
 	
 	
 }
+
+unsigned  RigidBodyManager::generateContacts()
+{
+	//unsigned limit = maxContacts;
+	//Contact* nextContact = contacts;
+
+	//ContactGenRegistration* reg = firstContactGen;
+	//while (reg)
+	//{
+	//	unsigned used = reg->gen->addContact(nextContact, limit);
+	//	limit -= used;
+	//	nextContact += used;
+
+	//	// We've run out of contacts to fill. This means we're missing
+	//	// contacts.
+	//	if (limit <= 0) break;
+
+	//	reg = reg->next;
+	//}
+
+	//// Return the number of contacts used.
+	//return maxContacts - limit;
+	return 0;
+}
+
 void RigidBodyManager::startFrame()
 {
 	//TODO : clear accumulator ?
@@ -56,8 +81,15 @@ void RigidBodyManager::runPhysic(float duration)
 	//on update les forces;
 	this->getRegistre().updateForces(duration);
 	integerAllRigidBodies(duration);
+	unsigned int limit = 5;
+	CollisionData *collisionData = new CollisionData();
+	PotentialContact* pContact = new PotentialContact();
 	//TODO : comment on insère un BVHnode ?
-	//TODO : call broadPhase -> doit donner tous les contacts potentiels avec getPotentialContact
-	//TODO : call narrowPhase -> doit créer et utiliser la collisionData -> quelle résolution appelé ?
-	//TODO : if Collisions return true and pause the game
+	//à faire pour tout le bvh si jamais ça le fais pas la
+	// call broadPhase -> doit donner tous les contacts potentiels avec getPotentialContact on obtient des potentialContact avec les deux rigiBody potentiellement en contact
+	BVHtree[0].getPotentialContacts(pContact,limit);
+	//TODO : ici soit créer un collisionData à remplir avec seulement friction et restitution de set à 0 et 1 soit dans le setBodyData de la narrowDetection enlever les data.friction
+	//TODO: avec les rigidBody on cherche les primitives correspondant dans une liste de primitive ( ou liste de primitive lié à un contact generator ?)
+	//TODO : on appelle une fonction qui vient choisir quel type de collision c'est en fonction des deux primitives ( shpere and sphere ..) et rempli le collisionData
+	//TODO : if CollisionsData est non vide return true and pause the game
 }

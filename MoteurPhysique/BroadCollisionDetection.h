@@ -1,5 +1,6 @@
 #pragma once
 #include "Rigidbody.h"
+#include "BoundingVolumes.h"
 /**
 * Stores a potential contact to check later.
 */
@@ -16,7 +17,7 @@ struct PotentialContact
 * This class uses a binary tree to store the bounding
 * volumes.
 */
-template<class BoundingVolumeClass>
+template <class boundingVolume>
 class BVHNode
 {
 public:
@@ -29,7 +30,7 @@ public:
 	* Holds a single bounding volume encompassing all the
 	* descendents of this node.
 	*/
-	BoundingVolumeClass volume;
+	boundingVolume *volume;
 	/**
 	* Holds the rigid body at this node of the hierarchy.
 	* Only leaf nodes can have a rigid body defined (see isLeaf).
@@ -51,30 +52,28 @@ public:
 	* found.
 	*/
 	unsigned getPotentialContacts(PotentialContact* contacts,unsigned limit) const;
-	unsigned getPotentialContactsWith(const BVHNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit) const;
-	bool overlaps(const BVHNode<BoundingVolumeClass>* other) const;
+	unsigned getPotentialContactsWith(const BVHNode<boundingVolume>* other, PotentialContact* contacts, unsigned limit) const;
+	bool overlaps(const BVHNode* other) const;
 	void insert(RigidBody* newBody, const BoundingVolumeClass& newVolume);
 	void recalculateBoundingVolume(bool recurse);
 	~BVHNode();
 
 };
-
-template<class BoundingVolumeClass>
-bool BVHNode<BoundingVolumeClass>::overlaps(const BVHNode<BoundingVolumeClass>* other) const
+template <class boundingVolume>
+bool BVHNode<boundingVolume>::overlaps(const BVHNode* other) const
 {
 	return volume->overlaps(other->volume);
 }
 
 
-
-template<class BoundingVolumeClass>
-BVHNode<BoundingVolumeClass>::~BVHNode<BoundingVolumeClass>()
+template <class boundingVolume>
+BVHNode<boundingVolume>::~BVHNode()
 {
 	// If we don’t have a parent, then we ignore the sibling processing.
 	if (parent)
 	{
 		// Find our sibling.
-		BVHNode<BoundingVolumeClass>* sibling;
+		BVHNode* sibling;
 		if (parent->children[0] == this) sibling = parent->children[1];
 		else sibling = parent->children[0];
 		// Write its data to our parent.
@@ -90,7 +89,7 @@ BVHNode<BoundingVolumeClass>::~BVHNode<BoundingVolumeClass>()
 		sibling->children[1] = NULL;
 		delete sibling;
 		// Recalculate the parent’s bounding volume.
-		parent->recalculateBoundingVolume();
+		parent->recalculateBoundingVolume(true);
 	}
 	// Delete our children (again we remove their parent data so
 	// we don’t try to process their siblings as they are deleted).
@@ -103,9 +102,9 @@ BVHNode<BoundingVolumeClass>::~BVHNode<BoundingVolumeClass>()
 		delete children[0];
 	}
 }
-
-template<class BoundingVolumeClass>
-unsigned BVHNode<BoundingVolumeClass>::getPotentialContacts(PotentialContact* contacts, unsigned limit) const
+//retourne les contacts potentiels à partir des noeuds du BVH
+template <class boundingVolume>
+unsigned BVHNode<boundingVolume>::getPotentialContacts(PotentialContact* contacts, unsigned limit) const
 {
 	// Early out if we don’t have the room for contacts, or
 	// if we’re a leaf node.
@@ -116,10 +115,8 @@ unsigned BVHNode<BoundingVolumeClass>::getPotentialContacts(PotentialContact* co
 		children[1], contacts, limit
 	);
 }
-
-//TODO : à utiliser pour avoir les contacts potentiels !
-template<class BoundingVolumeClass>
-unsigned BVHNode<BoundingVolumeClass>::getPotentialContactsWith(const BVHNode<BoundingVolumeClass>* other, PotentialContact* contacts, unsigned limit) const
+template <class boundingVolume>
+unsigned BVHNode<boundingVolume>::getPotentialContactsWith(const BVHNode<boundingVolume>* other, PotentialContact* contacts, unsigned limit) const
 {
 	// Early-out if we don’t overlap or if we have no room
 	// to report contacts.
@@ -168,31 +165,32 @@ unsigned BVHNode<BoundingVolumeClass>::getPotentialContactsWith(const BVHNode<Bo
 		}
 	}
 }
+template <class boundingVolume>
 
-template<class BoundingVolumeClass>
-void BVHNode<BoundingVolumeClass>::recalculateBoundingVolume(bool recurse)
+void BVHNode<boundingVolume>::recalculateBoundingVolume(bool recurse)
 {
 	if (isLeaf()) return;
 
 	// Use the bounding volume combining constructor.
-	volume = BoundingVolumeClass(
-		children[0]->volume,
-		children[1]->volume
-	);
+	volume->calculateNewBoundingVolume(*children[0]->volume,*children[1]->volume);
+	//volume = BoundingVolumeClass(
+	//	children[0]->volume,
+	//	children[1]->volume
+	//);
 
 	// Recurse up the tree
 	if (parent) parent->recalculateBoundingVolume(true);
 }
+template <class boundingVolume>
 
-template<class BoundingVolumeClass>
-void BVHNode<BoundingVolumeClass>::insert(RigidBody* newBody, const BoundingVolumeClass& newVolume)
+void BVHNode<boundingVolume>::insert(RigidBody* newBody, const BoundingVolumeClass& newVolume)
 {
 	// If we don't have a parent, then we ignore the sibling
 	// processing
 	if (parent)
 	{
 		// Find our sibling
-		BVHNode<BoundingVolumeClass>* sibling;
+		BVHNode* sibling;
 		if (parent->children[0] == this) sibling = parent->children[1];
 		else sibling = parent->children[0];
 
@@ -211,7 +209,7 @@ void BVHNode<BoundingVolumeClass>::insert(RigidBody* newBody, const BoundingVolu
 		delete sibling;
 
 		// Recalculate the parent's bounding volume
-		parent->recalculateBoundingVolume();
+		parent->recalculateBoundingVolume(true);
 	}
 
 	// Delete our children (again we remove their

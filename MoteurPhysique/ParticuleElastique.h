@@ -9,7 +9,7 @@ private:
 	float _l0;
 public:
 	ParticuleElastique(Particule* autreParticule, float constanteRessort, float l0);
-	void updateForce(Particule* particule, float duration);
+	void updateForce(Particule* particule, float duration) override;
 
 };
 

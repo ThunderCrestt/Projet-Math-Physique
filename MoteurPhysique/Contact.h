@@ -80,7 +80,7 @@
          * of the contact (i.e. the bodies, and their material properties).
          */
         void setBodyData(RigidBody* one, RigidBody* two,
-            float friction, float restitution);
+            float friction=0, float restitution=1);
 
     protected:
 

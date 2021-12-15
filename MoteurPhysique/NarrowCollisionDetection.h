@@ -57,6 +57,7 @@
         {
             return transform;
         }
+        //TODO : create constructeur avec rigiBody et offset
 
 
     protected:
@@ -79,6 +80,8 @@
          * The radius of the sphere.
          */
         float radius;
+        //TODO : create constructeur 
+
     };
 
     /**
@@ -156,6 +159,9 @@
      * A helper structure that contains information for the detector to use
      * in building its contact data.
      */
+
+
+    //TODO : à mettre dans un autre fichier 
     struct CollisionData
     {
 
@@ -173,12 +179,6 @@
 
         /** Holds the restitution value to write into any collisions. */
         float restitution;
-
-        /**
-         * Holds the collision tolerance, even uncolliding objects this
-         * close should have collisions generated.
-         */
-        float tolerance;
 
         /**
          * Checks if there are more contacts available in the contact
@@ -222,6 +222,8 @@
      * of two objects, and a pointer to a contact array to fill. It
      * returns the number of contacts it wrote into the array.
      */
+
+    //TODO : à mettre dans un autre fichier
     class CollisionDetector
     {
     public:
